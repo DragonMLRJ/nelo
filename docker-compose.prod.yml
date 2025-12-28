@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: nelo-mysql-prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_prod_data:/var/lib/mysql
+      # Schema is only needed for fresh init, but good to keep
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - nelo-prod-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PHP Backend
+  php-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    container_name: nelo-backend-prod
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      # Production PHP settings can be added here
+    networks:
+      - nelo-prod-network
+    # No volume mount for code in production (baked in)
+
+    # React Frontend + Nginx
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nelo-frontend-prod
+    restart: always
+    depends_on:
+      - php-backend
+    ports:
+      - "80:80"
+      - "443:443" # Prepared for SSL
+    networks:
+      - nelo-prod-network
+
+networks:
+  nelo-prod-network:
+    driver: bridge
+
+volumes:
+  mysql_prod_data:
+    driver: local

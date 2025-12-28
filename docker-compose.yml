@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: nelo-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: nelo_marketplace
+      MYSQL_USER: nelo_user
+      MYSQL_PASSWORD: nelo_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - nelo-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PHP Backend
+  php-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    container_name: nelo-php-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASS: admin123
+      DB_NAME: nelo_marketplace
+    networks:
+      - nelo-network
+    volumes:
+      - ./api:/var/www/html
+
+  # React Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nelo-frontend
+    restart: unless-stopped
+    depends_on:
+      - php-backend
+    ports:
+      - "3000:80"
+    networks:
+      - nelo-network
+
+  # phpMyAdmin (optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: nelo-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    networks:
+      - nelo-network
+
+networks:
+  nelo-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
