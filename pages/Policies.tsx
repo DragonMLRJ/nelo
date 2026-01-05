@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, FileText, Cookie } from 'lucide-react';
+import { Shield, FileText, Cookie, RefreshCw } from 'lucide-react';
 
-type PolicyType = 'privacy' | 'terms' | 'cookies';
+type PolicyType = 'privacy' | 'terms' | 'cookies' | 'refund';
 
 interface PoliciesProps {
   type: PolicyType;
@@ -51,8 +51,8 @@ const Policies: React.FC<PoliciesProps> = ({ type }) => {
           </section>
           <section>
             <h3 className="text-xl font-bold text-gray-900 mb-3">3. Selling and Buying</h3>
-            <p><strong>Sellers:</strong> You must provide accurate descriptions and images of your items. You agree to ship items promptly upon sale.<br/>
-            <strong>Buyers:</strong> You agree to pay for items you commit to purchase. Payment is held securely until the item is received.</p>
+            <p><strong>Sellers:</strong> You must provide accurate descriptions and images of your items. You agree to ship items promptly upon sale.<br />
+              <strong>Buyers:</strong> You agree to pay for items you commit to purchase. Payment is held securely until the item is received.</p>
           </section>
           <section>
             <h3 className="text-xl font-bold text-gray-900 mb-3">4. Prohibited Items</h3>
@@ -153,12 +153,43 @@ const Policies: React.FC<PoliciesProps> = ({ type }) => {
             <p>You can control and manage cookies through your browser settings. You can choose to block or delete cookies, but please note that doing so may limit your ability to use some features of Nelo.</p>
             <p className="mt-2 text-sm">Most browsers allow you to:</p>
             <ul className="list-disc pl-5 mt-2 space-y-1 text-sm">
-                <li>View what cookies you have and delete them individually.</li>
-                <li>Block third-party cookies.</li>
-                <li>Block cookies from particular sites.</li>
-                <li>Block all cookies from being set.</li>
-                <li>Delete all cookies when you close your browser.</li>
+              <li>View what cookies you have and delete them individually.</li>
+              <li>Block third-party cookies.</li>
+              <li>Block cookies from particular sites.</li>
+              <li>Block all cookies from being set.</li>
+              <li>Delete all cookies when you close your browser.</li>
             </ul>
+          </section>
+        </div>
+      )
+    },
+    refund: {
+      title: 'Refund Policy',
+      icon: RefreshCw,
+      updated: 'October 24, 2024',
+      text: (
+        <div className="space-y-8 text-gray-600 leading-relaxed">
+          <section>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">1. General Policy</h3>
+            <p>Nelo is a peer-to-peer marketplace. As such, items are generally sold "as is". However, we want to ensure you are happy with your purchase. Buyers have a protection period during which they can report issues.</p>
+          </section>
+          <section>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">2. Eligible Reasons for Refund</h3>
+            <p>You may request a refund if:</p>
+            <ul className="list-disc pl-5 mt-2 space-y-1">
+              <li>The item was never received.</li>
+              <li>The item received is significantly different from the description.</li>
+              <li>The item is damaged or defective (unless stated in the listing).</li>
+            </ul>
+            <p className="mt-2">Refunds are <strong>not</strong> granted for "change of mind" or if the item doesn't fit (unless measurements were incorrect).</p>
+          </section>
+          <section>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">3. Reporting Window</h3>
+            <p>You must report any issue within <strong>48 hours</strong> of delivery. After this period, the funds are released to the seller, and the transaction is considered final.</p>
+          </section>
+          <section>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">4. How to Request</h3>
+            <p>Go to your Orders page, select the order in question, and click "Report Issue". Our support team will review your case and facilitate a return or refund if eligible.</p>
           </section>
         </div>
       )
@@ -185,7 +216,7 @@ const Policies: React.FC<PoliciesProps> = ({ type }) => {
           </div>
           <p className="text-teal-800 font-medium opacity-80">Last updated: {data.updated}</p>
         </div>
-        
+
         <div className="p-8 md:p-12">
           {data.text}
         </div>

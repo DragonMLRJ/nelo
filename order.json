@@ -1,0 +1,11 @@
+{
+    "buyerId": 1,
+    "shippingAddress": "Brazza Downtown",
+    "paymentMethod": "cod",
+    "items": [
+        {
+            "productId": 1,
+            "quantity": 1
+        }
+    ]
+}

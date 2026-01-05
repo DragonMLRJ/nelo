@@ -19,6 +19,10 @@ switch($method) {
     case 'GET':
         checkSession();
         break;
+
+    case 'PUT':
+        updateProfile();
+        break;
         
     default:
         sendResponse(['error' => 'Method not allowed'], 405);
@@ -142,4 +146,56 @@ function checkSession() {
     // For now, just return a simple response
     // In a real app, you'd check session/token
     sendResponse(['authenticated' => false]);
+}
+
+function updateProfile() {
+    $data = getJsonInput();
+    
+    if (empty($data['id']) || empty($data['name'])) {
+        sendResponse(['error' => 'User ID and Name are required'], 400);
+    }
+
+    try {
+        $db = getDB();
+        
+        // Update user
+        $stmt = $db->prepare("UPDATE users SET name = ?, location = ?, avatar = ? WHERE id = ?");
+        $stmt->execute([
+            $data['name'],
+            $data['location'] ?? 'Brazzaville',
+            $data['avatar'] ?? '',
+            $data['id']
+        ]);
+
+        // Fetch updated user to return
+        $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$data['id']]);
+        $user = $stmt->fetch();
+        
+        if (!$user) {
+            sendResponse(['error' => 'User not found after update'], 404);
+        }
+
+        // Convert to frontend format
+        $userData = [
+            'id' => (string)$user['id'],
+            'email' => $user['email'],
+            'name' => $user['name'],
+            'avatar' => $user['avatar'],
+            'location' => $user['location'],
+            'isAdmin' => (bool)$user['is_admin'],
+            'isVerified' => (bool)$user['is_verified'],
+            'memberSince' => (string)$user['member_since'],
+            'responseRate' => $user['response_rate']
+        ];
+
+        sendResponse([
+            'success' => true,
+            'user' => $userData,
+            'message' => 'Profile updated successfully'
+        ]);
+
+    } catch(PDOException $e) {
+        sendResponse(['error' => 'Database error: ' . $e->getMessage()], 500);
+    }
 }

@@ -50,6 +50,7 @@ const AnimatedRoutes: React.FC = () => {
         <Route path="/privacy" element={<Policies type="privacy" />} />
         <Route path="/terms" element={<Policies type="terms" />} />
         <Route path="/cookies" element={<Policies type="cookies" />} />
+        <Route path="/refund-policy" element={<Policies type="refund" />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/user/:userId" element={<UserProfile />} />
         <Route path="/admin" element={<AdminDashboard />} />

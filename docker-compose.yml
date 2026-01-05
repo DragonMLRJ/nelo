@@ -7,10 +7,10 @@ services:
     container_name: nelo-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: admin123
-      MYSQL_DATABASE: nelo_marketplace
-      MYSQL_USER: nelo_user
-      MYSQL_PASSWORD: nelo_pass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -35,10 +35,17 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASS: admin123
-      DB_NAME: nelo_marketplace
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      # SMTP
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME}
     networks:
       - nelo-network
     volumes:
@@ -55,6 +62,9 @@ services:
       - php-backend
     ports:
       - "3000:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs
     networks:
       - nelo-network
 
@@ -68,8 +78,8 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: admin123
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "8080:80"
     networks:

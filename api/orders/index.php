@@ -88,12 +88,16 @@ function createOrder() {
             // Generate Order Number
             $orderNumber = 'ORD-' . strtoupper(uniqid());
             
+            // Determine payment status
+            $paymentMethod = $data['paymentMethod'] ?? 'card';
+            $paymentStatus = ($paymentMethod === 'card') ? 'completed' : 'pending';
+
             // Insert Order
             $stmt = $db->prepare("
                 INSERT INTO orders (
                     order_number, buyer_id, seller_id, total_amount, currency, 
                     status, shipping_address, payment_method, payment_status
-                ) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, 'completed')
+                ) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)
             ");
             
             $stmt->execute([
@@ -103,7 +107,8 @@ function createOrder() {
                 $totalAmount,
                 $currency,
                 $data['shippingAddress'],
-                $data['paymentMethod'] ?? 'card'
+                $paymentMethod,
+                $paymentStatus
             ]);
             
             $orderId = $db->lastInsertId();

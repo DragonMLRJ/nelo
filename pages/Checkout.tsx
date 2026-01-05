@@ -5,7 +5,7 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import { useOrders } from '../context/OrderContext';
 import { useCart } from '../context/CartContext'; // Import CartContext
-import { ShieldCheck, CreditCard, CheckCircle, Truck, Package } from 'lucide-react';
+import { ShieldCheck, CreditCard, CheckCircle, Truck, Package, Banknote, Building2 } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
 
@@ -20,6 +20,7 @@ const Checkout: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderIds, setOrderIds] = useState<string[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod' | 'bank'>('card');
 
   // Determine items to checkout
   const checkoutItems = productId
@@ -64,9 +65,9 @@ const Checkout: React.FC = () => {
     const orderPayload = {
       buyerId: user.id,
       shippingAddress: user.location || "123 Main St, Brazzaville, Congo",
-      paymentMethod: 'card',
+      paymentMethod: paymentMethod,
       items: checkoutItems.map(item => ({
-        productId: item.product_id || (item as any).id, // Handle different ID structures if necessary. CartItem has product_id. Product has id.
+        productId: item.product_id || (item as any).id,
         quantity: item.quantity || 1
       }))
     };
@@ -140,30 +141,80 @@ const Checkout: React.FC = () => {
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-gray-500" /> {t('checkout.payment')}
             </h3>
-            <form onSubmit={handlePayment}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.card_number')}</label>
-                  <input type="text" placeholder="0000 0000 0000 0000" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.expiry')}</label>
-                    <input type="text" placeholder="MM/YY" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.cvc')}</label>
-                    <input type="text" placeholder="123" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
-                  </div>
-                </div>
 
-                <div className="flex justify-between items-center py-2 text-sm text-gray-500">
-                  <span>{t('checkout.secure_ssl')}</span>
-                  <div className="flex gap-2">
-                    <div className="w-8 h-5 bg-gray-200 rounded"></div>
-                    <div className="w-8 h-5 bg-gray-200 rounded"></div>
+            <form onSubmit={handlePayment}>
+              {/* Payment Method Selection */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('card')}
+                  className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-colors ${paymentMethod === 'card' ? 'border-teal-600 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                >
+                  <CreditCard className="w-6 h-6" />
+                  <span className="text-xs font-bold">Card</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('cod')}
+                  className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-colors ${paymentMethod === 'cod' ? 'border-teal-600 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                >
+                  <Banknote className="w-6 h-6" />
+                  <span className="text-xs font-bold">Cash on Delivery</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('bank')}
+                  className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-colors ${paymentMethod === 'bank' ? 'border-teal-600 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                >
+                  <Building2 className="w-6 h-6" />
+                  <span className="text-xs font-bold">Bank Transfer</span>
+                </button>
+              </div>
+
+              {/* Conditional Content */}
+              <div className="space-y-4">
+                {paymentMethod === 'card' && (
+                  <div className="space-y-4 animate-fadeIn">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.card_number')}</label>
+                      <input type="text" placeholder="0000 0000 0000 0000" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.expiry')}</label>
+                        <input type="text" placeholder="MM/YY" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('checkout.cvc')}</label>
+                        <input type="text" placeholder="123" className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center py-2 text-sm text-gray-500">
+                      <span>{t('checkout.secure_ssl')}</span>
+                      <div className="flex gap-2">
+                        <div className="w-8 h-5 bg-gray-200 rounded"></div>
+                        <div className="w-8 h-5 bg-gray-200 rounded"></div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {paymentMethod === 'cod' && (
+                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-100 text-sm text-orange-800 animate-fadeIn">
+                    <p className="font-bold mb-1">Pay when you receive!</p>
+                    <p>Please have the exact amount of <strong>{total.toLocaleString()} {currency}</strong> ready for the courier.</p>
+                  </div>
+                )}
+
+                {paymentMethod === 'bank' && (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm text-blue-800 animate-fadeIn">
+                    <p className="font-bold mb-2">Bank Transfer Instructions</p>
+                    <p>Bank: <strong>Nelo Bank Congo</strong></p>
+                    <p>Account: <strong>1234 5678 9000</strong></p>
+                    <p>Reference: <strong>Your Name</strong></p>
+                    <p className="mt-2 text-xs text-blue-600">Your order will be processed after we receive the transfer.</p>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -173,7 +224,9 @@ const Checkout: React.FC = () => {
                   {isProcessing ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   ) : (
-                    `${t('checkout.pay')} ${total.toLocaleString()} ${currency}`
+                    paymentMethod === 'card'
+                      ? `${t('checkout.pay')} ${total.toLocaleString()} ${currency}`
+                      : `Place Order (${total.toLocaleString()} ${currency})`
                   )}
                 </button>
               </div>

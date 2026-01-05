@@ -52,14 +52,14 @@ function getJsonInput() {
 }
 
 // Security & Classes Autoload
-require_once __DIR__ . '/../classes/RateLimiter.php';
 require_once __DIR__ . '/../classes/Validator.php';
+require_once __DIR__ . '/../classes/RateLimiter.php';
 
 // Global Rate Limit Check (IP-based)
 // Limit: 100 requests per minute per IP
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $rateDb = getDB();
-$limiter = new RateLimiter($rateDb, "ip:" . $ip, 100, 60);
+$limiter = new RateLimiter($rateDb, "ip:" . $ip, 1000, 60);
 
 if (!$limiter->check()) {
     http_response_code(429);

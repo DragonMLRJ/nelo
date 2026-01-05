@@ -48,14 +48,15 @@ const Footer: React.FC = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-           <div className="flex gap-4">
-             <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
-             <Link to="/cookies" className="hover:underline">Cookie Policy</Link>
-             <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
-           </div>
-           <p>© 2024 Nelo Congo. All rights reserved.</p>
+          <div className="flex gap-4">
+            <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+            <Link to="/cookies" className="hover:underline">Cookie Policy</Link>
+            <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
+            <Link to="/refund-policy" className="hover:underline">Refund Policy</Link>
+          </div>
+          <p>© 2024 Nelo Congo. All rights reserved.</p>
         </div>
       </div>
     </footer>

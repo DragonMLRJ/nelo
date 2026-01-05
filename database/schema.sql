@@ -21,6 +21,26 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    icon VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO categories (name, slug, icon) VALUES 
+('Fashion', 'fashion', 'shirt'),
+('Electronics', 'tech', 'smartphone'),
+('Home', 'home', 'home'),
+('Beauty', 'beauty', 'sparkles'),
+('Sports', 'sports', 'dumbbell'),
+('Toys', 'toys', 'gamepad'),
+('Vehicles', 'vehicles', 'car'),
+('Other', 'other', 'box')
+ON DUPLICATE KEY UPDATE name=name;
+
 -- Products table
 CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,6 +49,7 @@ CREATE TABLE IF NOT EXISTS products (
     currency VARCHAR(10) DEFAULT 'XAF',
     image VARCHAR(500),
     category VARCHAR(100),
+    category_id INT,
     brand VARCHAR(255),
     size VARCHAR(50),
     condition_status VARCHAR(100),
@@ -40,6 +61,7 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
     INDEX idx_category (category),
     INDEX idx_seller (seller_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -131,6 +153,13 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_product_reviews (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Rate Limits table
+CREATE TABLE IF NOT EXISTS rate_limits (
+    `key` VARCHAR(255) PRIMARY KEY,
+    attempts INT DEFAULT 0,
+    reset_at DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert test user (jjmassoukou|@gmail.com with password 'ggg')

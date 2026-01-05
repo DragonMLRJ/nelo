@@ -34,6 +34,25 @@ const OrderDetails: React.FC = () => {
         fetchOrder();
     }, [orderId, user]);
 
+    const handleUpdateStatus = async (newStatus: string) => {
+        try {
+            const response = await fetch(`${API_BASE}/orders/index.php`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId: order.id, status: newStatus })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setOrder({ ...order, status: newStatus });
+            } else {
+                alert('Failed to update status: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            alert('Failed to update status');
+        }
+    };
+
     if (loading) return <div className="p-8 text-center">Loading order...</div>;
     if (!order) return <div className="p-8 text-center">Order not found</div>;
 
@@ -65,7 +84,10 @@ const OrderDetails: React.FC = () => {
                 {/* Actions */}
                 <div className="flex gap-3">
                     {isSeller && order.status === 'pending' && (
-                        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+                        <button
+                            onClick={() => handleUpdateStatus('shipped')}
+                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                        >
                             Mark as Shipped
                         </button>
                     )}

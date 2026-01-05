@@ -22,9 +22,34 @@ import {
 import OrderCard from '../components/OrderCard';
 
 const Profile: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const { getOrdersByBuyer, getOrdersBySeller } = useOrders();
   const [activeTab, setActiveTab] = useState<'purchases' | 'sales' | 'settings'>('purchases');
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({ name: '', location: '' });
+
+  // Initialize form data when entering settings or user changes
+  React.useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name,
+        location: user.location || ''
+      });
+    }
+  }, [user]);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    const success = await updateProfile({
+      name: formData.name,
+      location: formData.location
+    });
+    if (success) {
+      setIsEditing(false);
+    } else {
+      alert('Failed to update profile');
+    }
+  };
 
   if (!user) return <Navigate to="/login" />;
 
@@ -168,21 +193,59 @@ const Profile: React.FC = () => {
               exit={{ opacity: 0, y: -10 }}
               className="max-w-2xl bg-white rounded-xl shadow-sm border border-gray-200 p-8"
             >
-              <h3 className="text-lg font-bold text-gray-900 mb-6">Personal Information</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-bold text-gray-900">Personal Information</h3>
+                {!isEditing ? (
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="text-teal-600 font-bold text-sm hover:underline"
+                  >
+                    Edit Profile
+                  </button>
+                ) : (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setIsEditing(false)}
+                      className="text-gray-500 font-bold text-sm hover:underline"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveProfile}
+                      className="bg-teal-600 text-white px-3 py-1 rounded text-sm font-bold hover:bg-teal-700"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" value={user.name} readOnly className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600" />
+                    <input
+                      type="text"
+                      value={isEditing ? formData.name : user.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      readOnly={!isEditing}
+                      className={`w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 ${isEditing ? 'bg-white border-teal-500 ring-2 ring-teal-100' : ''}`}
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                    <input type="text" value={user.location} readOnly className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600" />
+                    <input
+                      type="text"
+                      value={isEditing ? formData.location : user.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      readOnly={!isEditing}
+                      className={`w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 ${isEditing ? 'bg-white border-teal-500 ring-2 ring-teal-100' : ''}`}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                  <input type="email" value={user.email || "demo@nelo.cg"} readOnly className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600" />
+                  <input type="email" value={user.email || "demo@nelo.cg"} readOnly className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-400 cursor-not-allowed" title="Email cannot be changed" />
                 </div>
 
                 <div className="pt-6 border-t border-gray-100">

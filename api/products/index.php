@@ -255,6 +255,7 @@ function createProduct() {
         ], 201);
         
     } catch(PDOException $e) {
+        error_log("Product Creation DB Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         sendResponse(['error' => 'Database error: ' . $e->getMessage()], 500);
     }
 }

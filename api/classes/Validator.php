@@ -1,26 +1,41 @@
 <?php
-// api/classes/Validator.php
 
 class Validator {
     
-    public static function sanitize($data) {
-        if (is_array($data)) {
-            return array_map([self::class, 'sanitize'], $data);
+    /**
+     * Sanitize input string
+     */
+    public static function sanitize($input) {
+        if (is_array($input)) {
+            return array_map([self::class, 'sanitize'], $input);
         }
-        return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars(strip_tags(trim($input ?? '')));
     }
-
+    
+    /**
+     * Validate email format
+     */
     public static function validateEmail($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
-
-    public static function validateLength($str, $min, $max) {
-        $len = strlen($str);
-        return $len >= $min && $len <= $max;
+    
+    /**
+     * Validate required fields
+     */
+    public static function validateRequired($fields, $data) {
+        foreach ($fields as $field) {
+            if (empty($data[$field])) {
+                return false;
+            }
+        }
+        return true;
     }
-
-    public static function validatePrice($price) {
-        return is_numeric($price) && $price >= 0;
+    
+    /**
+     * Validate password strength (min 6 chars)
+     */
+    public static function validatePassword($password) {
+        return strlen($password) >= 6;
     }
 }
 ?>

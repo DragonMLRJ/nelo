@@ -1,119 +1,162 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { User } from '../types';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '../src/supabaseClient';
+import { Session, User as SupabaseUser } from '@supabase/supabase-js';
+
+// Compatible User type for our app
+export interface AppUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  isAdmin?: boolean;
+}
 
 interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (email: string, password: string, name: string, location?: string) => Promise<boolean>;
-  logout: () => void;
+  user: AppUser | null;
   loading: boolean;
   error: string | null;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (email: string, password: string, name: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+  updateProfile: (userData: Partial<AppUser>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = '/api';
+// Helper to map Supabase session/user to our AppUser
+const mapSessionToUser = (session: Session | null): AppUser | null => {
+  if (!session?.user) return null;
+  const { user } = session;
+  return {
+    id: user.id,
+    email: user.email || '',
+    name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+    avatar: user.user_metadata?.avatar_url,
+    isAdmin: false, // You might want to check app_metadata or a 'profiles' table for this
+  };
+};
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<AppUser | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load user from localStorage on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('nelo_user');
-    if (savedUser) {
+    // Check active session
+    const initSession = async () => {
       try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        localStorage.removeItem('nelo_user');
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(mapSessionToUser(session));
+      } catch (err) {
+        console.error('Session init error:', err);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+    initSession();
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(mapSessionToUser(session));
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(`${API_BASE}/auth/index.php?action=login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Login failed');
+      if (error) {
+        setError(error.message);
         setLoading(false);
         return false;
       }
 
-      if (data.success && data.user) {
-        setUser(data.user);
-        localStorage.setItem('nelo_user', JSON.stringify(data.user));
-        setLoading(false);
-        return true;
-      }
-
-      setError('Login failed');
-      setLoading(false);
-      return false;
+      return true;
     } catch (err) {
-      setError('Network error. Please check your connection.');
+      setError('An unexpected error occurred during login');
       setLoading(false);
       return false;
     }
   };
 
-  const register = async (email: string, password: string, name: string, location: string = 'Brazzaville'): Promise<boolean> => {
+  const register = async (email: string, password: string, name: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(`${API_BASE}/auth/index.php?action=register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+          },
         },
-        body: JSON.stringify({ email, password, name, location }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Registration failed');
+      if (error) {
+        setError(error.message);
         setLoading(false);
         return false;
       }
 
-      if (data.success && data.user) {
-        setUser(data.user);
-        localStorage.setItem('nelo_user', JSON.stringify(data.user));
-        setLoading(false);
-        return true;
-      }
-
-      setError('Registration failed');
-      setLoading(false);
-      return false;
+      return true;
     } catch (err) {
-      setError('Network error. Please check your connection.');
+      setError('An unexpected error occurred during registration');
       setLoading(false);
       return false;
     }
   };
 
-  const logout = () => {
+  const loginWithGoogle = async (): Promise<void> => {
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+    } catch (err) {
+      setError('Failed to initiate Google login');
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('nelo_user');
+  };
+
+  const updateProfile = async (userData: Partial<AppUser>): Promise<boolean> => {
+    if (!user) return false;
+    // Note: This updates local metadata. Ideally, you should update a 'profiles' table in Supabase.
+    // For now, updating user metadata:
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          full_name: userData.name,
+          avatar_url: userData.avatar
+        }
+      });
+
+      if (error) {
+        setError(error.message);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      return false;
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, error }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loginWithGoogle, updateProfile, loading, error }}>
       {children}
     </AuthContext.Provider>
   );

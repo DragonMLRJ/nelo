@@ -1,0 +1,5 @@
+Message could not be sent. Mailer Error: SMTP Error: Could not authenticate.
+[2025-12-28 18:12:32] [FALLBACK LOG] To: test@example.com
+Subject: Order Confirmation - TEST-ORD-3113
+Total: 15000
+
