@@ -7,4 +7,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
     console.warn('Missing Supabase Env Variables. Auth will not work.');
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
+    auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+        flowType: 'pkce',
+    },
+});

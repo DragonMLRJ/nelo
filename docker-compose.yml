@@ -39,6 +39,9 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
+      # Payment
+      FLW_PUBLIC_KEY: ${FLW_PUBLIC_KEY}
+      FLW_SECRET_HASH: ${FLW_SECRET_HASH}
       # SMTP
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}

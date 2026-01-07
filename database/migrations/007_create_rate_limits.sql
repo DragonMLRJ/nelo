@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS rate_limits (
+    `key` VARCHAR(255) PRIMARY KEY,
+    attempts INT DEFAULT 1,
+    reset_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

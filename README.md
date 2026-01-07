@@ -80,6 +80,33 @@ nelo-marketplace/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 
+## 🔐 Security & Payments
+
+### Payment Integration (Phase 3 & 4)
+This project uses **Flutterwave** for payments.
+- **Frontend**: `PaymentModal.tsx` handles card and mobile money inputs.
+- **Backend Verification**: `api/payment/webhook.php` verifies the transaction signature serverside.
+
+### Envrionment Variables
+Add these to your `.env` file (or `docker-compose.yml` for local dev):
+```yaml
+# Payment
+FLW_PUBLIC_KEY=FLWPUBK_TEST-xxxxxxxx
+FLW_SECRET_HASH=your_secret_hash_here # Must match Flutterwave Dashboard
+
+# Email (SMTP)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=user@example.com
+SMTP_PASS=password
+SMTP_FROM_EMAIL=no-reply@nelo.cg
+```
+
+### Legal Pages (Phase 5)
+Standard policy pages are located in `src/pages/legal/`. ensuring compliance with local regulations.
+
+## 📝 Development Workflow
+
 ### Docker Scripts
 
 - `docker-start.bat` - Start all services
