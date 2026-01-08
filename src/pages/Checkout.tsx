@@ -11,7 +11,7 @@ import { useLanguage } from '../context/LanguageContext';
 import SEO from '../components/SEO';
 
 import PaymentModal from '../components/PaymentModal';
-import { SHIPPING_RATES } from '../constants';
+import { SHIPPING_RATES, FEES } from '../constants';
 
 const Checkout: React.FC = () => {
   const { t } = useLanguage();
@@ -84,7 +84,7 @@ const Checkout: React.FC = () => {
     return SHIPPING_RATES.INTER_CITY;
   }, [user, checkoutItems, subtotal, getProductById]);
 
-  const protectionFee = 500;
+  const protectionFee = FEES.FIXED_FEE;
   const total = subtotal + shippingFee + protectionFee;
 
   useEffect(() => {

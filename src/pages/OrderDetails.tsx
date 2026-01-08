@@ -91,6 +91,12 @@ const OrderDetails: React.FC = () => {
                             Mark as Shipped
                         </button>
                     )}
+                    <button
+                        onClick={() => window.open(`/invoice/${orderId}`, '_blank')}
+                        className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-colors flex items-center gap-2"
+                    >
+                        See Invoice
+                    </button>
                     <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-colors">
                         Contact {isSeller ? 'Buyer' : 'Seller'}
                     </button>

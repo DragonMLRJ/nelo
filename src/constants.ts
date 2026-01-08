@@ -36,6 +36,24 @@ export const SHIPPING_RATES = {
   FREE_THRESHOLD: 100000 // Free shipping for official stores over this amount
 };
 
+export const FEES = {
+  COMMISSION_RATE: 0.05, // 5% commission per sale
+  FIXED_FEE: 200 // 200 XAF fixed service fee
+};
+
+export const AD_CONFIG: Record<string, { image: string; link: string; title: string }> = {
+  'home-top': {
+    image: 'https://picsum.photos/1200/200?random=100', // Placeholder for a real banner
+    link: '/catalog',
+    title: 'Discover our Summer Collection'
+  },
+  'home-bottom': {
+    image: 'https://picsum.photos/1200/250?random=101',
+    link: '/sell',
+    title: 'Sell your unused items today!'
+  }
+};
+
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: '1',

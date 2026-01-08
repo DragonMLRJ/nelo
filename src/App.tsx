@@ -35,6 +35,7 @@ import SellerDashboard from './pages/SellerDashboard';
 import CookieConsent from './components/CookieConsent';
 import AdminRoute from './components/AdminRoute';
 import AdminLayout from './layouts/AdminLayout';
+import InvoiceView from './pages/InvoiceView';
 import UsersPage from './pages/Admin/Users';
 import ModerationPage from './pages/Admin/Moderation';
 
@@ -82,6 +83,7 @@ const AnimatedRoutes: React.FC = () => {
 
         {/* Order Management */}
         <Route path="/orders/:orderId" element={<OrderDetails />} />
+        <Route path="/invoice/:orderId" element={<InvoiceView />} />
         <Route path="/sales" element={<SellerDashboard />} />
       </Routes>
     </AnimatePresence>
