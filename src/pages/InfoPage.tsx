@@ -87,7 +87,6 @@ const InfoPage: React.FC<InfoPageProps> = ({ pageKey }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
       className="container mx-auto px-4 py-12 max-w-4xl min-h-[60vh]"
     >
       <SEO title={data.title} description={data.title + " - Nelo Marketplace"} />
