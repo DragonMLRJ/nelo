@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 type PageKey = 'about' | 'sustainability' | 'jobs' | 'how-it-works' | 'pro' | 'trust';
 
@@ -86,8 +87,10 @@ const InfoPage: React.FC<InfoPageProps> = ({ pageKey }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
       className="container mx-auto px-4 py-12 max-w-4xl min-h-[60vh]"
     >
+      <SEO title={data.title} description={data.title + " - Nelo Marketplace"} />
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="bg-teal-50 p-8 border-b border-teal-100">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{data.title}</h1>

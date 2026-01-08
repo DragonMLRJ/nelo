@@ -1,9 +1,11 @@
 import React from 'react';
 import { Shield, FileText } from 'lucide-react';
+import SEO from '../../components/SEO';
 
 const Terms: React.FC = () => {
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <SEO title="Conditions Générales" description="Conditions Générales d'Utilisation de Nelo Marketplace." />
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="p-3 bg-teal-50 rounded-lg text-teal-600">

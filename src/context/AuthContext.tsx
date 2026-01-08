@@ -26,7 +26,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Helper to map Supabase session/user to our AppUser
-const ADMIN_EMAILS = ['admin@nelo.cg', 'drago@nelo.cg']; // TODO: Move to database role check
+const ADMIN_EMAILS = ['admin@nelo.cg', 'drago@nelo.cg', 'jmassoukou@gmail.com']; // TODO: Move to database role check
 const mapSessionToUser = (session: Session | null): AppUser | null => {
   if (!session?.user) return null;
   const { user } = session;
