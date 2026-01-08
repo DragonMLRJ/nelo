@@ -5,6 +5,7 @@ import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from 'lucid
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import SEO from '../components/SEO';
 
 const Cart: React.FC = () => {
     const { user } = useAuth();
@@ -56,6 +57,10 @@ const Cart: React.FC = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <SEO
+                title={t('cart.title')}
+                description="Consultez votre panier et finalisez votre commande."
+            />
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">

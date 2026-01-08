@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { User } from '../types';
 import { CONGO_CITIES } from '../constants';
+import SEO from '../components/SEO';
 
 const Auth: React.FC<{ type: 'login' | 'register' }> = ({ type }) => {
   const { login, register, loginWithGoogle, loading, error } = useAuth();
@@ -38,6 +39,10 @@ const Auth: React.FC<{ type: 'login' | 'register' }> = ({ type }) => {
       animate={{ opacity: 1, scale: 1 }}
       className="min-h-[80vh] flex items-center justify-center py-12 px-4"
     >
+      <SEO
+        title={type === 'login' ? 'Connexion' : 'Inscription'}
+        description={type === 'login' ? 'Connectez-vous à votre compte Nelo.' : 'Créez votre compte Nelo pour commencer à vendre et acheter.'}
+      />
       <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 max-w-md w-full">
         <h1 className="text-2xl font-bold text-center mb-2">{type === 'login' ? 'Bon retour' : 'Rejoignez Nelo'}</h1>
         <p className="text-gray-500 text-center mb-8 text-sm">Le meilleur marché du Congo vous attend.</p>

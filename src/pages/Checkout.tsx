@@ -8,6 +8,7 @@ import { useCart } from '../context/CartContext'; // Import CartContext
 import { ShieldCheck, CreditCard, CheckCircle, Truck, Package, Banknote, Building2 } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
+import SEO from '../components/SEO';
 
 import PaymentModal from '../components/PaymentModal';
 import { SHIPPING_RATES } from '../constants';
@@ -199,6 +200,10 @@ const Checkout: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SEO
+        title="Paiement"
+        description="Finalisez votre commande en toute sécurité."
+      />
       <h1 className="text-2xl font-bold mb-8">Finaliser la commande</h1>
 
       <div className="grid md:grid-cols-2 gap-8">
