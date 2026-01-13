@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Product, User } from '../types';
 import { supabase } from '../supabaseClient';
+import { MOCK_PRODUCTS } from '../constants';
 
 interface ProductContextType {
   products: Product[];
@@ -85,10 +86,16 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
 
       if (error) throw error;
 
-      if (data) {
-        const mappedProducts = data.map(mapSupabaseToProduct);
-        setProducts(mappedProducts);
-      }
+      console.log('Supabase Data:', data);
+
+      const mappedProducts = data ? data.map(mapSupabaseToProduct) : [];
+
+      // Combine with MOCK_PRODUCTS to ensure we have variety
+      // Filter out mocks if real data has same ID (unlikely but good practice)
+      const finalProducts = [...mappedProducts, ...MOCK_PRODUCTS.filter(mp => !mappedProducts.find(p => p.id === mp.id))];
+
+      console.log('Final merged products:', finalProducts.length);
+      setProducts(finalProducts);
     } catch (error) {
       console.error('Failed to load products from Supabase:', error);
     } finally {

@@ -154,6 +154,12 @@ const translations: Record<Language, Record<string, string>> = {
     'product.member_since': 'Joined',
     'product.response_rate': 'Response',
     'product.location': 'Location',
+    'product.quick_view': 'Quick View',
+    'product.link_copied': 'Link Copied',
+    'product.link_copied_msg': 'Product link copied to clipboard.',
+    'product.added_wishlist': 'Added to Wishlist',
+    'product.added_wishlist_msg': 'has been saved to your favorites.',
+    'product.likes': 'likes',
 
     // Sell
     'sell.title': 'Sell an Item',
@@ -328,6 +334,12 @@ const translations: Record<Language, Record<string, string>> = {
     'product.member_since': 'Membre depuis',
     'product.response_rate': 'Réponse',
     'product.location': 'Lieu',
+    'product.quick_view': 'Aperçu',
+    'product.link_copied': 'Lien copié',
+    'product.link_copied_msg': 'Lien du produit copié dans le presse-papier.',
+    'product.added_wishlist': 'Ajouté aux favoris',
+    'product.added_wishlist_msg': 'a été enregistré dans vos favoris.',
+    'product.likes': 'J\'aime',
 
     // Sell
     'sell.title': 'Vendre un article',
@@ -516,6 +528,12 @@ const translations: Record<Language, Record<string, string>> = {
     'product.member_since': 'Akomaki',
     'product.response_rate': 'Ayanolaka',
     'product.location': 'Esika',
+    'product.quick_view': 'Tala noki',
+    'product.link_copied': 'Lien ekomami',
+    'product.link_copied_msg': 'Lien ya eloko ekomami.',
+    'product.added_wishlist': 'Ebakisami na favoris',
+    'product.added_wishlist_msg': 'ebombami na biloko olingi.',
+    'product.likes': 'balingi',
 
     // Sell
     'sell.title': 'Teka Eloko',

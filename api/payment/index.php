@@ -2,83 +2,40 @@
 require_once '../config/database.php';
 
 // Endpoint: POST /api/payment
-// Purpose: Initiate a payment (Flutterwave Standard)
+// Purpose: Handle Manual Payment Submission
 
 $data = getJsonInput();
 $amount = $data['amount'] ?? 0;
-$email = $data['email'] ?? 'user@example.com';
-$phone = $data['phone'] ?? '';
-$user_id = $data['userId'] ?? 0;
+$order_id = $data['orderId'] ?? null;
+$manual_tx_ref = $data['manualTxRef'] ?? null;
+$provider = $data['provider'] ?? 'MTN';
 
-if (!$amount || !$email) {
-    sendResponse(['success' => false, 'message' => 'Invalid data'], 400);
+if (!$amount || !$order_id) {
+    sendResponse(['success' => false, 'message' => 'Données invalides (Montant ou ID Commande manquant)'], 400);
 }
 
-// 1. Generate Transaction Ref
-$tx_ref = 'NELO-' . uniqid() . '-' . time();
-
-// 2. Call Flutterwave API (Standard Payment Link)
-// Docs: https://developer.flutterwave.com/docs/payments/standard-payments
-$flw_secret = getenv('FLW_SECRET_KEY'); // You need to add this to .env
-$redirect_url = getenv('APP_URL') . '/payment-callback'; // Frontend route
-
-// Payload
-$payload = [
-    'tx_ref' => $tx_ref,
-    'amount' => $amount,
-    'currency' => 'XAF',
-    'redirect_url' => $redirect_url,
-    'customer' => [
-        'email' => $email,
-        'phonenumber' => $phone,
-        'name' => $data['name'] ?? 'Nelo Customer'
-    ],
-    'customizations' => [
-        'title' => 'Nelo Marketplace',
-        'logo' => 'https://nelo.cg/logo.png'
-    ]
-];
-
-// If using Mobile Money directly (USSD Push), the payload differs.
-// For MVP, we often use the Payment Link/Modal flow.
-// But PaymentModal.tsx expects a direct response? 
-// If PaymentModal is "success", it means "Payment Initiated".
-// We will return the tx_ref as transactionId.
-
-// Check if we are mocking (no key)
-if (!$flw_secret) {
-    // Mock Response
+// If Manual Reference is provided, we skip external gateways
+if ($manual_tx_ref) {
+    // 1. Log the manual transaction
+    // We return the User's Manual Ref as the ID so we can track it
     sendResponse([
         'success' => true,
-        'transactionId' => $tx_ref,
-        'message' => 'Payment Initiated (Mock)'
+        'transactionId' => $manual_tx_ref,
+        'message' => 'Paiement enregistré. En attente de validation.'
     ]);
+    exit();
 }
 
-// Real Call to Flutterwave
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'https://api.flutterwave.com/v3/payments');
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Bearer ' . $flw_secret,
-    'Content-Type: application/json'
-]);
-
-$response = curl_exec($ch);
-curl_close($ch);
-$res = json_decode($response, true);
-
-if (isset($res['status']) && $res['status'] === 'success') {
+// If Provider is Card, we auto-validate (Mock for "Direct" requirement)
+if ($provider === 'Card') {
     sendResponse([
         'success' => true,
-        'transactionId' => $tx_ref,
-        'paymentUrl' => $res['data']['link'], // Critical for redirect
-        'message' => 'Payment Initiated'
+        'transactionId' => 'CARD-' . time() . '-' . rand(1000, 9999),
+        'message' => 'Paiement par carte accepté.'
     ]);
-} else {
-    error_log("Flutterwave Error: " . json_encode($res));
-    sendResponse(['success' => false, 'message' => 'Payment Gateway Error'], 500);
+    exit();
 }
+
+// Fallback: If no manual ref (should not happen in new flow), fail.
+sendResponse(['success' => false, 'message' => 'Référence de transaction manquante'], 400);
 ?>

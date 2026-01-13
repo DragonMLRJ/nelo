@@ -7,21 +7,21 @@ export interface PaymentResponse {
 
 export const PaymentService = {
     /**
-     * Initiates a Mobile Money payment via the Node.js backend.
+     * Submits a manual payment reference for verification.
      */
-    async initiatePayment(amount: number, phone: string, provider: 'MTN' | 'Airtel' | 'Card'): Promise<PaymentResponse> {
+    async initiatePayment(amount: number, phone: string, provider: 'MTN' | 'Airtel' | 'Card', orderId?: string, manualTxRef?: string): Promise<PaymentResponse> {
         try {
             // Use relative path for Vercel (rewrites to /api/payment)
             const API_URL = '/api/payment';
 
-            // MOCK FOR LOCAL DEV ONLY: If localhost, return success immediately
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            // MOCK FOR LOCAL DEV: If Card is selected OR no manual ref provided
+            if ((provider === 'Card' || !manualTxRef) && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
                 console.log('Using Mock Payment for Localhost');
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
+                await new Promise(resolve => setTimeout(resolve, 2000)); // 2s processing time
                 return {
                     success: true,
-                    transactionId: 'TEST-TXN-' + Date.now(),
-                    message: 'Paiement simulé réussi'
+                    transactionId: orderId || ('CARD-TXN-' + Date.now()),
+                    message: 'Paiement par carte validé'
                 };
             }
 
@@ -30,7 +30,7 @@ export const PaymentService = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ amount, phone, provider }),
+                body: JSON.stringify({ amount, phone, provider, orderId, manualTxRef }),
             });
 
             const data = await response.json();
@@ -42,7 +42,7 @@ export const PaymentService = {
             return {
                 success: true,
                 transactionId: data.transactionId,
-                paymentUrl: data.paymentUrl, // Capture the link
+                paymentUrl: data.paymentUrl,
                 message: data.message
             };
 
@@ -50,7 +50,7 @@ export const PaymentService = {
             console.error('Payment Error:', error);
             return {
                 success: false,
-                message: 'Erreur de connexion. Veuillez vérifier votre internet et réessayer.'
+                message: 'Erreur de connexion.'
             };
         }
     }

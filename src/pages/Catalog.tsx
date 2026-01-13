@@ -247,34 +247,39 @@ const Catalog: React.FC = () => {
 
         <aside
           className={`
-            lg:w-64 flex-shrink-0 
-            fixed lg:static inset-y-0 left-0 w-3/4 max-w-xs bg-white z-50 transform transition-transform duration-300 ease-in-out lg:transform-none lg:z-auto
+            lg:w-72 flex-shrink-0 
+            fixed lg:static inset-y-0 left-0 w-3/4 max-w-xs z-50 transform transition-transform duration-300 ease-in-out lg:transform-none lg:z-auto
             ${isMobileFiltersOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0 shadow-none'}
             overflow-y-auto lg:overflow-visible
+            lg:bg-transparent bg-white
           `}
         >
-          <div className="p-6 lg:p-0 lg:sticky lg:top-24 bg-white rounded-lg lg:shadow-sm lg:border lg:border-gray-100 min-h-screen lg:min-h-0">
-            <div className="flex items-center justify-between mb-6 text-gray-800">
-              <div className="flex items-center gap-2">
-                <Filter className="w-5 h-5" />
-                <h2 className="font-bold">Filters</h2>
+          <div className="p-6 lg:p-6 lg:sticky lg:top-24 bg-white/80 backdrop-blur-xl rounded-3xl lg:shadow-xl lg:border lg:border-white/50 min-h-screen lg:min-h-0">
+            <div className="flex items-center justify-between mb-8 text-gray-800">
+              <div className="flex items-center gap-3">
+                <div className="bg-teal-100 p-2 rounded-lg text-teal-700">
+                  <Filter className="w-5 h-5" />
+                </div>
+                <h2 className="font-bold font-outfit text-xl">Filtres</h2>
               </div>
               <div className="flex items-center gap-4">
                 {activeFiltersCount > 0 && (
-                  <button onClick={clearFilters} className="text-xs text-teal-600 font-medium hover:underline">
-                    Reset
+                  <button onClick={clearFilters} className="text-xs text-teal-600 font-bold hover:underline bg-teal-50 px-2 py-1 rounded-md">
+                    Réinitialiser
                   </button>
                 )}
-                <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden">
-                  <X className="w-6 h-6 text-gray-400" />
+                <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
+                  <X className="w-6 h-6 text-gray-500" />
                 </button>
               </div>
             </div>
 
             {/* Location Filter */}
-            <div className="mb-6 border-b border-gray-100 pb-6">
-              <h3 className="text-sm font-bold mb-3 text-gray-900">Location</h3>
-              <div className="relative">
+            <div className="mb-8">
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-gray-400" /> Ville
+              </h3>
+              <div className="relative group">
                 <select
                   value={searchParams.get('loc') || ''}
                   onChange={(e) => setSearchParams(prev => {
@@ -282,34 +287,36 @@ const Catalog: React.FC = () => {
                     else prev.delete('loc');
                     return prev;
                   })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm pl-9 outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none"
+                  className="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-teal-500/50 transition-all appearance-none cursor-pointer hover:bg-white"
                 >
-                  <option value="">All Locations</option>
+                  <option value="">Toutes les villes</option>
                   {CONGO_CITIES.map(city => (
                     <option key={city} value={city}>{city}</option>
                   ))}
                 </select>
-                <MapPin className="absolute left-3 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
             {/* Category Filter */}
-            <div className="mb-6 border-b border-gray-100 pb-6">
-              <h3 className="text-sm font-bold mb-3 text-gray-900">Category</h3>
+            <div className="mb-8">
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Catégorie</h3>
               <ul className="space-y-1">
                 <li>
                   <button
                     onClick={() => { setSelectedCategory('all'); setSearchParams(prev => { prev.delete('cat'); return prev; }) }}
-                    className={`text-sm w-full text-left px-2 py-1.5 rounded transition-colors ${selectedCategory === 'all' ? 'bg-teal-50 text-teal-700 font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`text-sm w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedCategory === 'all' ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
                   >
-                    All Items
+                    Tout voir
                   </button>
                 </li>
                 {CATEGORIES.map(cat => (
                   <li key={cat.id}>
                     <button
                       onClick={() => { setSelectedCategory(cat.id); setSearchParams(prev => { prev.set('cat', cat.id); return prev; }) }}
-                      className={`text-sm w-full text-left px-2 py-1.5 rounded transition-colors ${selectedCategory === cat.id ? 'bg-teal-50 text-teal-700 font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
+                      className={`text-sm w-full text-left px-3 py-2 rounded-xl transition-all font-medium ${selectedCategory === cat.id ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
                     >
                       {cat.name}
                     </button>
@@ -318,51 +325,51 @@ const Catalog: React.FC = () => {
               </ul>
             </div>
 
-            {/* Seller Filter (New) */}
-            <div className="mb-6 border-b border-gray-100 pb-6">
-              <h3 className="text-sm font-bold mb-3 text-gray-900">Seller</h3>
-              <div className="space-y-2">
-                <label className="flex items-center cursor-pointer group">
-                  <div className="relative">
+            {/* Seller Filter */}
+            <div className="mb-8">
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Vendeur</h3>
+              <div className="space-y-3">
+                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
+                  <div className="relative flex items-center">
                     <input
                       type="checkbox"
                       checked={verifiedSellerOnly}
                       onChange={() => setVerifiedSellerOnly(!verifiedSellerOnly)}
                       className="peer sr-only"
                     />
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all"></div>
-                    <Check className="w-3.5 h-3.5 text-white absolute top-0.5 left-0.5 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
+                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
                   </div>
-                  <div className="ml-2 flex items-center gap-1.5">
-                    <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Verified Sellers</span>
-                    <BadgeCheck className="w-4 h-4 text-teal-600" />
+                  <div className="ml-3 flex items-center gap-2">
+                    <BadgeCheck className="w-5 h-5 text-teal-500" />
+                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Vérifié</span>
                   </div>
                 </label>
 
-                <label className="flex items-center cursor-pointer group">
-                  <div className="relative">
+                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
+                  <div className="relative flex items-center">
                     <input
                       type="checkbox"
                       checked={officialStoresOnly}
                       onChange={() => setOfficialStoresOnly(!officialStoresOnly)}
                       className="peer sr-only"
                     />
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all"></div>
-                    <Check className="w-3.5 h-3.5 text-white absolute top-0.5 left-0.5 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all shadow-sm"></div>
+                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
                   </div>
-                  <div className="ml-2 flex items-center gap-1.5">
-                    <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Official Stores</span>
-                    <Store className="w-4 h-4 text-purple-600" />
+                  <div className="ml-3 flex items-center gap-2">
+                    <Store className="w-5 h-5 text-purple-600" />
+                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Boutique Officielle</span>
                   </div>
                 </label>
               </div>
             </div>
 
             {/* Price Filter */}
-            <div className="mb-6 border-b border-gray-100 pb-6">
+            <div className="mb-8">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-gray-900">Price Range</h3>
-                <div className="flex bg-gray-100 p-0.5 rounded-lg">
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Prix</h3>
+                <div className="flex bg-gray-100/80 p-1 rounded-lg">
                   <button
                     onClick={() => setFilterCurrency('XAF')}
                     className={`px-2 py-0.5 text-xs font-bold rounded-md transition-all ${filterCurrency === 'XAF' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
@@ -384,7 +391,7 @@ const Catalog: React.FC = () => {
                     value={priceRange.min}
                     onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
                     placeholder="Min"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                    className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
                   />
                 </div>
                 <span className="text-gray-400 font-medium">-</span>
@@ -394,33 +401,33 @@ const Catalog: React.FC = () => {
                     value={priceRange.max}
                     onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
                     placeholder="Max"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                    className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
                   />
                 </div>
               </div>
             </div>
 
             {/* Condition Filter */}
-            <div className="mb-6">
-              <h3 className="text-sm font-bold mb-3 text-gray-900">Condition</h3>
-              <div className="space-y-2">
+            <div>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">État</h3>
+              <div className="space-y-1">
                 {CONDITIONS.map(condition => (
-                  <label key={condition} className="flex items-center cursor-pointer group justify-between">
+                  <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">
                     <div className="flex items-center">
-                      <div className="relative">
+                      <div className="relative flex items-center">
                         <input
                           type="checkbox"
                           checked={selectedConditions.includes(condition)}
                           onChange={() => toggleCondition(condition)}
                           className="peer sr-only"
                         />
-                        <div className="w-5 h-5 border-2 border-gray-300 rounded bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all"></div>
-                        <Check className="w-3.5 h-3.5 text-white absolute top-0.5 left-0.5 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                        <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
+                        <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
                       </div>
-                      <span className="ml-2 text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{condition}</span>
+                      <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-900 font-medium transition-colors">{condition}</span>
                     </div>
-                    <span className="text-xs text-gray-400 font-medium">
-                      ({conditionCounts[condition] || 0})
+                    <span className="text-xs text-gray-400 font-medium bg-gray-50 px-2 py-0.5 rounded-md">
+                      {conditionCounts[condition] || 0}
                     </span>
                   </label>
                 ))}
@@ -428,7 +435,10 @@ const Catalog: React.FC = () => {
             </div>
 
             {/* Sidebar Ad */}
-            <AdBanner slot="catalog-sidebar" format="box" className="mt-8" />
+            <div className="mt-8 hidden lg:block opacity-80 hover:opacity-100 transition-opacity">
+              <AdBanner slot="catalog-sidebar" format="box" />
+            </div>
+
           </div>
         </aside>
 

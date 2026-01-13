@@ -125,16 +125,18 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <nav className="sticky top-0 z-50 transition-all duration-300 backdrop-blur-2xl bg-white/70 border-b border-white/20 supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-6">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-teal-600 tracking-tight flex-shrink-0">
-            nelo
+          <Link to="/" className="text-3xl font-heading font-black text-teal-900 tracking-tighter flex-shrink-0 relative group">
+            nelo<span className="text-teal-500">.</span>
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-400 group-hover:w-full transition-all duration-300 rounded-full"></span>
           </Link>
 
           {/* Desktop Search */}
-          <div className="hidden md:flex flex-1 max-w-2xl relative mx-4" ref={searchRef}>
-            <form onSubmit={handleSearchSubmit} className="w-full relative">
+          <div className="hidden md:flex flex-1 max-w-xl relative" ref={searchRef}>
+            <form onSubmit={handleSearchSubmit} className="w-full relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-100 to-emerald-50 rounded-xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
               <input
                 type="text"
                 value={searchQuery}
@@ -144,9 +146,9 @@ const Navbar: React.FC = () => {
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder={t('nav.search')}
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-100 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all outline-none"
+                className="w-full pl-11 pr-4 py-3 bg-white/90 border border-gray-200/50 rounded-xl focus:bg-white focus:ring-0 focus:border-teal-500/50 focus:shadow-[0_0_20px_rgba(20,184,166,0.1)] transition-all outline-none font-medium text-sm relative"
               />
-              <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5 pointer-events-none" />
+              <Search className="absolute left-4 top-3.5 text-gray-400 w-5 h-5 pointer-events-none group-focus-within:text-teal-500 transition-colors" />
             </form>
 
             {/* Search Suggestions Dropdown */}
@@ -181,29 +183,38 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-5">
             {/* Language Selector */}
             <div className="relative">
               <button
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="flex items-center gap-1 text-gray-500 hover:text-teal-600 font-medium text-sm transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-600 font-bold text-xs border border-transparent hover:border-gray-200"
               >
-                <Globe className="w-5 h-5" />
-                <span>{language}</span>
+                {language}
               </button>
               {showLangMenu && (
-                <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
-                  <button onClick={() => toggleLanguage('EN')} className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === 'EN' ? 'font-bold text-teal-600' : 'text-gray-700'}`}>English</button>
-                  <button onClick={() => toggleLanguage('FR')} className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === 'FR' ? 'font-bold text-teal-600' : 'text-gray-700'}`}>Français</button>
-                  <button onClick={() => toggleLanguage('LN')} className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === 'LN' ? 'font-bold text-teal-600' : 'text-gray-700'}`}>Lingala</button>
+                <div className="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50 overflow-hidden animate-fade-in-up">
+                  {['EN', 'FR', 'LN'].map(lang => (
+                    <button
+                      key={lang}
+                      onClick={() => toggleLanguage(lang as Language)}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === lang ? 'font-bold text-teal-600' : 'text-gray-700'}`}
+                    >
+                      {lang === 'EN' ? 'English' : lang === 'FR' ? 'Français' : 'Lingala'}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
-            <Link to="/wishlist" className="relative text-gray-500 hover:text-teal-600 transition-colors">
-              <Heart className="w-6 h-6" />
+            <div className="h-6 w-px bg-gray-200"></div>
+
+            <Link to="/wishlist" className="relative group">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-50 text-gray-500 group-hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </div>
               {wishlistContext.wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full ring-2 ring-white">
                   {wishlistContext.wishlistCount}
                 </span>
               )}
@@ -213,11 +224,13 @@ const Navbar: React.FC = () => {
 
             {user ? (
               <>
-                <div className="flex items-center gap-4 text-gray-500">
-                  <button className="hover:text-teal-600 transition-colors relative" onClick={() => navigate('/messages')}>
-                    <MessageCircle className="w-6 h-6" />
+                <div className="flex items-center gap-3">
+                  <button className="relative group" onClick={() => navigate('/messages')}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-teal-50 text-gray-500 group-hover:text-teal-600 transition-colors">
+                      <MessageCircle className="w-5 h-5" />
+                    </div>
                     {chatContext.unreadTotal > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                      <span className="absolute top-0 right-0 bg-teal-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full ring-2 ring-white">
                         {chatContext.unreadTotal}
                       </span>
                     )}
@@ -226,12 +239,14 @@ const Navbar: React.FC = () => {
                   {/* Notifications */}
                   <div className="relative" ref={notifRef}>
                     <button
-                      className="hover:text-teal-600 transition-colors relative"
+                      className="relative group outline-none"
                       onClick={() => setShowNotifications(!showNotifications)}
                     >
-                      <Bell className="w-6 h-6" />
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-teal-50 text-teal-600' : 'hover:bg-gray-100 text-gray-500'}`}>
+                        <Bell className={`w-5 h-5 ${unreadCount > 0 ? 'animate-bell-shake' : ''}`} />
+                      </div>
                       {unreadCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full ring-2 ring-white">
                           {unreadCount}
                         </span>
                       )}

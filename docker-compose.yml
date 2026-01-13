@@ -24,7 +24,27 @@ services:
       timeout: 5s
       retries: 5
 
+  # Node.js Backend
+  node-backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: nelo-node-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DATABASE_URL=${DATABASE_URL}
+      - SUPABASE_URL=${VITE_SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    networks:
+      - nelo-network
+    depends_on:
+      - mysql
+
   # PHP Backend
+
   php-backend:
     build:
       context: .

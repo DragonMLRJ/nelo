@@ -145,7 +145,7 @@ const Checkout: React.FC = () => {
 
       // 3. Trigger Email Confirmation (Backend)
       try {
-        await fetch('/api/orders/confirmation.php', {
+        await fetch('/api/v2/orders/confirmation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

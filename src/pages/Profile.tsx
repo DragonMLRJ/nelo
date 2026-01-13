@@ -28,7 +28,6 @@ const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ name: '', location: '' });
 
-  // Initialize form data when entering settings or user changes
   React.useEffect(() => {
     if (user) {
       setFormData({
@@ -44,11 +43,8 @@ const Profile: React.FC = () => {
       name: formData.name,
       location: formData.location
     });
-    if (success) {
-      setIsEditing(false);
-    } else {
-      alert('Échec de la mise à jour du profil');
-    }
+    if (success) setIsEditing(false);
+    else alert('Échec de la mise à jour du profil');
   };
 
   if (!user) return <Navigate to="/login" />;
@@ -64,126 +60,103 @@ const Profile: React.FC = () => {
       exit={{ opacity: 0 }}
       className="min-h-screen bg-gray-50 pb-20"
     >
-      {/* Header Profile Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="w-24 h-24 rounded-full bg-teal-100 p-1 relative">
+      {/* Premium Header Section */}
+      <div className="bg-gradient-to-r from-teal-900 to-teal-800 text-white pb-12">
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="w-28 h-28 rounded-full p-1 relative ring-4 ring-white/10">
               <img
                 src={user.avatar}
                 alt={user.name}
-                className="w-full h-full rounded-full object-cover border-4 border-white shadow-sm"
+                className="w-full h-full rounded-full object-cover border-4 border-teal-900 shadow-xl"
               />
               {user.isVerified && (
-                <div className="absolute bottom-0 right-0 bg-teal-600 text-white p-1 rounded-full border-2 border-white">
+                <div className="absolute bottom-1 right-1 bg-teal-500 text-white p-1 rounded-full border-4 border-teal-900">
                   <CheckCircle className="w-4 h-4" />
                 </div>
               )}
             </div>
 
             <div className="flex-1 text-center md:text-left">
-              <div className="flex flex-col md:flex-row items-center gap-3 mb-1 justify-center md:justify-start">
-                <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+              <div className="flex flex-col md:flex-row items-center gap-4 mb-2 justify-center md:justify-start">
+                <h1 className="text-3xl font-bold font-outfit tracking-tight">{user.name}</h1>
                 <div className="flex items-center gap-2">
                   {user.isAdmin && (
-                    <span className="flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold border border-purple-200">
+                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-purple-500/20 text-purple-200 border border-purple-500/30 flex items-center gap-1">
                       <Shield className="w-3 h-3" /> Admin
                     </span>
                   )}
                   {user.isForumManager && (
-                    <span className="flex items-center gap-1 bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold border border-orange-200">
+                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-orange-500/20 text-orange-200 border border-orange-500/30 flex items-center gap-1">
                       <MessageSquare className="w-3 h-3" /> Modérateur Forum
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-sm text-gray-500 mb-4">
-                <span className="flex items-center gap-1" title="Ville">
-                  <MapPin className="w-4 h-4 text-gray-400" /> {user.location || 'Brazzaville, Congo'}
+              <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-teal-100/80 mb-6">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4" /> {user.location || 'Brazzaville, Congo'}
                 </span>
-                <span className="hidden md:inline text-gray-300">•</span>
-                <span className="flex items-center gap-1" title="Membre depuis">
-                  <Calendar className="w-4 h-4 text-gray-400" /> Membre depuis {user.memberSince || '2024'}
+                <span className="hidden md:inline text-teal-100/30">•</span>
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" /> Membre depuis {user.memberSince || '2024'}
                 </span>
-                {user.email && (
-                  <>
-                    <span className="hidden md:inline text-gray-300">•</span>
-                    <span>{user.email}</span>
-                  </>
-                )}
               </div>
-              <div className="flex items-center justify-center md:justify-start gap-3">
-                <button
-                  onClick={() => setActiveTab('settings')}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2"
-                >
-                  <Settings className="w-4 h-4" /> Modifier le profil
-                </button>
-                <button onClick={logout} className="px-4 py-2 border border-gray-200 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors flex items-center gap-2">
+
+              <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                <button onClick={logout} className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10 flex items-center gap-2">
                   <LogOut className="w-4 h-4" /> Se déconnecter
                 </button>
               </div>
             </div>
 
-            {/* Stats Card */}
-            <div className="flex gap-4 md:gap-8 bg-gray-50 p-4 rounded-xl border border-gray-100">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-gray-900">{myPurchases.length}</p>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Achats</p>
+            {/* Stats Cards - Glassmorphism */}
+            <div className="flex gap-4 md:gap-0 divide-x divide-white/10 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
+              <div className="px-6 py-4 text-center min-w-[100px]">
+                <p className="text-2xl font-bold text-white">{myPurchases.length}</p>
+                <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Achats</p>
               </div>
-              <div className="w-px bg-gray-200"></div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-gray-900">{mySales.length}</p>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Ventes</p>
+              <div className="px-6 py-4 text-center min-w-[100px]">
+                <p className="text-2xl font-bold text-white">{mySales.length}</p>
+                <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Ventes</p>
               </div>
-              <div className="w-px bg-gray-200"></div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-gray-900">{user.responseRate || '100%'}</p>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wide flex items-center gap-1 justify-center">
-                  <Clock className="w-3 h-3" /> Taux de rép.
-                </p>
+              <div className="px-6 py-4 text-center min-w-[100px]">
+                <p className="text-2xl font-bold text-white">{user.responseRate || '100%'}</p>
+                <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Taux Rép.</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="container mx-auto px-4 mt-4">
-          <div className="flex gap-8 border-b border-gray-200 overflow-x-auto hide-scrollbar">
-            <button
-              onClick={() => setActiveTab('purchases')}
-              className={`pb-4 text-sm font-bold flex items-center gap-2 transition-colors relative whitespace-nowrap ${activeTab === 'purchases' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-800'}`}
-            >
-              <ShoppingBag className="w-4 h-4" /> Mes Commandes
-              {activeTab === 'purchases' && (
-                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('sales')}
-              className={`pb-4 text-sm font-bold flex items-center gap-2 transition-colors relative whitespace-nowrap ${activeTab === 'sales' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-800'}`}
-            >
-              <Package className="w-4 h-4" /> Mes Ventes
-              {activeTab === 'sales' && (
-                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('settings')}
-              className={`pb-4 text-sm font-bold flex items-center gap-2 transition-colors relative whitespace-nowrap ${activeTab === 'settings' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-800'}`}
-            >
-              <Settings className="w-4 h-4" /> Paramètres
-              {activeTab === 'settings' && (
-                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
-              )}
-            </button>
+      {/* Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-8 overflow-x-auto hide-scrollbar">
+            {[
+              { id: 'purchases', label: 'Mes Commandes', icon: ShoppingBag },
+              { id: 'sales', label: 'Mes Ventes', icon: Package },
+              { id: 'settings', label: 'Paramètres', icon: Settings }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`py-5 text-sm font-bold flex items-center gap-2.5 transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-teal-700' : 'text-gray-500 hover:text-gray-800'}`}
+              >
+                <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'stroke-[2.5px]' : ''}`} />
+                {tab.label}
+                {activeTab === tab.id && (
+                  <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 rounded-t-full" />
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="container mx-auto px-4 py-8">
+      {/* Main Content Area */}
+      <div className="container mx-auto px-4 py-12">
         <AnimatePresence mode="wait">
           {activeTab === 'settings' ? (
             <motion.div
@@ -191,71 +164,95 @@ const Profile: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="max-w-2xl bg-white rounded-xl shadow-sm border border-gray-200 p-8"
+              className="max-w-3xl mx-auto"
             >
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-bold text-gray-900">Informations personnelles</h3>
-                {!isEditing ? (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="text-teal-600 font-bold text-sm hover:underline"
-                  >
-                    Modifier
-                  </button>
-                ) : (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setIsEditing(false)}
-                      className="text-gray-500 font-bold text-sm hover:underline"
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      onClick={handleSaveProfile}
-                      className="bg-teal-600 text-white px-3 py-1 rounded text-sm font-bold hover:bg-teal-700"
-                    >
-                      Enregistrer
-                    </button>
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div className="p-8 md:p-10">
+                  <div className="flex justify-between items-center mb-10">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 font-outfit">Informations personnelles</h3>
+                      <p className="text-gray-500">Gérez vos informations de profil et de contact.</p>
+                    </div>
+                    {!isEditing ? (
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="text-teal-600 font-bold bg-teal-50 px-4 py-2 rounded-xl hover:bg-teal-100 transition-colors"
+                      >
+                        Modifier
+                      </button>
+                    ) : (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          className="px-4 py-2 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-colors"
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          onClick={handleSaveProfile}
+                          className="px-4 py-2 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 shadow-lg shadow-teal-500/20 transition-colors"
+                        >
+                          Enregistrer
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
-                    <input
-                      type="text"
-                      value={isEditing ? formData.name : user.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      readOnly={!isEditing}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 ${isEditing ? 'bg-white border-teal-500 ring-2 ring-teal-100' : ''}`}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
-                    <input
-                      type="text"
-                      value={isEditing ? formData.location : user.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      readOnly={!isEditing}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 ${isEditing ? 'bg-white border-teal-500 ring-2 ring-teal-100' : ''}`}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Adresse Email</label>
-                  <input type="email" value={user.email || "demo@nelo.cg"} readOnly className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-400 cursor-not-allowed" title="Email cannot be changed" />
-                </div>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Nom complet</label>
+                        <input
+                          type="text"
+                          value={isEditing ? formData.name : user.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          readOnly={!isEditing}
+                          className={`w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-700 font-medium outline-none transition-all ${isEditing ? 'focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500' : 'opacity-70'}`}
+                        />
+                      </div>
+                      <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Adresse Email</label>
+                        <input
+                          type="email"
+                          value={user.email || "demo@nelo.cg"}
+                          readOnly
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-400 font-medium cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
 
-                <div className="pt-6 border-t border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">Moyens de paiement</h3>
-                  <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50">
-                    <CreditCard className="w-6 h-6 text-gray-400" />
-                    <span className="text-sm font-medium text-gray-700">•••• •••• •••• 4242</span>
-                    <span className="text-xs text-gray-400 ml-auto">Expire 12/25</span>
+                    <div className="space-y-6">
+                      <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Ville</label>
+                        <input
+                          type="text"
+                          value={isEditing ? formData.location : user.location}
+                          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                          readOnly={!isEditing}
+                          className={`w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-700 font-medium outline-none transition-all ${isEditing ? 'focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500' : 'opacity-70'}`}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <button className="text-teal-600 text-sm font-bold mt-3 hover:underline">Ajouter une carte</button>
+
+                  <div className="mt-10 pt-10 border-t border-gray-100">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6">Moyens de paiement</h3>
+                    <div className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-md transition-all cursor-pointer group">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-white p-2 rounded-lg border border-gray-200">
+                          <CreditCard className="w-6 h-6 text-gray-600" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900">Visa terminant par 4242</p>
+                          <p className="text-sm text-gray-500">Expire 12/25</p>
+                        </div>
+                      </div>
+                      <button className="text-teal-600 text-sm font-bold group-hover:underline">Modifier</button>
+                    </div>
+                    <button className="mt-4 text-teal-600 text-sm font-bold hover:underline flex items-center gap-1">
+                      + Ajouter une carte
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -265,26 +262,34 @@ const Profile: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="max-w-4xl"
+              className="max-w-5xl mx-auto"
             >
               {displayOrders.length > 0 ? (
                 <div className="space-y-4">
                   {displayOrders.map((order) => (
-                    <div key={order.id} className="mb-4">
+                    <div key={order.id} className="transform transition-all hover:translate-y-[-2px]">
                       <OrderCard order={order} role={activeTab === 'purchases' ? 'buyer' : 'seller'} />
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-200">
-                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <ShoppingBag className="w-8 h-8 text-gray-300" />
+                <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
+                  <div className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <ShoppingBag className="w-10 h-10 text-teal-600/50" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Aucune {activeTab === 'purchases' ? 'commande' : 'vente'} pour l'instant</h3>
-                  <p className="text-gray-500 text-sm mb-6">Les {activeTab === 'purchases' ? 'articles achetés' : 'articles vendus'} apparaîtront ici.</p>
-                  {activeTab === 'purchases' && (
-                    <Link to="/catalog" className="inline-block bg-teal-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-teal-700 transition-colors">
-                      Commencer à acheter
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 font-outfit">Aucune {activeTab === 'purchases' ? 'commande' : 'vente'}</h3>
+                  <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+                    {activeTab === 'purchases'
+                      ? "Vous n'avez pas encore passé de commande. Explorez le catalogue !"
+                      : "Vous n'avez aucun article en vente pour le moment."}
+                  </p>
+                  {activeTab === 'purchases' ? (
+                    <Link to="/catalog" className="inline-block bg-teal-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-1">
+                      Découvrir nos produits
+                    </Link>
+                  ) : (
+                    <Link to="/sell" className="inline-block bg-teal-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-1">
+                      Vendre un article
                     </Link>
                   )}
                 </div>

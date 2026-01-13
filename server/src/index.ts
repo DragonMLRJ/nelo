@@ -7,8 +7,13 @@ dotenv.config({ path: '../.env' }); // Load from root .env or local
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+import orderRoutes from './routes/orders';
+
 app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use('/orders', orderRoutes); // Maps to /api/v2/orders via Nginx
 
 // Basic Health Check
 app.get('/api/health', (req, res) => {

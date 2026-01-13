@@ -111,38 +111,53 @@ const Sell: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      className="container mx-auto px-4 py-8 max-w-3xl"
+      className="container mx-auto px-4 py-12 max-w-4xl min-h-screen"
     >
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{t('sell.title')}</h1>
+      <div className="text-center mb-10">
+        <h1 className="text-4xl font-bold font-outfit text-gray-900 mb-3">{t('sell.title')}</h1>
+        <p className="text-gray-500 text-lg">Mettez en vente vos articles en quelques secondes.</p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
+      <form onSubmit={handleSubmit} className="bg-white/80 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-xl border border-white/50 relative overflow-hidden">
+        {/* Background Decorative Blob */}
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* Photo Upload */}
-        <div className="mb-8">
-          <label className="block text-sm font-bold text-gray-700 mb-4">{t('sell.photos')} {images.length > 0 && `(${images.length})`}</label>
+        {/* Section: Photos */}
+        <div className="mb-10">
+          <h2 className="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+            <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">1</span>
+            {t('sell.photos')}
+          </h2>
+          <p className="text-sm text-gray-500 mb-4 ml-10">Ajoutez jusqu'à 8 photos. La première sera la couverture.</p>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 mb-4">
+          <div className="ml-0 md:ml-10 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
             {images.map((img, idx) => (
-              <div key={idx} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200 group">
+              <div key={idx} className="relative aspect-square bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm group hover:shadow-md transition-all">
                 <img src={img} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
                 <button
                   type="button"
                   onClick={() => removeImage(idx)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-1.5 right-1.5 bg-white/90 text-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-50"
                 >
-                  <Tag className="w-3 h-3 rotate-45" /> {/* Using Tag as X icon workaround or just import X */}
+                  <X className="w-3.5 h-3.5" />
                 </button>
-                {idx === 0 && <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] text-center py-0.5">{t('sell.cover')}</span>}
+                {idx === 0 && (
+                  <div className="absolute bottom-0 inset-x-0 bg-teal-600/90 text-white text-[10px] uppercase font-bold text-center py-1 backdrop-blur-sm">
+                    {t('sell.cover')}
+                  </div>
+                )}
               </div>
             ))}
 
-            <label className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer aspect-square">
+            <label className="border-2 border-dashed border-teal-200 rounded-2xl flex flex-col items-center justify-center bg-teal-50/30 hover:bg-teal-50/60 hover:border-teal-400 transition-all cursor-pointer aspect-square group">
               {uploading ? (
-                <span className="text-xs text-gray-500 animate-pulse">{t('sell.uploading')}</span>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
               ) : (
                 <>
-                  <Camera className="w-6 h-6 text-gray-400 mb-1" />
-                  <span className="text-xs text-gray-500">{t('sell.add_photo')}</span>
+                  <div className="bg-white p-2 rounded-full shadow-sm mb-2 group-hover:scale-110 transition-transform">
+                    <Camera className="w-5 h-5 text-teal-600" />
+                  </div>
+                  <span className="text-xs text-teal-700 font-medium">{t('sell.add_photo')}</span>
                 </>
               )}
               <input type="file" className="hidden" multiple accept="image/*" onChange={handleImageUpload} disabled={uploading} />
@@ -150,122 +165,148 @@ const Sell: React.FC = () => {
           </div>
         </div>
 
-        {/* Title & Desc */}
-        <div className="space-y-6 mb-8">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.item_title')}</label>
-            <input
-              type="text"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              placeholder={t('sell.item_title_ph')}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.description')}</label>
-            <textarea
-              rows={5}
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder={t('sell.description_ph')}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all"
-              required
-            />
-          </div>
-        </div>
+        <hr className="border-gray-100 my-8" />
 
-        {/* Details */}
-        <div className="space-y-6 mb-8 border-t border-gray-100 pt-8">
-          <div className="grid md:grid-cols-2 gap-6">
+        {/* Sections Grid */}
+        <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
+
+          {/* Left Column: Details */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">2</span>
+              Détails
+            </h2>
+
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.category')}</label>
-              <select
-                value={category}
-                onChange={e => setCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500 outline-none bg-white"
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Titre de l'annonce</label>
+              <input
+                type="text"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                placeholder="Ex: iPhone 13 Pro Max 256GB"
+                className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
                 required
-              >
-                <option value="">{t('sell.select_category')}</option>
-                <option value="men">{t('cat.men')}</option>
-                <option value="women">{t('cat.women')}</option>
-                <option value="kids">{t('cat.kids')}</option>
-                <option value="tech">{t('cat.tech')}</option>
-                <option value="home">{t('cat.home')}</option>
-                <option value="ent">{t('cat.entertainment')}</option>
-                <option value="beauty">{t('cat.beauty')}</option>
-              </select>
+              />
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Catégorie</label>
+                <select
+                  value={category}
+                  onChange={e => setCategory(e.target.value)}
+                  className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none appearance-none"
+                  required
+                >
+                  <option value="">Sélectionner</option>
+                  <option value="men">{t('cat.men')}</option>
+                  <option value="women">{t('cat.women')}</option>
+                  <option value="kids">{t('cat.kids')}</option>
+                  <option value="tech">{t('cat.tech')}</option>
+                  <option value="home">{t('cat.home')}</option>
+                  <option value="ent">{t('cat.entertainment')}</option>
+                  <option value="beauty">{t('cat.beauty')}</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">État</label>
+                <select
+                  value={condition}
+                  onChange={e => setCondition(e.target.value)}
+                  className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none appearance-none"
+                  required
+                >
+                  <option value="">Sélectionner</option>
+                  <option value="New">{t('common.new')}</option>
+                  <option value="Very Good">Très bon état</option>
+                  <option value="Good">Bon état</option>
+                  <option value="Fair">État correct</option>
+                </select>
+              </div>
+            </div>
+
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.brand')}</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Marque (Optionnel)</label>
               <input
                 type="text"
                 value={brand}
                 onChange={e => setBrand(e.target.value)}
-                placeholder={t('sell.brand_ph')}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500 outline-none"
+                placeholder="Ex: Apple, Zara, Samsung"
+                className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
               />
             </div>
+
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.condition')}</label>
-              <select
-                value={condition}
-                onChange={e => setCondition(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500 outline-none bg-white"
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+              <textarea
+                rows={4}
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                placeholder="Décrivez votre article en détail..."
+                className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all resize-none"
                 required
+              />
+            </div>
+          </div>
+
+          {/* Right Column: Price & Location */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">3</span>
+              Prix et Lieu
+            </h2>
+
+            <div className="bg-teal-50/50 p-6 rounded-2xl border border-teal-100">
+              <label className="block text-sm font-bold text-teal-900 mb-2">Prix de vente</label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={price}
+                  onChange={e => setPrice(e.target.value)}
+                  placeholder="0"
+                  className="w-full bg-white border border-teal-200 rounded-xl pl-4 pr-16 py-4 text-2xl font-bold text-gray-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                  required
+                />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-teal-600">
+                  XAF
+                </div>
+              </div>
+              <p className="text-xs text-teal-600/70 mt-2">
+                Nelo ne prend aucune commission sur les ventes entre particuliers.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Ville</label>
+              <select
+                value={user.location || 'Brazzaville'}
+                disabled
+                className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-500 outline-none cursor-not-allowed"
               >
-                <option value="">{t('sell.select_condition')}</option>
-                <option value="New">{t('common.new')}</option>
-                <option value="Very Good">Very Good</option>
-                <option value="Good">Good</option>
-                <option value="Fair">Fair</option>
+                {CONGO_CITIES.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
               </select>
+              <p className="text-xs text-gray-400 mt-1">Basé sur votre profil.</p>
             </div>
           </div>
 
-          {/* Location for Item - Defaults to User Location */}
-          <div className="mt-6">
-            <label className="block text-sm font-bold text-gray-700 mb-2">{t('product.location')}</label>
-            <select
-              value={user.location || 'Brazzaville'}
-              onChange={() => { }}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 focus:ring-2 focus:ring-teal-500 outline-none"
-              disabled
-            >
-              {CONGO_CITIES.map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">Item location is based on your profile.</p>
-          </div>
         </div>
 
-        {/* Price */}
-        <div className="mb-8 border-t border-gray-100 pt-8">
-          <label className="block text-sm font-bold text-gray-700 mb-2">{t('sell.price')}</label>
-          <div className="relative max-w-xs">
-            <input
-              type="number"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-              placeholder="0.00"
-              className="w-full border border-gray-300 rounded-lg pl-4 pr-12 py-3 focus:ring-2 focus:ring-teal-500 outline-none font-bold text-lg"
-              required
-            />
-            <div className="absolute right-0 top-0 bottom-0 px-4 bg-gray-100 border-l border-gray-300 rounded-r-lg flex items-center text-gray-500 font-bold">
-              XAF
-            </div>
-          </div>
+        <div className="mt-12 pt-6 border-t border-gray-100">
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className={`w-full bg-gradient-to-r from-teal-600 to-teal-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-teal-500/25 hover:from-teal-500 hover:to-teal-600 transition-all transform hover:-translate-y-0.5 ${isSubmitting ? 'opacity-70 cursor-not-allowed transform-none' : ''}`}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                Publication en cours...
+              </span>
+            ) : t('sell.submit')}
+          </button>
         </div>
-
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className={`w-full bg-teal-600 text-white py-4 rounded-lg font-bold text-lg shadow-md hover:bg-teal-700 transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
-        >
-          {isSubmitting ? t('sell.submitting') : t('sell.submit')}
-        </button>
 
       </form>
     </motion.div >

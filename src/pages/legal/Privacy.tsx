@@ -4,7 +4,7 @@ import { Lock, Eye } from 'lucide-react';
 const Privacy: React.FC = () => {
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+            <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="p-3 bg-teal-50 rounded-lg text-teal-600">
                         <Lock className="w-8 h-8" />

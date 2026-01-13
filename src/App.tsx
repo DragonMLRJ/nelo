@@ -12,80 +12,89 @@ import { OrderProvider } from './context/OrderContext';
 import { NotificationProvider } from './context/NotificationContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Catalog from './pages/Catalog';
-import ProductDetails from './pages/ProductDetails';
-import Sell from './pages/Sell';
-import Messages from './pages/Messages';
-import Wishlist from './pages/Wishlist';
-import Cart from './pages/Cart';
-import Auth from './pages/Auth';
-import Policies from './pages/Policies';
-import Terms from './pages/legal/Terms';
-import Privacy from './pages/legal/Privacy';
-import Returns from './pages/legal/Returns';
-import Profile from './pages/Profile';
-import UserProfile from './pages/UserProfile';
-import AdminDashboard from './pages/Admin/Dashboard';
-import Forum from './pages/Forum';
-import InfoPage from './pages/InfoPage';
-import Checkout from './pages/Checkout';
-import OrderDetails from './pages/OrderDetails';
-import SellerDashboard from './pages/SellerDashboard';
+const Home = React.lazy(() => import('./pages/Home'));
+const Catalog = React.lazy(() => import('./pages/Catalog'));
+const ProductDetails = React.lazy(() => import('./pages/ProductDetails'));
+const Sell = React.lazy(() => import('./pages/Sell'));
+const Messages = React.lazy(() => import('./pages/Messages'));
+const Wishlist = React.lazy(() => import('./pages/Wishlist'));
+const Cart = React.lazy(() => import('./pages/Cart'));
+const Auth = React.lazy(() => import('./pages/Auth'));
+const Policies = React.lazy(() => import('./pages/Policies'));
+const Terms = React.lazy(() => import('./pages/legal/Terms'));
+const Privacy = React.lazy(() => import('./pages/legal/Privacy'));
+const Returns = React.lazy(() => import('./pages/legal/Returns'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile'));
+const AdminDashboard = React.lazy(() => import('./pages/Admin/Dashboard'));
+const Forum = React.lazy(() => import('./pages/Forum'));
+const InfoPage = React.lazy(() => import('./pages/InfoPage'));
+const Checkout = React.lazy(() => import('./pages/Checkout'));
+const OrderDetails = React.lazy(() => import('./pages/OrderDetails'));
+const SellerDashboard = React.lazy(() => import('./pages/SellerDashboard'));
+const InvoiceView = React.lazy(() => import('./pages/InvoiceView'));
+const UsersPage = React.lazy(() => import('./pages/Admin/Users'));
+const ModerationPage = React.lazy(() => import('./pages/Admin/Moderation'));
+
 import CookieConsent from './components/CookieConsent';
 import AdminRoute from './components/AdminRoute';
 import AdminLayout from './layouts/AdminLayout';
-import InvoiceView from './pages/InvoiceView';
-import UsersPage from './pages/Admin/Users';
-import ModerationPage from './pages/Admin/Moderation';
+
+// Loading Fallback
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin"></div>
+  </div>
+);
 
 const AnimatedRoutes: React.FC = () => {
   const location = useLocation();
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/catalog" element={<Catalog />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/sell" element={<Sell />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout/:productId" element={<Checkout />} />
-        <Route path="/login" element={<Auth type="login" />} />
-        <Route path="/register" element={<Auth type="register" />} />
-        <Route path="/register" element={<Auth type="register" />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/cookies" element={<Policies type="cookies" />} />
-        <Route path="/refund-policy" element={<Returns />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/user/:userId" element={<UserProfile />} />
-        {/* Admin Routes */}
-        <Route path="/admin" element={
-          <AdminRoute>
-            <AdminLayout />
-          </AdminRoute>
-        }>
-          <Route index element={<AdminDashboard />} />
-          <Route path="users" element={<UsersPage />} />
-          <Route path="moderation" element={<ModerationPage />} />
-        </Route>
+      <React.Suspense fallback={<PageLoader />}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/sell" element={<Sell />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout/:productId" element={<Checkout />} />
+          <Route path="/login" element={<Auth type="login" />} />
+          <Route path="/register" element={<Auth type="register" />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/cookies" element={<Policies type="cookies" />} />
+          <Route path="/refund-policy" element={<Returns />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/user/:userId" element={<UserProfile />} />
+          {/* Admin Routes */}
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }>
+            <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="moderation" element={<ModerationPage />} />
+          </Route>
 
-        {/* Info Pages */}
-        <Route path="/about" element={<InfoPage pageKey="about" />} />
-        <Route path="/sustainability" element={<InfoPage pageKey="sustainability" />} />
-        <Route path="/jobs" element={<InfoPage pageKey="jobs" />} />
-        <Route path="/how-it-works" element={<InfoPage pageKey="how-it-works" />} />
-        <Route path="/pro" element={<InfoPage pageKey="pro" />} />
-        <Route path="/trust" element={<InfoPage pageKey="trust" />} />
+          {/* Info Pages */}
+          <Route path="/about" element={<InfoPage pageKey="about" />} />
+          <Route path="/sustainability" element={<InfoPage pageKey="sustainability" />} />
+          <Route path="/jobs" element={<InfoPage pageKey="jobs" />} />
+          <Route path="/how-it-works" element={<InfoPage pageKey="how-it-works" />} />
+          <Route path="/pro" element={<InfoPage pageKey="pro" />} />
+          <Route path="/trust" element={<InfoPage pageKey="trust" />} />
 
-        {/* Order Management */}
-        <Route path="/orders/:orderId" element={<OrderDetails />} />
-        <Route path="/invoice/:orderId" element={<InvoiceView />} />
-        <Route path="/sales" element={<SellerDashboard />} />
-      </Routes>
+          {/* Order Management */}
+          <Route path="/orders/:orderId" element={<OrderDetails />} />
+          <Route path="/invoice/:orderId" element={<InvoiceView />} />
+          <Route path="/sales" element={<SellerDashboard />} />
+        </Routes>
+      </React.Suspense>
     </AnimatePresence>
   );
 };

@@ -4,59 +4,64 @@ import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 pt-12 pb-8 mt-auto">
+    <footer className="bg-white border-t border-gray-100 pt-16 pb-8 mt-auto">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12">
           <div>
-            <h3 className="font-bold text-gray-800 mb-4">Nelo</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/about" className="hover:text-teal-600">À propos</Link></li>
-              <li><Link to="/sustainability" className="hover:text-teal-600">Durabilité</Link></li>
-              <li><Link to="/jobs" className="hover:text-teal-600">Emplois</Link></li>
+            <h3 className="font-heading font-extrabold text-xl text-teal-700 mb-6">nelo.</h3>
+            <ul className="space-y-3 text-sm text-slate-500 font-medium">
+              <li><Link to="/about" className="hover:text-teal-600 transition-colors">À propos</Link></li>
+              <li><Link to="/sustainability" className="hover:text-teal-600 transition-colors">Durabilité</Link></li>
+              <li><Link to="/jobs" className="hover:text-teal-600 transition-colors">Emplois</Link></li>
+              <li><Link to="/blog" className="hover:text-teal-600 transition-colors">Blog</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 mb-4">Découvrir</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/how-it-works" className="hover:text-teal-600">Comment ça marche</Link></li>
-              <li><Link to="/pro" className="hover:text-teal-600">Nelo Pro</Link></li>
+            <h3 className="font-bold text-slate-900 mb-6">Découvrir</h3>
+            <ul className="space-y-3 text-sm text-slate-500 font-medium">
+              <li><Link to="/how-it-works" className="hover:text-teal-600 transition-colors">Comment ça marche</Link></li>
+              <li><Link to="/pro" className="hover:text-teal-600 transition-colors">Nelo Pro</Link></li>
+              <li><Link to="/mobile" className="hover:text-teal-600 transition-colors">Application Mobile</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 mb-4">Aide</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
+            <h3 className="font-bold text-slate-900 mb-6">Aide & Support</h3>
+            <ul className="space-y-3 text-sm text-slate-500 font-medium">
               <li>
-                <a href="mailto:challengecodeur334334@gmail.com" className="hover:text-teal-600 flex items-center gap-1">
+                <a href="mailto:challengecodeur334334@gmail.com" className="hover:text-teal-600 transition-colors flex items-center gap-1">
                   Centre d'aide
                 </a>
               </li>
-              <li><Link to="/sell" className="hover:text-teal-600">Vendre</Link></li>
-              <li><Link to="/catalog" className="hover:text-teal-600">Acheter</Link></li>
-              <li><Link to="/trust" className="hover:text-teal-600">Confiance & Sécurité</Link></li>
+              <li><Link to="/sell" className="hover:text-teal-600 transition-colors">Vendre un article</Link></li>
+              <li><Link to="/trust" className="hover:text-teal-600 transition-colors">Confiance & Sécurité</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 mb-4">Communauté</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/forum" className="hover:text-teal-600">Forum</Link></li>
-              <li className="flex gap-4 mt-4">
-                <Facebook className="w-5 h-5 hover:text-teal-600 cursor-pointer" />
-                <Twitter className="w-5 h-5 hover:text-teal-600 cursor-pointer" />
-                <Instagram className="w-5 h-5 hover:text-teal-600 cursor-pointer" />
-                <Linkedin className="w-5 h-5 hover:text-teal-600 cursor-pointer" />
-              </li>
-            </ul>
+            <h3 className="font-bold text-slate-900 mb-6">Suivez-nous</h3>
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-teal-50 hover:text-teal-600 transition-all">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-teal-50 hover:text-teal-600 transition-all">
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-teal-50 hover:text-teal-600 transition-all">
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
+            <p className="mt-6 text-xs text-slate-400 font-medium">
+              Inscrivez-vous à notre newsletter pour les meilleures offres !
+            </p>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-          <div className="flex gap-4">
-            <Link to="/privacy" className="hover:underline">Politique de confidentialité</Link>
-            <Link to="/cookies" className="hover:underline">Politique des cookies</Link>
-            <Link to="/terms" className="hover:underline">Conditions générales</Link>
-            <Link to="/refund-policy" className="hover:underline">Politique de remboursement</Link>
+        <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400 font-medium">
+          <div className="flex flex-wrap justify-center gap-6">
+            <Link to="/privacy" className="hover:text-teal-600 transition-colors">Politique de confidentialité</Link>
+            <Link to="/cookies" className="hover:text-teal-600 transition-colors">Cookies</Link>
+            <Link to="/terms" className="hover:text-teal-600 transition-colors">Conditions générales</Link>
           </div>
-          <p>© 2024 Nelo Congo. Tous droits réservés.</p>
+          <p>© 2026 Nelo Congo. Fait avec passion à Brazzaville.</p>
         </div>
       </div>
     </footer>

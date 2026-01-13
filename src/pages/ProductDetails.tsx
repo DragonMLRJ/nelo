@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, Edit, ChevronLeft, Star, ShieldCheck, Heart, Share2, MapPin, MessageCircle, BadgeCheck, HandCoins, X, ShoppingCart, Store, Truck } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
+import { supabase } from '../supabaseClient';
 import { SHIPPING_RATES } from '../constants';
 import AdBanner from '../components/AdBanner';
 import ProductCard from '../components/ProductCard';
@@ -55,15 +56,40 @@ const ProductDetails: React.FC = () => {
 
   React.useEffect(() => {
     if (product) {
-      // Fetch related products
-      fetch(`/api/products/index.php?action=related&id=${product.id}&limit=5`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            setRelatedProducts(data.products);
+      const fetchRelated = async () => {
+        try {
+          // Fetch related products (same category, different ID) from Supabase
+          const { data, error } = await supabase
+            .from('products')
+            .select(`
+              *,
+              profiles!seller_id (id, name, avatar, is_verified)
+            `)
+            .eq('category_id', product.category_id || 0) // Fallback if no category_id
+            .neq('id', product.id)
+            .limit(5);
+
+          if (error) throw error;
+
+          if (data) {
+            const formatted = data.map(p => ({
+              ...p,
+              image: p.image,
+              seller: {
+                id: p.profiles?.id.toString(),
+                name: p.profiles?.name,
+                avatar: p.profiles?.avatar,
+                isVerified: p.profiles?.is_verified
+              }
+            }));
+            setRelatedProducts(formatted);
           }
-        })
-        .catch(err => console.error("Failed to load related products", err));
+        } catch (err) {
+          console.error("Failed to load related products", err);
+        }
+      };
+
+      fetchRelated();
     }
   }, [product]);
 

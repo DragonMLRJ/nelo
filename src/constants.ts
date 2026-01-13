@@ -10,6 +10,9 @@ export const CATEGORIES: Category[] = [
   { id: 'tech', name: 'Electronics', icon: 'smartphone' },
   { id: 'ent', name: 'Entertainment', icon: 'gamepad-2' },
   { id: 'beauty', name: 'Beauty', icon: 'sparkles' },
+  { id: 'vehicles', name: 'Vehicles', icon: 'car' },
+  { id: 'real_estate', name: 'Real Estate', icon: 'building' },
+  { id: 'services', name: 'Services', icon: 'briefcase' },
 ];
 
 export const CONGO_CITIES = [
@@ -177,7 +180,7 @@ export const MOCK_PRODUCTS: Product[] = [
     title: 'Zara Summer Dress',
     price: 8500,
     currency: 'XAF',
-    image: 'https://picsum.photos/400/500?random=6',
+    image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400',
     category: 'women',
     brand: 'Zara',
     size: 'S',
@@ -185,7 +188,7 @@ export const MOCK_PRODUCTS: Product[] = [
     seller: {
       id: 'u1',
       name: 'Marie K.',
-      avatar: 'https://picsum.photos/50/50?random=1',
+      avatar: 'https://ui-avatars.com/api/?name=Marie+K',
       isVerified: true,
       memberSince: '2021',
       responseRate: '98%',
@@ -196,4 +199,117 @@ export const MOCK_PRODUCTS: Product[] = [
     location: 'Brazzaville, Bacongo',
     postedAt: '1 week ago'
   },
+  {
+    id: '7',
+    title: 'Toyota RAV4 2020',
+    price: 15000000,
+    currency: 'XAF',
+    image: 'https://images.unsplash.com/photo-1621007947382-bb3c3968e3bb?auto=format&fit=crop&w=800',
+    category: 'vehicles',
+    brand: 'Toyota',
+    condition: 'Good',
+    seller: {
+      id: 'u6',
+      name: 'Auto Prestige',
+      avatar: 'https://ui-avatars.com/api/?name=Auto+Prestige&background=0D9488&color=fff',
+      isVerified: true,
+      memberSince: '2019',
+      responseRate: '100%',
+      location: 'Brazzaville',
+      isOfficialStore: true
+    },
+    likes: 89,
+    description: 'Toyota RAV4 4x4, full option, maintained at Toyota Congo. 45,000km.',
+    location: 'Brazzaville, Centre-Ville',
+    postedAt: '2 days ago'
+  },
+  {
+    id: '8',
+    title: 'Appartement Meublé 3 Pièces',
+    price: 350000,
+    currency: 'XAF',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400',
+    category: 'real_estate',
+    condition: 'Good',
+    seller: {
+      id: 'u7',
+      name: 'Immo Congo',
+      avatar: 'https://ui-avatars.com/api/?name=Immo+Congo&background=0D9488&color=fff',
+      isVerified: true,
+      memberSince: '2020',
+      responseRate: '95%',
+      location: 'Pointe-Noire'
+    },
+    likes: 42,
+    description: 'Bel appartement meublé, vue sur mer, sécurisé, groupe électrogène.',
+    location: 'Pointe-Noire, Côte Sauvage',
+    postedAt: '1 day ago'
+  },
+  {
+    id: '9',
+    title: 'HP Envy x360',
+    price: 450000,
+    currency: 'XAF',
+    image: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?auto=format&fit=crop&w=400',
+    category: 'tech',
+    brand: 'HP',
+    condition: 'Very Good',
+    seller: {
+      id: 'u8',
+      name: 'Student Tech',
+      avatar: 'https://ui-avatars.com/api/?name=Student+Tech',
+      isVerified: false,
+      memberSince: '2023',
+      responseRate: '80%',
+      location: 'Brazzaville'
+    },
+    likes: 15,
+    description: 'HP convertible laptop, i7 11th gen, 16GB RAM, 512GB SSD.',
+    location: 'Brazzaville, Moungali',
+    postedAt: '6 hours ago'
+  },
+  {
+    id: '10',
+    title: 'Terrain 500m2 Kintélé',
+    price: 8000000,
+    currency: 'XAF',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=400',
+    category: 'real_estate',
+    condition: 'New',
+    seller: {
+      id: 'u7',
+      name: 'Immo Congo',
+      avatar: 'https://ui-avatars.com/api/?name=Immo+Congo&background=0D9488&color=fff',
+      isVerified: true,
+      memberSince: '2020',
+      responseRate: '95%',
+      location: 'Pointe-Noire'
+    },
+    likes: 112,
+    description: 'Terrain plat, borné, avec titre foncier. Zone en plein essor.',
+    location: 'Kintélé',
+    postedAt: '3 days ago'
+  },
+  {
+    id: '11',
+    title: 'Dépannage Informatique',
+    price: 15000,
+    currency: 'XAF',
+    image: 'https://images.unsplash.com/photo-1597872250969-966903bf88fb?auto=format&fit=crop&w=400',
+    category: 'services',
+    condition: 'New',
+    seller: {
+      id: 'u9',
+      name: 'IT Services Pro',
+      avatar: 'https://ui-avatars.com/api/?name=IT+Pro',
+      isVerified: true,
+      memberSince: '2021',
+      responseRate: '100%',
+      location: 'Brazzaville'
+    },
+    likes: 5,
+    description: 'Réparation PC/Mac, installation Windows/Office, récupération données.',
+    location: 'Brazzaville, Poto-Poto',
+    postedAt: 'Just now'
+  }
 ];

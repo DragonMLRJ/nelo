@@ -12,7 +12,8 @@ import {
   AlertTriangle,
   X,
   Check,
-  Clock
+  Clock,
+  Package
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
@@ -65,7 +66,6 @@ const UserProfile: React.FC = () => {
 
   const handleReportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
     setTimeout(() => {
       setHasReported(true);
       setIsReportModalOpen(false);
@@ -80,89 +80,92 @@ const UserProfile: React.FC = () => {
       exit={{ opacity: 0 }}
       className="min-h-screen bg-gray-50 pb-20"
     >
-      {/* Header / Cover */}
-      <div className="bg-teal-700 h-32 md:h-48 relative">
-        <div className="absolute inset-0 bg-black/10"></div>
+      {/* Decorative Background */}
+      <div className="h-64 bg-gradient-to-r from-teal-800 to-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        {/* Abstract Shapes */}
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-16 relative z-10">
-        <div className="grid md:grid-cols-4 gap-6">
+      <div className="container mx-auto px-4 -mt-24 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-8">
 
           {/* Sidebar: Profile Info & Stats */}
-          <div className="md:col-span-1 space-y-6">
-            {/* Main Profile Card */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center relative overflow-hidden">
-              <div className="w-24 h-24 mx-auto rounded-full bg-white p-1 shadow-md relative -mt-12 mb-4">
+          <div className="lg:col-span-4 space-y-6">
+            {/* Main Profile Card - Glassmorphism */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-8 text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 to-purple-500"></div>
+
+              <div className="w-28 h-28 mx-auto rounded-full bg-white p-1 shadow-lg relative -mt-4 mb-5">
                 <img
                   src={profileUser.avatar}
                   alt={profileUser.name}
-                  className="w-full h-full object-cover rounded-full bg-gray-200"
+                  className="w-full h-full object-cover rounded-full bg-gray-100"
                 />
                 {profileUser.isVerified && (
-                  <div className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-sm">
-                    <BadgeCheck className="w-5 h-5 text-teal-600 fill-teal-50" />
+                  <div className="absolute bottom-0 right-0 bg-teal-600 text-white p-1 rounded-full border-2 border-white shadow-sm" title="Compte vérifié">
+                    <Check className="w-4 h-4" />
                   </div>
                 )}
               </div>
 
-              <h1 className="text-xl font-bold text-gray-900 mb-1">{profileUser.name}</h1>
-              <div className="flex items-center justify-center gap-1 text-yellow-500 font-bold text-sm mb-4">
-                <Star className="w-4 h-4 fill-current" /> 4.9 (24)
+              <h1 className="text-2xl font-bold text-gray-900 mb-2 font-outfit">{profileUser.name}</h1>
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <span className="flex items-center gap-1 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-lg border border-yellow-100 text-sm font-bold">
+                  <Star className="w-3.5 h-3.5 fill-current" /> 4.9
+                </span>
+                <span className="text-gray-400 text-sm">•</span>
+                <span className="text-gray-500 text-sm">24 avis</span>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <button
                   onClick={handleMessageUser}
-                  className="w-full bg-teal-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-teal-700 transition-colors shadow-sm flex items-center justify-center gap-2"
+                  className="w-full bg-teal-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
                 >
-                  <MessageCircle className="w-4 h-4" /> {t('profile.message')}
+                  <MessageCircle className="w-5 h-5" /> {t('profile.message')}
                 </button>
-                <div className="flex gap-2">
-                  <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors flex items-center justify-center gap-2">
+                <div className="flex gap-3">
+                  <button className="flex-1 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-700 font-medium transition-colors flex items-center justify-center gap-2">
                     <Share2 className="w-4 h-4" /> {t('profile.share')}
                   </button>
                   <button
                     onClick={() => setIsReportModalOpen(true)}
                     disabled={hasReported}
-                    className={`flex-1 py-2 border border-gray-300 rounded-lg transition-colors flex items-center justify-center gap-2 ${hasReported ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-red-50 text-gray-600 hover:text-red-600 hover:border-red-200'}`}
-                    title={t('profile.report')}
+                    className={`flex-1 py-2.5 border border-gray-200 rounded-xl transition-colors flex items-center justify-center gap-2 font-medium ${hasReported ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-red-50 text-gray-600 hover:text-red-600 hover:border-red-100'}`}
                   >
-                    <Flag className={`w-4 h-4 ${hasReported ? 'fill-gray-400' : ''}`} /> {t('profile.report')}
+                    <Flag className={`w-4 h-4 ${hasReported ? 'fill-gray-400' : ''}`} />
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* About Seller Section */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">{t('profile.about')}</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-gray-100 rounded-lg text-gray-500">
+              {/* Info List */}
+              <div className="mt-8 space-y-4 text-left border-t border-gray-100 pt-6">
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 group-hover:bg-teal-100 transition-colors">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">{t('product.location')}</p>
+                    <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-0.5">{t('product.location')}</p>
                     <p className="font-medium text-gray-900">{profileUser.location}</p>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-gray-100 rounded-lg text-gray-500">
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-100 transition-colors">
                     <Calendar className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">{t('product.member_since')}</p>
+                    <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-0.5">{t('product.member_since')}</p>
                     <p className="font-medium text-gray-900">{profileUser.memberSince}</p>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-gray-100 rounded-lg text-gray-500">
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition-colors">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">{t('product.response_rate')}</p>
+                    <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-0.5">{t('product.response_rate')}</p>
                     <p className="font-medium text-gray-900">{profileUser.responseRate || '100%'}</p>
                   </div>
                 </div>
@@ -170,36 +173,41 @@ const UserProfile: React.FC = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div>
-                  <p className="text-2xl font-bold text-teal-600">{userListings.length}</p>
-                  <p className="text-xs text-gray-500 font-medium">{t('profile.listings')}</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-800">12</p>
-                  <p className="text-xs text-gray-500 font-medium">{t('profile.sold')}</p>
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
+                <p className="text-3xl font-bold text-teal-600 font-outfit">{userListings.length}</p>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('profile.listings')}</p>
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
+                <p className="text-3xl font-bold text-indigo-600 font-outfit">12</p>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('profile.sold')}</p>
               </div>
             </div>
           </div>
 
           {/* Main Content: Listings */}
-          <div className="md:col-span-3 pt-6 md:pt-0">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900">{t('profile.listings')}</h2>
-              <p className="text-gray-500 text-sm">{t('home.see_all')}</p>
+          <div className="lg:col-span-8 pt-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 font-outfit flex items-center gap-2">
+                <span className="w-2 h-8 bg-teal-500 rounded-full"></span>
+                {t('profile.listings')}
+              </h2>
+
             </div>
 
             {userListings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {userListings.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <div className="bg-white p-12 rounded-xl text-center border border-dashed border-gray-200">
-                <p className="text-gray-500">{t('profile.no_listings')}</p>
+              <div className="bg-white p-16 rounded-3xl text-center border border-dashed border-gray-200">
+                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Package className="w-10 h-10 text-gray-300" />
+                </div>
+                <p className="text-lg font-medium text-gray-900 mb-1">{t('profile.no_listings')}</p>
+                <p className="text-gray-500 text-sm">Cet utilisateur n'a pas encore mis d'articles en vente.</p>
               </div>
             )}
           </div>
@@ -209,61 +217,65 @@ const UserProfile: React.FC = () => {
       {/* Report Modal */}
       <AnimatePresence>
         {isReportModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-teal-900/40 backdrop-blur-md">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white w-full max-w-md rounded-xl shadow-xl overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                 <h3 className="text-lg font-bold text-red-600 flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" /> {t('profile.report_title')}
                 </h3>
-                <button onClick={() => setIsReportModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setIsReportModalOpen(false)} className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-600 shadow-sm border border-gray-200">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               <form onSubmit={handleReportSubmit} className="p-6">
-                <p className="text-sm text-gray-600 mb-4">
-                  {t('profile.report_msg')} <span className="font-bold">{profileUser.name}</span>.
+                <p className="text-sm text-gray-600 mb-5 leading-relaxed">
+                  {t('profile.report_msg')} <span className="font-bold text-gray-900">{profileUser.name}</span>.
+                  Nous prenons chaque signalement très au sérieux.
                 </p>
 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-8">
                   {[
-                    t('report.suspicious') || 'Suspicious or spam account',
-                    t('report.inappropriate') || 'Inappropriate content',
-                    t('report.harassment') || 'Harassment or offensive behavior',
-                    t('report.prohibited') || 'Selling prohibited items',
-                    t('report.other') || 'Other'
+                    t('report.suspicious') || 'Compte suspect ou spam',
+                    t('report.inappropriate') || 'Contenu inapproprié',
+                    t('report.harassment') || 'Harcèlement',
+                    t('report.prohibited') || 'Article interdit',
+                    t('report.other') || 'Autre raison'
                   ].map(reason => (
-                    <label key={reason} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                      <input
-                        type="radio"
-                        name="report_reason"
-                        value={reason}
-                        checked={reportReason === reason}
-                        onChange={(e) => setReportReason(e.target.value)}
-                        className="w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300"
-                      />
-                      <span className="text-sm font-medium text-gray-700">{reason}</span>
+                    <label key={reason} className="flex items-center gap-3 p-3.5 border border-gray-200 rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-100 transition-all group">
+                      <div className="relative flex items-center">
+                        <input
+                          type="radio"
+                          name="report_reason"
+                          value={reason}
+                          checked={reportReason === reason}
+                          onChange={(e) => setReportReason(e.target.value)}
+                          className="peer sr-only"
+                        />
+                        <div className="w-5 h-5 border-2 border-gray-300 rounded-full peer-checked:border-red-500 peer-checked:border-[6px] transition-all bg-white"></div>
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-red-700">{reason}</span>
                     </label>
                   ))}
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <button
                     type="button"
                     onClick={() => setIsReportModalOpen(false)}
-                    className="flex-1 py-2.5 border border-gray-300 rounded-lg font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-colors"
                   >
                     {t('profile.report_cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={!reportReason}
-                    className="flex-1 py-2.5 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-500/20 disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed"
                   >
                     {t('profile.report_submit')}
                   </button>
@@ -278,15 +290,20 @@ const UserProfile: React.FC = () => {
       <AnimatePresence>
         {hasReported && !isReportModalOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3 z-50"
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            className="fixed bottom-8 left-1/2 bg-gray-900/90 backdrop-blur-md text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 z-50 border border-white/10"
           >
-            <Check className="w-5 h-5 text-green-400" />
-            <span className="font-medium text-sm">{t('profile.report_success')}</span>
-            <button onClick={() => setHasReported(false)} className="ml-2 text-gray-400 hover:text-white">
-              <X className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+              <Check className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-sm">Signalement envoyé</p>
+              <p className="text-xs text-gray-400">{t('profile.report_success')}</p>
+            </div>
+            <button onClick={() => setHasReported(false)} className="ml-2 text-gray-500 hover:text-white transition-colors">
+              <X className="w-5 h-5" />
             </button>
           </motion.div>
         )}
