@@ -41,10 +41,13 @@ const StripeForm: React.FC<PaymentProps> = ({ amount, currency, onSuccess, onErr
 
             const { clientSecret } = await response.json();
 
+            const cardElement = elements.getElement(CardElement);
+            if (!cardElement) throw new Error('Card element not found');
+
             // 2. Confirm Card Payment
             const result = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
-                    card: elements.getElement(CardElement)!,
+                    card: cardElement as any,
                 }
             });
 
