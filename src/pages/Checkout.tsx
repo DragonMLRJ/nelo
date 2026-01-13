@@ -11,6 +11,7 @@ import { useLanguage } from '../context/LanguageContext';
 import SEO from '../components/SEO';
 
 import PaymentModal from '../components/PaymentModal';
+import { StripePayment, MobileMoneyForm } from '../components/PaymentForms';
 import { SHIPPING_RATES, FEES } from '../constants';
 
 const Checkout: React.FC = () => {
@@ -225,81 +226,54 @@ const Checkout: React.FC = () => {
               <CreditCard className="w-5 h-5 text-gray-500" /> Paiement
             </h3>
 
-            <form onSubmit={handlePayment}>
-              {/* Payment Method Selection */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
+            {/* Payment Method Selection */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('card')}
-                  className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-colors ${paymentMethod === 'card' ? 'border-teal-600 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                  className={`p-4 border rounded-xl flex flex-col items-center justify-center gap-3 transition-all ${paymentMethod === 'card' ? 'border-slate-800 bg-slate-50 text-slate-900 shadow-md ring-1 ring-slate-200' : 'border-gray-100 hover:bg-gray-50 text-gray-500'}`}
                 >
                   <CreditCard className="w-6 h-6" />
-                  <span className="text-xs font-bold text-center">Mobile Money / Carte</span>
+                  <span className="text-xs font-bold text-center">Carte Bancaire</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('cod')}
-                  className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-colors ${paymentMethod === 'cod' ? 'border-teal-600 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                  className={`p-4 border rounded-xl flex flex-col items-center justify-center gap-3 transition-all ${paymentMethod === 'cod' ? 'border-yellow-400 bg-yellow-50 text-yellow-800 shadow-md ring-1 ring-yellow-200' : 'border-gray-100 hover:bg-gray-50 text-gray-500'}`}
                 >
-                  <Banknote className="w-6 h-6" />
-                  <span className="text-xs font-bold text-center">Paiement à la livraison</span>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/MTN_Mobile_Money_logo.svg" alt="Momo" className="w-8 h-8 opacity-80" onError={(e) => e.currentTarget.style.display = 'none'} />
+                  {/* Fallback icon if image fails */}
+                  <span className="hidden">MoMo</span>
+                  <span className="text-xs font-bold text-center">Mobile Money</span>
                 </button>
               </div>
 
-              {/* Conditional Content */}
-              <div className="space-y-4">
+              {/* Payment Forms */}
+              <div className="animate-fade-in-up">
                 {paymentMethod === 'card' && (
-                  <div className="space-y-4 animate-fadeIn">
-                    <div className="bg-teal-50 border border-teal-100 rounded-lg p-4 flex gap-3 text-sm text-teal-800">
-                      <CreditCard className="w-5 h-5 flex-shrink-0" />
-                      <div>
-                        <p className="font-bold">Paiement sécurisé via Flutterwave</p>
-                        <p>Accepte Mobile Money (Airtel/MTN) et Cartes Bancaires.</p>
-                      </div>
-                    </div>
-                  </div>
+                  <StripePayment
+                    amount={total}
+                    currency={currency}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                    onSuccess={(details) => handleOrderPlacement({ ...details, method: 'stripe' })}
+                    onError={(err) => alert(err)}
+                  />
                 )}
 
                 {paymentMethod === 'cod' && (
-                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-100 text-sm text-orange-800 animate-fadeIn">
-                    <p className="font-bold mb-1">Payez à la réception !</p>
-                    <p>Merci de préparer le montant exact de <strong>{total.toLocaleString()} {currency}</strong> pour le livreur.</p>
-                  </div>
-                )}
-
-                <div className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg border border-gray-100 mb-4">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    checked={agreedToTerms}
-                    onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-teal-600 rounded border-gray-300 focus:ring-teal-500"
+                  <MobileMoneyForm
+                    amount={total}
+                    currency={currency}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                    onSuccess={(details) => handleOrderPlacement({ ...details, method: 'mtn-momo' })}
+                    onError={(err) => alert(err)}
                   />
-                  <label htmlFor="terms" className="text-xs text-gray-600 cursor-pointer select-none">
-                    J'ai lu et j'accepte les <a href="/terms" target="_blank" className="text-teal-600 hover:underline">Conditions Générales</a>,
-                    la <a href="/privacy" target="_blank" className="text-teal-600 hover:underline">Politique de Confidentialité</a> et
-                    la <a href="/refund-policy" target="_blank" className="text-teal-600 hover:underline">Politique de Retour</a> de Nelo Marketplace.
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isProcessing || !agreedToTerms}
-                  className="w-full bg-teal-600 text-white py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-                >
-                  {isProcessing ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Traitement en cours... Ne fermez pas la fenêtre.</span>
-                    </div>
-                  ) : (
-                    paymentMethod === 'card'
-                      ? `Payer maintenant (${total.toLocaleString()} ${currency})`
-                      : `Confirmer la commande (${total.toLocaleString()} ${currency})`
-                  )}
-                </button>
+                )}
               </div>
-            </form>
+            </div>
           </div>
         </div>
 
