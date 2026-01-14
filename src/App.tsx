@@ -61,6 +61,7 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/messages" element={<Messages />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/:productId" element={<Checkout />} />
           <Route path="/login" element={<Auth type="login" />} />
           <Route path="/register" element={<Auth type="register" />} />
