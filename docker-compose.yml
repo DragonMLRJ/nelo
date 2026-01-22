@@ -2,46 +2,46 @@ version: '3.8'
 
 services:
   # MySQL Database
-  mysql:
-    image: mysql:8.0
-    container_name: nelo-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    networks:
-      - nelo-network
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin123" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: nelo-mysql
+  #   restart: unless-stopped
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  #   networks:
+  #     - nelo-network
+  #   healthcheck:
+  #     test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin123" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
   # Node.js Backend
-  node-backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: nelo-node-backend
-    restart: unless-stopped
-    ports:
-      - "3001:3001"
-    environment:
-      - PORT=3001
-      - DATABASE_URL=${DATABASE_URL}
-      - SUPABASE_URL=${VITE_SUPABASE_URL}
-      - SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
-    networks:
-      - nelo-network
-    depends_on:
-      - mysql
+  # node-backend:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   container_name: nelo-node-backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - PORT=3001
+  #     - DATABASE_URL=${DATABASE_URL}
+  #     - SUPABASE_URL=${VITE_SUPABASE_URL}
+  #     - SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+  #   networks:
+  #     - nelo-network
+  #   depends_on:
+  #     - mysql
 
   # PHP Backend
 
@@ -51,14 +51,20 @@ services:
       dockerfile: Dockerfile.php
     container_name: nelo-php-backend
     restart: unless-stopped
-    depends_on:
-      mysql:
-        condition: service_healthy
+    # depends_on:
+    #   mysql:
+    #     condition: service_healthy
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      DB_NAME: ${DB_NAME}
+      DB_CONNECTION: pgsql
+      DB_HOST: db.nzyuwfxghaujzzfjewze.supabase.co
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASS: StrongPass_Nelo_2026!
+      # DB_HOST: ${DB_HOST}
+      # DB_USER: ${DB_USER}
+      # DB_PASS: ${DB_PASS}
+      # DB_NAME: ${DB_NAME}
       # Payment
       FLW_PUBLIC_KEY: ${FLW_PUBLIC_KEY}
       FLW_SECRET_HASH: ${FLW_SECRET_HASH}
@@ -90,23 +96,22 @@ services:
       - ./certs:/etc/nginx/certs
     networks:
       - nelo-network
-
   # phpMyAdmin (optional - for database management)
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: nelo-phpmyadmin
-    restart: unless-stopped
-    depends_on:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: ${MYSQL_USER}
-      PMA_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "8080:80"
-    networks:
-      - nelo-network
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   container_name: nelo-phpmyadmin
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - mysql
+  #   environment:
+  #     PMA_HOST: mysql
+  #     PMA_PORT: 3306
+  #     PMA_USER: ${MYSQL_USER}
+  #     PMA_PASSWORD: ${MYSQL_PASSWORD}
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - nelo-network
 
 networks:
   nelo-network:

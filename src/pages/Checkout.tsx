@@ -144,7 +144,8 @@ const Checkout: React.FC = () => {
         clearCart(); // Clear cart only if it was a cart checkout
       }
 
-      // 3. Trigger Email Confirmation (Backend)
+      // 3. Trigger Email Confirmation (Backend) - Temporarily Disabled (Serverless Mode)
+      /*
       try {
         await fetch('/api/v2/orders/confirmation', {
           method: 'POST',
@@ -166,6 +167,7 @@ const Checkout: React.FC = () => {
         console.error("Failed to trigger email confirmation", err);
         // Don't block success screen, just log
       }
+      */
 
     } else {
       alert('Échec du paiement : ' + result.error);

@@ -11,6 +11,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
 }
 
 // Database configuration - supports both Docker and local development
+define('DB_CONNECTION', getenv('DB_CONNECTION') ?: 'mysql');
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_USER', getenv('DB_USER') ?: 'root');
 define('DB_PASS', getenv('DB_PASS') ?: 'admin123');
@@ -31,8 +32,14 @@ function getDB() {
             $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
         }
 
+        if (DB_CONNECTION === 'pgsql') {
+            $dsn = "pgsql:host=" . DB_HOST . ";port=" . (getenv('DB_PORT') ?: 5432) . ";dbname=" . DB_NAME;
+        } else {
+            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        }
+
         $conn = new PDO(
-            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+            $dsn,
             DB_USER,
             DB_PASS,
             $options

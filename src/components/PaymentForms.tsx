@@ -31,35 +31,32 @@ const StripeForm: React.FC<PaymentProps> = ({ amount, currency, onSuccess, onErr
         setCardError(null);
 
         try {
-            // 1. Create Payment Intent on Backend
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/payments/create-intent`, {
+            // MOCKED STRIPE FLOW for Demo/MVP (Since Node backend is removed)
+            // In a real scenario, this would call /api/payment/create-intent
+
+            // Call the PHP Backend generic payment endpoint
+            const response = await fetch('/api/payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, currency }),
+                body: JSON.stringify({
+                    amount,
+                    currency,
+                    provider: 'Card',
+                    orderId: 'TEMP-' + Date.now() // API expects orderId
+                }),
             });
 
-            if (!response.ok) throw new Error('Failed to initialize payment');
+            const data = await response.json();
 
-            const { clientSecret } = await response.json();
-
-            const cardElement = elements.getElement(CardElement);
-            if (!cardElement) throw new Error('Card element not found');
-
-            // 2. Confirm Card Payment
-            const result = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: cardElement as any,
-                }
-            });
-
-            if (result.error) {
-                setCardError(result.error.message || 'Payment failed');
-                onError(result.error.message || 'Payment failed');
-            } else {
-                if (result.paymentIntent.status === 'succeeded') {
-                    onSuccess({ provider: 'stripe', id: result.paymentIntent.id });
-                }
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Payment failed');
             }
+
+            // Simulate "Card Confirmation" delay for UX
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            onSuccess({ provider: 'stripe', id: data.transactionId || 'evt_mock' });
+
         } catch (err: any) {
             setCardError(err.message);
             onError(err.message);
@@ -115,22 +112,29 @@ export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSu
         setIsProcessing(true);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/payments/momo/pay`, {
+            const response = await fetch('/api/payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, currency, phone }),
+                body: JSON.stringify({
+                    amount,
+                    currency,
+                    phone,
+                    orderId: 'MOMO-' + Date.now(),
+                    manualTxRef: 'MOMO-PENDING-' + Date.now(), // Trigger manual flow
+                    provider: 'Momo'
+                }),
             });
 
             const data = await response.json();
 
-            if (!response.ok) throw new Error(data.error || 'Payment request failed');
+            if (!response.ok) throw new Error(data.message || 'Payment request failed');
 
             // For Sandbox, we simulate success easily. In prod, we'd poll the status.
             alert(`Payment Request Sent to ${phone}. Please approve ensuring funds.`);
 
             // Simulating a delay for the user to approve on phone
             setTimeout(() => {
-                onSuccess({ provider: 'mtn-momo', referenceId: data.referenceId });
+                onSuccess({ provider: 'mtn-momo', referenceId: data.transactionId });
             }, 3000);
 
         } catch (err: any) {

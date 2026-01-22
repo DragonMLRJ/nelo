@@ -5,6 +5,7 @@ import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/ProductCard';
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 const Wishlist: React.FC = () => {
   const { user } = useAuth();
@@ -13,19 +14,43 @@ const Wishlist: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      fetch('/api/wishlist/index.php?action=list', {
-        headers: { 'X-User-Id': user.id }
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.products) setProducts(data.products);
-          else setProducts([]);
-        })
-        .catch(err => console.error(err))
-        .finally(() => setLoading(false));
-    }
-  }, [user, savedItemIds]); // Reload if IDs change (e.g. removed from header)
+    const fetchWishlistProducts = async () => {
+      if (savedItemIds.length === 0) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            *,
+            profiles!seller_id (
+              id, name, avatar, is_verified
+            )
+          `)
+          .in('id', savedItemIds);
+
+        if (error) throw error;
+
+        if (data) {
+          const mapped = data.map(item => ({
+            ...item,
+            seller: item.profiles || { name: 'Unknown', avatar: '' }
+          }));
+          setProducts(mapped);
+        }
+      } catch (err) {
+        console.error('Failed to fetch wishlist products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWishlistProducts();
+  }, [savedItemIds]);
 
   if (!user) {
     return (
