@@ -94,7 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Hover Actions Pill */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 shadow-lg opacity-100 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
           <button
             onClick={handleHeartClick}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isSaved ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-white text-slate-600 hover:bg-teal-50'}`}

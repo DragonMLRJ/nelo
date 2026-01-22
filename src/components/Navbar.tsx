@@ -366,13 +366,12 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu Toggle & Actions */}
           <div className="md:hidden flex items-center gap-3">
-            <button onClick={() => navigate('/catalog')} className="text-gray-600">
-              <Search className="w-6 h-6" />
+            <button onClick={() => navigate('/catalog')} className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+              <Search className="w-5 h-5" />
             </button>
 
-            {/* Mobile Direct Message Access */}
             {user && (
-              <button onClick={() => navigate('/messages')} className="text-gray-600 relative">
+              <button onClick={() => navigate('/messages')} className="w-10 h-10 flex items-center justify-center bg-transparent text-gray-600 relative">
                 <MessageCircle className="w-6 h-6" />
                 {chatContext.unreadTotal > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">

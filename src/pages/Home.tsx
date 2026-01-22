@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'; // v4 FORCE UPDATE
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '../constants';
 import { useProducts } from '../context/ProductContext';
 import ProductCard from '../components/ProductCard';
@@ -26,8 +26,19 @@ import { useLanguage } from '../context/LanguageContext';
 import SEO from '../components/SEO';
 
 const Home: React.FC = () => {
+  console.log("HOME COMPONENT LOADED v5"); // DEBUG LOG
   const { products, loading } = useProducts();
   const { t } = useLanguage();
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    if (products.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % products.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [products]);
 
   return (
     <motion.div
@@ -45,14 +56,18 @@ const Home: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:h-[600px] auto-rows-[minmax(180px, auto)]">
 
-          {/* 1. Main Value Prop (Large Box) */}
+          {/* 1. Main Value Prop (Large Box) - Clickable & Integrated Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-midnight-900 to-teal-900 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden text-white flex flex-col justify-end group shadow-2xl shadow-teal-900/20"
+            className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-midnight-900 to-teal-900 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden text-white flex flex-col justify-end group shadow-2xl shadow-teal-900/20 cursor-pointer overflow-hidden"
+            onClick={() => window.location.href = '/catalog'}
           >
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/20 rounded-full blur-3xl -mr-40 -mt-20 pointer-events-none animate-pulse"></div>
             <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/20 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none"></div>
+
+            {/* Hover visual cue */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-white/5 transition-colors duration-300"></div>
 
             <div className="relative z-10 max-w-lg">
               <span className="inline-block px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 backdrop-blur-md text-teal-300 text-xs font-bold uppercase tracking-wider mb-6">
@@ -60,16 +75,13 @@ const Home: React.FC = () => {
               </span>
               <h1 className="text-4xl md:text-6xl font-heading font-black leading-tight mb-6 tracking-tight">
                 Vendez simplement.<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-emerald-200">Achetez sereinement.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-emerald-200 flex items-center gap-2">
+                  Achetez sereinement. <ArrowRight className="w-8 h-8 text-teal-200 opacity-80" />
+                </span>
               </h1>
               <p className="text-lg text-teal-100/80 mb-8 max-w-sm font-light">
                 La plateforme la plus sécurisée pour donner une seconde vie à vos objets.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to="/catalog" className="bg-white text-midnight-900 px-8 py-3.5 rounded-xl font-bold hover:bg-teal-50 transition-all flex items-center gap-2 group/btn">
-                  Explorer <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
-              </div>
             </div>
           </motion.div>
 
@@ -83,27 +95,46 @@ const Home: React.FC = () => {
             <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80" alt="Fashion" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-6 left-6 right-6">
-              <div className="glass-card p-4 rounded-xl backdrop-blur-xl border border-white/20 bg-white/10 text-white">
+              <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 text-white w-fit shadow-lg">
                 <p className="font-bold text-sm">Collection Été 2024</p>
                 <p className="text-xs text-white/80">Tendances de la saison</p>
               </div>
             </div>
           </motion.div>
 
-          {/* 3. Quick Action: Sell */}
+          {/* 3. Quick Action: Sell - Slideshow & Bubble Style */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white rounded-[2.5rem] p-8 border border-gray-100 flex flex-col justify-between hover:shadow-xl hover:border-teal-100 transition-all group cursor-pointer"
+            className="bg-gray-100 rounded-[2.5rem] relative overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-teal-100 transition-all group cursor-pointer h-full min-h-[280px]"
             onClick={() => window.location.href = '/sell'}
           >
-            <div className="w-14 h-14 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-colors">
-              <Zap className="w-7 h-7" />
-            </div>
-            <div>
-              <h3 className="font-heading font-bold text-xl text-slate-900 mb-1">Vendre un objet</h3>
-              <p className="text-sm text-slate-500">Gagnez de l'argent en 2 clics</p>
+            {/* Background Slideshow */}
+            <AnimatePresence mode="wait">
+              {products.length > 0 && (
+                <motion.img
+                  key={currentImageIndex}
+                  src={products[currentImageIndex]?.image}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1 }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )}
+            </AnimatePresence>
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors z-0"></div>
+
+            {/* Content Bubble */}
+            <div className="relative z-10 p-6 flex flex-col justify-between h-full">
+              <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl w-fit border border-white/20 shadow-lg mb-auto">
+                <div className="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center text-teal-800 mb-3">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading font-bold text-xl text-white mb-1 drop-shadow-md">Vendre un objet</h3>
+                <p className="text-sm text-white/90 font-medium">Gagnez de l'argent en 2 clics</p>
+              </div>
             </div>
           </motion.div>
 
@@ -181,7 +212,7 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
             {loading
               ? Array.from({ length: 10 }).map((_, i) => (
                 <ProductCardSkeleton key={i} />

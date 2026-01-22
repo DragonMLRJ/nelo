@@ -10,6 +10,7 @@ interface OrderContextType {
   updateOrderStatus: (orderId: string, status: string) => Promise<boolean>;
   getOrdersByBuyer: (userId: string) => Order[];
   getOrdersBySeller: (userId: string) => Order[];
+  getOrderById: (orderId: string) => Order | undefined;
   refreshOrders: () => Promise<void>;
 }
 
@@ -183,6 +184,10 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return sales;
   };
 
+  const getOrderById = (orderId: string) => {
+    return orders.find(o => o.id === orderId) || sales.find(s => s.id === orderId);
+  };
+
   return (
     <OrderContext.Provider value={{
       orders,
@@ -191,6 +196,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       updateOrderStatus,
       getOrdersByBuyer,
       getOrdersBySeller,
+      getOrderById,
       refreshOrders
     }}>
       {children}
