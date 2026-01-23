@@ -10,47 +10,47 @@ interface InfoPageProps {
 
 const CONTENT: Record<PageKey, { title: string; content: React.ReactNode }> = {
   about: {
-    title: 'About Nelo',
+    title: 'À propos de Nelo',
     content: (
       <>
-        <p className="mb-4">Nelo is the premier marketplace for Congo-Brazzaville. Born from a vision to connect buyers and sellers across Brazzaville, Pointe-Noire, Dolisie, and beyond, we provide a safe and easy-to-use platform for commerce.</p>
-        <p>Our mission is to empower local entrepreneurs and provide consumers with access to quality goods at fair prices.</p>
+        <p className="mb-4">Nelo est la première marketplace du Congo-Brazzaville. Née d'une vision de connecter acheteurs et vendeurs à travers Brazzaville, Pointe-Noire, Dolisie et au-delà, nous fournissons une plateforme sûre et facile à utiliser pour le commerce.</p>
+        <p>Notre mission est de donner du pouvoir aux entrepreneurs locaux et de fournir aux consommateurs un accès à des produits de qualité à des prix équitables.</p>
       </>
     )
   },
   sustainability: {
-    title: 'Sustainability',
+    title: 'Durabilité',
     content: (
       <>
-        <p className="mb-4">At Nelo, we believe in the circular economy. By giving pre-loved items a second life, we reduce waste and minimize our environmental footprint.</p>
-        <p>Buying second-hand is not just cheaper—it's greener.</p>
+        <p className="mb-4">Chez Nelo, nous croyons en l'économie circulaire. En donnant une seconde vie aux articles d'occasion, nous réduisons les déchets et minimisons notre empreinte environnementale.</p>
+        <p>Acheter d'occasion n'est pas seulement moins cher—c'est aussi plus écologique.</p>
       </>
     )
   },
   jobs: {
-    title: 'Careers at Nelo',
+    title: 'Carrières chez Nelo',
     content: (
       <>
-        <p className="mb-4">We are always looking for talented individuals to join our team in Brazzaville.</p>
-        <p>If you are passionate about technology and commerce, send your CV to our support email.</p>
+        <p className="mb-4">Nous sommes toujours à la recherche de personnes talentueuses pour rejoindre notre équipe à Brazzaville.</p>
+        <p>Si vous êtes passionné par la technologie et le commerce, envoyez votre CV à notre email de support.</p>
       </>
     )
   },
   'how-it-works': {
-    title: 'How Nelo Works',
+    title: 'Comment ça marche',
     content: (
       <div className="space-y-6">
         <div>
-          <h3 className="font-bold text-lg mb-2">1. Snap & Sell</h3>
-          <p>Take a photo of your item, describe it, and set a price. It's free to list!</p>
+          <h3 className="font-bold text-lg mb-2">1. Photographiez & Vendez</h3>
+          <p>Prenez une photo de votre article, décrivez-le et fixez un prix. C'est gratuit de publier !</p>
         </div>
         <div>
-          <h3 className="font-bold text-lg mb-2">2. Chat & Negotiate</h3>
-          <p>Buyers can contact you via our secure messaging system to ask questions or negotiate the price.</p>
+          <h3 className="font-bold text-lg mb-2">2. Discutez & Négociez</h3>
+          <p>Les acheteurs peuvent vous contacter via notre système de messagerie sécurisé pour poser des questions ou négocier le prix.</p>
         </div>
         <div>
-          <h3 className="font-bold text-lg mb-2">3. Meet or Ship</h3>
-          <p>Arrange a safe meeting place or use our delivery partners to send the item.</p>
+          <h3 className="font-bold text-lg mb-2">3. Rencontrez ou Expédiez</h3>
+          <p>Organisez un lieu de rencontre sûr ou utilisez nos partenaires de livraison pour envoyer l'article.</p>
         </div>
       </div>
     )
@@ -59,20 +59,20 @@ const CONTENT: Record<PageKey, { title: string; content: React.ReactNode }> = {
     title: 'Nelo Pro',
     content: (
       <>
-        <p className="mb-4">Nelo Pro is designed for businesses and high-volume sellers.</p>
-        <p>Get access to advanced analytics, bulk listing tools, and priority support to grow your business.</p>
+        <p className="mb-4">Nelo Pro est conçu pour les entreprises et les vendeurs à gros volume.</p>
+        <p>Accédez à des analyses avancées, des outils de publication en masse et un support prioritaire pour développer votre entreprise.</p>
       </>
     )
   },
   trust: {
-    title: 'Trust & Safety',
+    title: 'Confiance et Sécurité',
     content: (
       <>
-        <p className="mb-4">Your safety is our top priority. We employ verification badges, user reviews, and fraud detection systems to keep Nelo safe.</p>
+        <p className="mb-4">Votre sécurité est notre priorité absolue. Nous utilisons des badges de vérification, des avis d'utilisateurs et des systèmes de détection de fraude pour garder Nelo sûr.</p>
         <ul className="list-disc pl-5 space-y-2">
-          <li>Never share your password or financial details outside the app.</li>
-          <li>Meet in public places for local transactions.</li>
-          <li>Report suspicious behavior immediately using the "Report User" button.</li>
+          <li>Ne partagez jamais votre mot de passe ou vos informations financières en dehors de l'application.</li>
+          <li>Rencontrez-vous dans des lieux publics pour les transactions locales.</li>
+          <li>Signalez immédiatement tout comportement suspect en utilisant le bouton "Signaler l'utilisateur".</li>
         </ul>
       </>
     )

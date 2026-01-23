@@ -258,7 +258,7 @@ const Navbar: React.FC = () => {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50"
+                          className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50"
                         >
                           <div className="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                             <h3 className="font-bold text-gray-900 text-sm">Notifications</h3>
@@ -268,7 +268,7 @@ const Navbar: React.FC = () => {
                               </button>
                             )}
                           </div>
-                          <div className="max-h-80 overflow-y-auto">
+                          <div className="max-h-80 max-h-[60vh] overflow-y-auto">
                             {notifications.length === 0 ? (
                               <div className="p-8 text-center text-gray-400 text-sm">
                                 <Bell className="w-8 h-8 mx-auto mb-2 opacity-20" />
@@ -314,7 +314,7 @@ const Navbar: React.FC = () => {
                       <UserIcon className="w-6 h-6" />
                       <span className="text-sm font-medium">{user.name}</span>
                     </div>
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-100 z-50">
+                    <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-100 z-50">
                       <div className="px-4 py-3 border-b border-gray-100 mb-1">
                         <p className="text-sm font-bold text-gray-900">{user.name}</p>
                         <p className="text-xs text-gray-500 truncate">{user.id}</p>

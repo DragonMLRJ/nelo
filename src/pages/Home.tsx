@@ -111,19 +111,28 @@ const Home: React.FC = () => {
             onClick={() => window.location.href = '/sell'}
           >
             {/* Background Slideshow */}
-            <AnimatePresence mode="wait">
-              {products.length > 0 && (
-                <motion.img
-                  key={currentImageIndex}
-                  src={products[currentImageIndex]?.image}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1 }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              )}
-            </AnimatePresence>
+            <div className="absolute inset-0">
+              <AnimatePresence mode="wait">
+                {products.length > 0 ? (
+                  <motion.img
+                    key={`slide-${currentImageIndex}-${products[currentImageIndex]?.id}`}
+                    src={products[currentImageIndex]?.image || 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80'}
+                    alt="Product Slideshow"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.5 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80"
+                    alt="Fallback"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+              </AnimatePresence>
+            </div>
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors z-0"></div>
 
             {/* Content Bubble */}
@@ -157,8 +166,8 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-        </div>
-      </div>
+        </div >
+      </div >
 
       <AdBanner slot="home-top" className="container mx-auto px-4 mt-8" />
 
@@ -260,7 +269,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-    </motion.div>
+    </motion.div >
   );
 };
 

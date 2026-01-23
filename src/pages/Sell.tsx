@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Upload, Camera, Tag, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProducts } from '../context/ProductContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { Product } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { CONGO_CITIES } from '../constants';
@@ -27,7 +27,10 @@ const Sell: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  // ... (auth check remains)
+  // Redirect to login if not authenticated
+  if (!user) {
+    return <Navigate to="/login?redirect=/sell" />;
+  }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;

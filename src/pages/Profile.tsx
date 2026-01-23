@@ -112,16 +112,16 @@ const Profile: React.FC = () => {
             </div>
 
             {/* Stats Cards - Glassmorphism */}
-            <div className="flex gap-4 md:gap-0 divide-x divide-white/10 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
-              <div className="px-6 py-4 text-center min-w-[100px]">
+            <div className="flex flex-wrap gap-4 md:gap-0 md:divide-x divide-white/10 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
+              <div className="flex-1 min-w-[100px] px-6 py-4 text-center">
                 <p className="text-2xl font-bold text-white">{myPurchases.length}</p>
                 <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Achats</p>
               </div>
-              <div className="px-6 py-4 text-center min-w-[100px]">
+              <div className="flex-1 min-w-[100px] px-6 py-4 text-center">
                 <p className="text-2xl font-bold text-white">{mySales.length}</p>
                 <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Ventes</p>
               </div>
-              <div className="px-6 py-4 text-center min-w-[100px]">
+              <div className="flex-1 min-w-[100px] px-6 py-4 text-center">
                 <p className="text-2xl font-bold text-white">{user.responseRate || '100%'}</p>
                 <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Taux Rép.</p>
               </div>
