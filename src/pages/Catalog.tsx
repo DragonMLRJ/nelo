@@ -220,9 +220,9 @@ const Catalog: React.FC = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-2 sm:px-4 py-4 sm:py-8"
     >
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
         {/* Mobile Filter Toggle */}
         <div className="lg:hidden flex justify-between items-center mb-4">
           <button

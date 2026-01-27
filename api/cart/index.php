@@ -54,7 +54,13 @@ switch($method) {
  * Get user's cart with product details
  */
 function getCart() {
-    $userId = $_GET['userId'] ?? null;
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
+    $userId = $authUserId; // Force use of authenticated ID
     
     if (!$userId) {
         sendResponse(['error' => 'User ID is required'], 400);
@@ -118,8 +124,14 @@ function getCart() {
  * Add item to cart
  */
 function addToCart() {
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
     $data = getJsonInput();
-    $userId = $data['userId'] ?? null;
+    $userId = $authUserId;
     $productId = $data['productId'] ?? null;
     $quantity = $data['quantity'] ?? 1;
     
@@ -186,13 +198,19 @@ function addToCart() {
  * Update cart item quantity
  */
 function updateCartItem() {
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
     $data = getJsonInput();
     $cartItemId = $data['cartItemId'] ?? null;
     $quantity = $data['quantity'] ?? null;
-    $userId = $data['userId'] ?? null;
+    $userId = $authUserId; // FORCE AUTH ID
     
-    if (!$cartItemId || !$quantity || !$userId) {
-        sendResponse(['error' => 'Cart Item ID, quantity, and User ID are required'], 400);
+    if (!$cartItemId || !$quantity) {
+        sendResponse(['error' => 'Cart Item ID and quantity are required'], 400);
     }
     
     if ($quantity < 1) {
@@ -229,11 +247,17 @@ function updateCartItem() {
  * Remove item from cart
  */
 function removeFromCart() {
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
     $cartItemId = $_GET['cartItemId'] ?? null;
-    $userId = $_GET['userId'] ?? null;
+    $userId = $authUserId; // FORCE AUTH ID
     
-    if (!$cartItemId || !$userId) {
-        sendResponse(['error' => 'Cart Item ID and User ID are required'], 400);
+    if (!$cartItemId) {
+        sendResponse(['error' => 'Cart Item ID is required'], 400);
     }
     
     try {
@@ -261,11 +285,13 @@ function removeFromCart() {
  * Clear entire cart
  */
 function clearCart() {
-    $userId = $_GET['userId'] ?? null;
-    
-    if (!$userId) {
-        sendResponse(['error' => 'User ID is required'], 400);
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
     }
+
+    $userId = $authUserId; // FORCE AUTH ID
     
     try {
         $db = getDB();

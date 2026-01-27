@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { Order } from '../types';
+import { Order, ShipmentProof } from '../types';
 import { supabase } from '../supabaseClient';
 
 interface OrderContextType {
@@ -8,6 +8,9 @@ interface OrderContextType {
   sales: Order[];  // Seller orders
   addOrder: (orderData: any) => Promise<any>;
   updateOrderStatus: (orderId: string, status: string) => Promise<boolean>;
+  submitShipmentProof: (orderId: number, proof: Partial<ShipmentProof>) => Promise<boolean>;
+  submitDeliveryProof: (orderId: number, proof: Partial<ShipmentProof>) => Promise<boolean>;
+  getOrderProofs: (orderId: number) => Promise<ShipmentProof[]>;
   getOrdersByBuyer: (userId: string) => Order[];
   getOrdersBySeller: (userId: string) => Order[];
   getOrderById: (orderId: string) => Order | undefined;
@@ -176,6 +179,107 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  const submitShipmentProof = async (orderId: number, proof: Partial<ShipmentProof>) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+
+      // Insert proof into shipment_proofs table
+      const { data, error } = await supabase
+        .from('shipment_proofs')
+        .insert([{
+          order_id: orderId,
+          proof_type: 'shipment',
+          submitted_by: user.id,
+          proof_method: proof.proof_method,
+          proof_data: proof.proof_data,
+          file_url: proof.file_url,
+          notes: proof.notes
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Update order status
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({
+          shipment_proof_submitted: true,
+          shipment_proof_submitted_at: new Date().toISOString(),
+          proof_validation_status: 'delivery_pending',
+          status: 'shipped'
+        })
+        .eq('id', orderId);
+
+      if (updateError) throw updateError;
+
+      await refreshOrders();
+      return true;
+    } catch (error) {
+      console.error('Failed to submit shipment proof:', error);
+      return false;
+    }
+  };
+
+  const submitDeliveryProof = async (orderId: number, proof: Partial<ShipmentProof>) => {
+    try {
+      if (!user) throw new Error('User not authenticated');
+
+      // Insert proof into shipment_proofs table
+      const { data, error } = await supabase
+        .from('shipment_proofs')
+        .insert([{
+          order_id: orderId,
+          proof_type: 'delivery',
+          submitted_by: user.id,
+          proof_method: proof.proof_method,
+          proof_data: proof.proof_data,
+          file_url: proof.file_url,
+          notes: proof.notes
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Update order status
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({
+          delivery_proof_submitted: true,
+          delivery_proof_submitted_at: new Date().toISOString(),
+          proof_validation_status: 'validated',
+          status: 'delivered',
+          payment_status: 'completed'
+        })
+        .eq('id', orderId);
+
+      if (updateError) throw updateError;
+
+      await refreshOrders();
+      return true;
+    } catch (error) {
+      console.error('Failed to submit delivery proof:', error);
+      return false;
+    }
+  };
+
+  const getOrderProofs = async (orderId: number): Promise<ShipmentProof[]> => {
+    try {
+      const { data, error } = await supabase
+        .from('shipment_proofs')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Failed to fetch proofs:', error);
+      return [];
+    }
+  };
+
   const getOrdersByBuyer = (userId: string) => {
     return orders;
   };
@@ -194,6 +298,9 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       sales,
       addOrder,
       updateOrderStatus,
+      submitShipmentProof,
+      submitDeliveryProof,
+      getOrderProofs,
       getOrdersByBuyer,
       getOrdersBySeller,
       getOrderById,

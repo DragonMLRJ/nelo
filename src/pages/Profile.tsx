@@ -17,9 +17,11 @@ import {
   User as UserIcon,
   Shield,
   MessageSquare,
-  Clock
+  Clock,
+  Download
 } from 'lucide-react';
 import OrderCard from '../components/OrderCard';
+import { exportToCSV } from '../utils/exportUtils';
 
 const Profile: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
@@ -266,6 +268,23 @@ const Profile: React.FC = () => {
             >
               {displayOrders.length > 0 ? (
                 <div className="space-y-4">
+                  <div className="flex justify-end mb-4">
+                    <button
+                      onClick={() => {
+                        const data = displayOrders.map(o => ({
+                          Date: new Date(o.created_at).toLocaleDateString(),
+                          'Order #': o.order_number,
+                          [activeTab === 'purchases' ? 'Seller' : 'Buyer']: o.counterparty_name,
+                          Amount: `${o.total_amount} ${o.currency}`,
+                          Status: o.status
+                        }));
+                        exportToCSV(data, `nelo_${activeTab}_${new Date().toISOString().split('T')[0]}`);
+                      }}
+                      className="flex items-center gap-2 text-teal-600 font-bold hover:bg-teal-50 px-3 py-1.5 rounded-lg transition-colors text-sm"
+                    >
+                      <Download className="w-4 h-4" /> Exporter CSV
+                    </button>
+                  </div>
                   {displayOrders.map((order) => (
                     <div key={order.id} className="transform transition-all hover:translate-y-[-2px]">
                       <OrderCard order={order} role={activeTab === 'purchases' ? 'buyer' : 'seller'} />

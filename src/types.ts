@@ -96,6 +96,40 @@ export interface Order {
   items: OrderItem[];
 }
 
+export interface ShipmentProof {
+  id: number;
+  order_id: number;
+  proof_type: 'shipment' | 'delivery';
+  submitted_by: number;
+  proof_method: 'photo' | 'tracking_number' | 'signature' | 'receipt';
+  proof_data: {
+    tracking_number?: string;
+    carrier?: string;
+    description?: string;
+    recipient_name?: string;
+    [key: string]: any;
+  };
+  file_url?: string;
+  notes?: string;
+  submitted_at: string;
+  verified: boolean;
+  verified_at?: string;
+  verified_by?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderWithProofs extends Order {
+  shipment_proof_required: boolean;
+  shipment_proof_submitted: boolean;
+  shipment_proof_submitted_at?: string;
+  delivery_proof_required: boolean;
+  delivery_proof_submitted: boolean;
+  delivery_proof_submitted_at?: string;
+  proof_validation_status: 'pending' | 'shipment_pending' | 'delivery_pending' | 'validated' | 'disputed';
+  shipment_proofs?: ShipmentProof[];
+}
+
 export interface Notification {
   id: string;
   type: 'info' | 'success' | 'warning' | 'error';

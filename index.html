@@ -13,6 +13,14 @@
       font-family: 'Inter', sans-serif;
     }
   </style>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+                 script-src 'self'; 
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                 font-src 'self' https://fonts.gstatic.com; 
+                 img-src 'self' data: https://picsum.photos https://fastly.picsum.photos https://*.supabase.co https://upload.wikimedia.org; 
+                 connect-src 'self' https://*.supabase.co http://localhost:3000;
+                 object-src 'none';
+                 base-uri 'self';">
 </head>
 
 <body>

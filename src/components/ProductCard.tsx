@@ -62,8 +62,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -5 }}
-      className="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-teal-900/10 transition-all duration-500 border border-gray-100"
+      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+      className="group relative bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl hover:shadow-teal-900/10 transition-all duration-500 border border-gray-100 hover:border-gray-200"
     >
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
@@ -93,23 +93,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           )}
         </div>
 
-        {/* Hover Actions Pill */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 shadow-lg opacity-100 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
-          <button
+        {/* Hover Actions Pill - Hidden on desktop until hover, always visible on mobile */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/95 backdrop-blur-xl border border-gray-200 shadow-lg opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 ease-out z-20">
+          <motion.button
             onClick={handleHeartClick}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isSaved ? 'bg-red-500 text-white shadow-red-500/30' : 'bg-white text-slate-600 hover:bg-teal-50'}`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 ${isSaved ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' : 'bg-white text-slate-600 hover:bg-teal-50 hover:text-teal-600 shadow-sm'}`}
             title={t('product.add_wishlist')}
           >
             <Heart className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
-          </button>
-          <div className="w-px h-4 bg-white/30"></div>
-          <button
+          </motion.button>
+          <div className="w-px h-5 bg-gray-200"></div>
+          <motion.button
             onClick={handleQuickViewClick}
-            className="w-10 h-10 rounded-full bg-white text-slate-600 hover:text-teal-600 hover:bg-teal-50 flex items-center justify-center transition-all duration-300"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-11 h-11 rounded-full bg-white text-slate-600 hover:text-teal-600 hover:bg-teal-50 flex items-center justify-center transition-all duration-300 shadow-sm"
             title={t('product.quick_view')}
           >
             <Eye className="w-5 h-5" />
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -134,9 +138,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
             <span className="text-xs text-slate-500 truncate max-w-[80px]">{product.seller.name}</span>
           </div>
-          <button onClick={handleShareClick} className="text-slate-300 hover:text-teal-600 transition-colors">
+          <motion.button
+            onClick={handleShareClick}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            className="text-slate-300 hover:text-teal-600 transition-colors"
+          >
             <Share2 className="w-4 h-4" />
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.div>

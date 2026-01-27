@@ -33,6 +33,17 @@ function login() {
     $email = $data['email'] ?? '';
     $password = $data['password'] ?? '';
     
+    // Rate Limit: 5 Login attempts per minute per email
+    try {
+        $db = getDB();
+        $limiter = new RateLimiter($db, "login:" . $email, 5, 60);
+        if (!$limiter->check()) {
+            sendResponse(['error' => 'Too many login attempts. Please try again later.'], 429);
+        }
+    } catch (Exception $e) {
+        // Fail open if rate limiter fails
+    }
+    
     if (empty($email) || empty($password)) {
         sendResponse(['error' => 'Email and password are required'], 400);
     }
@@ -68,9 +79,18 @@ function login() {
             'responseRate' => $user['response_rate']
         ];
         
+        // Generate Token
+        $payload = [
+            'sub' => $user['id'],
+            'email' => $user['email'],
+            'exp' => time() + (60 * 60 * 24 * 7) // 7 days expiration
+        ];
+        $token = JWT::encode($payload);
+        
         sendResponse([
             'success' => true,
-            'user' => $userData
+            'user' => $userData,
+            'token' => $token
         ]);
         
     } catch(PDOException $e) {
@@ -80,13 +100,23 @@ function login() {
 
 function register() {
     $data = getJsonInput();
-    $email = $data['email'] ?? '';
-    $password = $data['password'] ?? '';
-    $name = $data['name'] ?? '';
-    $location = $data['location'] ?? 'Brazzaville';
-    
-    if (empty($email) || empty($password) || empty($name)) {
+    // Sanitize
+    $email = Validator::sanitize($data['email'] ?? '');
+    $name = Validator::sanitize($data['name'] ?? '');
+    $location = Validator::sanitize($data['location'] ?? 'Brazzaville');
+    $password = $data['password'] ?? ''; // Don't sanitize password, just hash it
+
+    // Validate
+    if (!Validator::validateRequired(['email', 'password', 'name'], $data)) {
         sendResponse(['error' => 'Email, password, and name are required'], 400);
+    }
+
+    if (!Validator::validateEmail($email)) {
+        sendResponse(['error' => 'Invalid email format'], 400);
+    }
+
+    if (!Validator::validatePassword($password)) {
+        sendResponse(['error' => 'Password must be at least 8 characters and contain a number'], 400);
     }
     
     try {
@@ -149,27 +179,33 @@ function checkSession() {
 }
 
 function updateProfile() {
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
     $data = getJsonInput();
     
-    if (empty($data['id']) || empty($data['name'])) {
-        sendResponse(['error' => 'User ID and Name are required'], 400);
+    if (empty($data['name'])) {
+        sendResponse(['error' => 'Name is required'], 400);
     }
 
     try {
         $db = getDB();
         
-        // Update user
+        // Update user (Use $authUserId from Token, NOT data['id'])
         $stmt = $db->prepare("UPDATE users SET name = ?, location = ?, avatar = ? WHERE id = ?");
         $stmt->execute([
             $data['name'],
             $data['location'] ?? 'Brazzaville',
             $data['avatar'] ?? '',
-            $data['id']
+            $authUserId // FORCE AUTH ID
         ]);
 
         // Fetch updated user to return
         $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
-        $stmt->execute([$data['id']]);
+        $stmt->execute([$authUserId]);
         $user = $stmt->fetch();
         
         if (!$user) {

@@ -338,6 +338,9 @@ const Navbar: React.FC = () => {
                       <Link to="/profile" className="px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 flex items-center gap-2 w-full">
                         <Settings className="w-4 h-4" /> {t('nav.settings')}
                       </Link>
+                      <Link to="/disputes" className="px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 flex items-center gap-2 w-full">
+                        <Shield className="w-4 h-4 text-orange-500" /> Disputes
+                      </Link>
 
                       <div className="border-t border-gray-100 mt-1 pt-1">
                         <button onClick={handleLogoutClick} className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left flex items-center gap-2">
@@ -389,7 +392,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 shadow-lg z-50">
+          <div className="md:hidden bg-white border-t border-gray-100 fixed top-20 left-0 right-0 bottom-0 overflow-y-auto shadow-lg z-50">
             <div className="p-4 flex flex-col gap-4">
               {/* Mobile Search Input */}
               <form onSubmit={handleSearchSubmit} className="relative mb-2">

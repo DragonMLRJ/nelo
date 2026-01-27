@@ -43,9 +43,17 @@ if ($method === 'GET' && $action === 'list') {
 
     if (
         !empty($data->product_id) &&
-        !empty($data->user_id) &&
         !empty($data->rating)
     ) {
+        // SECURITY CHECK: Verify Token
+        $authUserId = JWT::getUserIdFromHeader();
+        if (!$authUserId) {
+            http_response_code(401);
+            echo json_encode(["success" => false, "message" => "Unauthorized access."]);
+            exit();
+        }
+        
+        $user_id = $authUserId; // Enforce auth user ID
         // Validation: Check if user bought the product
         // Ideally we check the orders table here.
         // For simpler MVP, check if user has *any* order containing this product?
@@ -76,11 +84,26 @@ if ($method === 'GET' && $action === 'list') {
         // Let's skip strict purchase verification for this moment to ensure the feature works first, then harden.
         // Actually, let's just insert directly for now.
         
+        // SECURITY: Verify purchase exists using order_items
+        $stmt = $db->prepare("
+            SELECT COUNT(*) FROM order_items oi
+            JOIN orders o ON oi.order_id = o.id
+            WHERE o.buyer_id = ? AND oi.product_id = ?
+        ");
+        $stmt->execute([$user_id, $data->product_id]);
+        $hasPurchased = $stmt->fetchColumn() > 0;
+
+        if (!$hasPurchased) {
+             http_response_code(403);
+             echo json_encode(["success" => false, "message" => "You can only review products you have purchased."]);
+             exit();
+        }
+
         $query = "INSERT INTO reviews SET product_id=:product_id, user_id=:user_id, rating=:rating, comment=:comment";
         $stmt = $db->prepare($query);
 
         $stmt->bindParam(":product_id", $data->product_id);
-        $stmt->bindParam(":user_id", $data->user_id);
+        $stmt->bindParam(":user_id", $user_id);
         $stmt->bindParam(":rating", $data->rating);
         $stmt->bindParam(":comment", $data->comment); // nullable
 

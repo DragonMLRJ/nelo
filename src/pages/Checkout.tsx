@@ -26,7 +26,8 @@ const Checkout: React.FC = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderIds, setOrderIds] = useState<string[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('card');
-  /* paymentMethod already defined above */
+
+  const [deliveryMethod, setDeliveryMethod] = useState<'shipping' | 'pickup'>('shipping');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
@@ -55,6 +56,7 @@ const Checkout: React.FC = () => {
 
   // Calculate Shipping Fee
   const shippingFee = React.useMemo(() => {
+    if (deliveryMethod === 'pickup') return 0;
     if (!user?.location || checkoutItems.length === 0) return SHIPPING_RATES.INTER_CITY;
 
     // Simple logic: if any item is from a different city, charge Inter-city
@@ -117,8 +119,9 @@ const Checkout: React.FC = () => {
 
     const orderPayload = {
       buyerId: user?.id,
-      shippingAddress: user?.location || "123 Main St, Brazzaville, Congo",
+      shippingAddress: deliveryMethod === 'pickup' ? 'Local Pickup' : (user?.location || "123 Main St, Brazzaville, Congo"),
       paymentMethod: paymentMethod,
+      deliveryMethod: deliveryMethod,
       sellerId: (checkoutItems[0] as any).seller_id, // Get seller from first item
       total: total,
       items: checkoutItems.map(item => ({
@@ -214,13 +217,46 @@ const Checkout: React.FC = () => {
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <Truck className="w-5 h-5 text-gray-500" /> Livraison
+              <Truck className="w-5 h-5 text-gray-500" /> Mode de livraison
             </h3>
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-              <p className="font-bold">{user?.name}</p>
-              <p>{user?.location || "123 Main St, Brazzaville, Congo"}</p>
-              <button className="text-teal-600 text-sm font-bold mt-2 hover:underline">Modifier l'adresse</button>
+
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <button
+                type="button"
+                onClick={() => setDeliveryMethod('shipping')}
+                className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-all ${deliveryMethod === 'shipping' ? 'border-teal-600 bg-teal-50 text-teal-800 ring-1 ring-teal-200' : 'border-gray-200 hover:bg-gray-50'}`}
+              >
+                <Truck className="w-5 h-5" />
+                <span className="text-sm font-bold">Livraison</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliveryMethod('pickup')}
+                className={`p-3 border rounded-lg flex flex-col items-center justify-center gap-2 transition-all ${deliveryMethod === 'pickup' ? 'border-teal-600 bg-teal-50 text-teal-800 ring-1 ring-teal-200' : 'border-gray-200 hover:bg-gray-50'}`}
+              >
+                <Building2 className="w-5 h-5" />
+                <span className="text-sm font-bold">Main Propre</span>
+              </button>
             </div>
+
+            {deliveryMethod === 'shipping' ? (
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <p className="text-xs text-gray-500 mb-1">Adresse de livraison</p>
+                <p className="font-bold">{user?.name}</p>
+                <p>{user?.location || "123 Main St, Brazzaville, Congo"}</p>
+                <button className="text-teal-600 text-sm font-bold mt-2 hover:underline">Modifier l'adresse</button>
+              </div>
+            ) : (
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                <p className="font-bold text-blue-900 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" /> Remise en main propre sécurisée
+                </p>
+                <p className="text-sm text-blue-800 mt-1">
+                  Vous recevrez un <strong>Code de Sécurité</strong> unique après paiement.
+                  Donnez ce code au vendeur uniquement lors de la remise de l'article pour valider la transaction.
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">

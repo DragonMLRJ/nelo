@@ -10,12 +10,22 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
     exit();
 }
 
-// Database configuration - supports both Docker and local development
+// Database configuration
+// SECURITY: Defaults removed to prevent accidental exposure of dev credentials in production.
+// Ensure these environment variables are set in your deployment platform (Vercel/Docker/Apache).
 define('DB_CONNECTION', getenv('DB_CONNECTION') ?: 'mysql');
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: 'admin123');
-define('DB_NAME', getenv('DB_NAME') ?: 'nelo_marketplace');
+define('DB_HOST', getenv('DB_HOST'));
+define('DB_USER', getenv('DB_USER'));
+define('DB_PASS', getenv('DB_PASS'));
+define('DB_NAME', getenv('DB_NAME'));
+
+if (!DB_HOST || !DB_USER || !DB_NAME) {
+    // Fail securely if config is missing
+    error_log("Critical: Database configuration missing.");
+    http_response_code(500);
+    echo json_encode(['error' => 'Server configuration error']);
+    exit();
+}
 
 // Create database connection
 function getDB() {
@@ -46,9 +56,11 @@ function getDB() {
         );
         return $conn;
     } catch(PDOException $e) {
+        // SECURITY: Log the detailed error but NEVER expose it to the client
         error_log("Database Connection Error: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Database connection failed']);
+        // Generic message for security
+        echo json_encode(['error' => 'Service temporarily unavailable']);
         exit();
     }
 }
@@ -69,15 +81,15 @@ function getJsonInput() {
 // Security & Classes Autoload
 require_once __DIR__ . '/../classes/Validator.php';
 require_once __DIR__ . '/../classes/RateLimiter.php';
+require_once __DIR__ . '/../classes/JWT.php';
 
 // Global Rate Limit Check (IP-based)
 // Limit: 100 requests per minute per IP
 // DISABLED FOR VERCEL DEPLOYMENT (No local MySQL)
-/*
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 try {
     $rateDb = getDB(); 
-    $limiter = new RateLimiter($rateDb, "ip:" . $ip, 1000, 60);
+    $limiter = new RateLimiter($rateDb, "ip:" . $ip, 100, 60); // 100 req/min
     if (!$limiter->check()) {
         http_response_code(429);
         echo json_encode(['error' => 'Too Many Requests']);
@@ -86,5 +98,4 @@ try {
 } catch (Exception $e) {
     // Fail open
 }
-*/
 ?>

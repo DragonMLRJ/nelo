@@ -5,14 +5,15 @@ require_once __DIR__ . '/../config/database.php';
 $method = $_SERVER['REQUEST_METHOD'];
 $db = getDB();
 
-// Auth Check (Basic)
+// Auth Check (JWT)
 $headers = getallheaders();
-$userId = $headers['X-User-Id'] ?? null; // Simulation auth
-// ideally use session or JWT
+$authUserId = JWT::getUserIdFromHeader();
 
-if (!$userId) {
-    sendResponse(['error' => 'Unauthorized'], 401);
+if (!$authUserId) {
+    sendResponse(['error' => 'Unauthorized Access'], 401);
 }
+
+$userId = $authUserId;
 
 switch($method) {
     case 'GET':

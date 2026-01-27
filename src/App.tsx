@@ -31,12 +31,15 @@ const Forum = React.lazy(() => import('./pages/Forum'));
 const InfoPage = React.lazy(() => import('./pages/InfoPage'));
 const Checkout = React.lazy(() => import('./pages/Checkout'));
 const OrderDetails = React.lazy(() => import('./pages/OrderDetails'));
+const DisputeList = React.lazy(() => import('./pages/Disputes/DisputeList'));
+const DisputeDetail = React.lazy(() => import('./pages/Disputes/DisputeDetail'));
 const SellerDashboard = React.lazy(() => import('./pages/SellerDashboard'));
 const InvoiceView = React.lazy(() => import('./pages/InvoiceView'));
 const UsersPage = React.lazy(() => import('./pages/Admin/Users'));
 const ModerationPage = React.lazy(() => import('./pages/Admin/Moderation'));
 
 import CookieConsent from './components/CookieConsent';
+import ScrollToTop from './components/ScrollToTop';
 import AdminRoute from './components/AdminRoute';
 import AdminLayout from './layouts/AdminLayout';
 
@@ -92,6 +95,8 @@ const AnimatedRoutes: React.FC = () => {
 
           {/* Order Management */}
           <Route path="/orders/:orderId" element={<OrderDetails />} />
+          <Route path="/disputes" element={<DisputeList />} />
+          <Route path="/disputes/:id" element={<DisputeDetail />} />
           <Route path="/invoice/:orderId" element={<InvoiceView />} />
           <Route path="/sales" element={<SellerDashboard />} />
         </Routes>
@@ -112,6 +117,7 @@ const App: React.FC = () => {
                   <QuickViewProvider>
                     <LanguageProvider>
                       <BrowserRouter>
+                        <ScrollToTop />
                         <div className="flex flex-col min-h-screen bg-white font-sans text-gray-900">
                           <Navbar />
                           <main className="flex-grow">

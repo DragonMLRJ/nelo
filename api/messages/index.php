@@ -41,7 +41,14 @@ switch($method) {
  */
 function getConversations() {
     $data = getJsonInput();
-    $userId = $data['userId'] ?? $_GET['userId'] ?? null;
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+    
+    // Only allow accessing own conversations
+    $userId = $authUserId; 
     
     if (!$userId) {
         sendResponse(['error' => 'User ID is required'], 400);
@@ -229,16 +236,22 @@ function getMessages() {
  * Send a new message
  */
 function sendMessage() {
+    // SECURITY CHECK: Verify Token
+    $authUserId = JWT::getUserIdFromHeader();
+    if (!$authUserId) {
+        sendResponse(['error' => 'Unauthorized Access'], 401);
+    }
+
     $data = getJsonInput();
-    $senderId = $data['senderId'] ?? null;
+    $senderId = $authUserId; // FORCE AUTH ID
     $receiverId = $data['receiverId'] ?? null;
     $content = $data['content'] ?? '';
     $productId = $data['productId'] ?? null;
     $attachmentUrl = $data['attachmentUrl'] ?? null;
     $attachmentType = $data['attachmentType'] ?? null;
     
-    if (!$senderId || !$receiverId) {
-        sendResponse(['error' => 'Sender ID and Receiver ID are required'], 400);
+    if (!$receiverId) {
+        sendResponse(['error' => 'Receiver ID is required'], 400);
     }
     
     try {

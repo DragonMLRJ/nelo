@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, CreditCard, Package, Truck, Calendar, User as UserIcon, Shield } from 'lucide-react';
+import { ArrowLeft, MapPin, CreditCard, Package, Truck, Calendar, User as UserIcon, Shield, Upload } from 'lucide-react';
 import { useOrders } from '../context/OrderContext';
 import { useAuth } from '../context/AuthContext';
-import { Order } from '../types';
+import { Order, OrderWithProofs, ShipmentProof } from '../types';
+import ShipmentProofModal from '../components/ShipmentProofModal';
+import ProofTimeline from '../components/ProofTimeline';
 
 const OrderDetails: React.FC = () => {
     const { orderId } = useParams<{ orderId: string }>();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [order, setOrder] = useState<any | null>(null);
+    const { submitShipmentProof, submitDeliveryProof } = useOrders();
+    const [order, setOrder] = useState<OrderWithProofs | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+    const [proofType, setProofType] = useState<'shipment' | 'delivery'>('shipment');
 
     // In a real app we'd fetch specific order details from API
     // For now we'll simulate fetching or use context if it had a direct get
@@ -34,23 +39,29 @@ const OrderDetails: React.FC = () => {
         fetchOrder();
     }, [orderId, user]);
 
-    const handleUpdateStatus = async (newStatus: string) => {
-        try {
-            const response = await fetch(`${API_BASE}/orders/index.php`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ orderId: order.id, status: newStatus })
-            });
+    const handleSubmitProof = async (proof: Partial<ShipmentProof>) => {
+        if (!order) return;
+
+        const success = proofType === 'shipment'
+            ? await submitShipmentProof(order.id, proof)
+            : await submitDeliveryProof(order.id, proof);
+
+        if (success) {
+            // Refresh order data
+            const response = await fetch(`${API_BASE}/orders/index.php?action=details&orderId=${orderId}`);
             const data = await response.json();
             if (data.success) {
-                setOrder({ ...order, status: newStatus });
-            } else {
-                alert('Failed to update status: ' + data.error);
+                setOrder(data.order);
             }
-        } catch (error) {
-            console.error('Error updating status:', error);
-            alert('Failed to update status');
+            alert(proofType === 'shipment' ? 'Preuve d\'envoi soumise avec succès!' : 'Réception confirmée!');
+        } else {
+            alert('Erreur lors de la soumission de la preuve');
         }
+    };
+
+    const handleOpenProofModal = (type: 'shipment' | 'delivery') => {
+        setProofType(type);
+        setIsProofModalOpen(true);
     };
 
     if (loading) return <div className="p-8 text-center">Loading order...</div>;
@@ -82,23 +93,74 @@ const OrderDetails: React.FC = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3">
-                    {isSeller && order.status === 'pending' && (
+                <div className="flex flex-wrap gap-3">
+                    {/* Seller: Submit Shipment Proof */}
+                    {isSeller && order.status === 'pending' && !order.shipment_proof_submitted && (
                         <button
-                            onClick={() => handleUpdateStatus('shipped')}
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                            onClick={() => handleOpenProofModal('shipment')}
+                            className="bg-teal-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-700 transition-colors flex items-center gap-2 shadow-lg shadow-teal-500/20"
                         >
-                            Mark as Shipped
+                            <Upload className="w-4 h-4" />
+                            Soumettre Preuve d'Envoi
                         </button>
                     )}
+
+                    {/* Seller: Verify Pickup Code */}
+                    {isSeller && order.delivery_method === 'pickup' && order.status === 'pending' && (
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder="Enter Pickup Code"
+                                id="pickupCodeInput"
+                                className="border rounded px-3 py-2 w-32"
+                                maxLength={6}
+                            />
+                            <button
+                                onClick={async () => {
+                                    const code = (document.getElementById('pickupCodeInput') as HTMLInputElement).value;
+                                    if (!code) return alert('Enter code');
+
+                                    try {
+                                        const res = await fetch(`${API_BASE}/orders/index.php?action=verify_pickup`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ orderId: order.id, code })
+                                        });
+                                        const d = await res.json();
+                                        if (d.success) {
+                                            alert('Pickup Verified!');
+                                            window.location.reload();
+                                        } else {
+                                            alert(d.error);
+                                        }
+                                    } catch (e) { alert('Error verifying'); }
+                                }}
+                                className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 hover:shadow-lg transition-all"
+                            >
+                                Verify Pickup
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Buyer: Submit Delivery Proof (only if shipped) */}
+                    {!isSeller && order.delivery_method === 'shipping' && order.status === 'shipped' && !order.delivery_proof_submitted && (
+                        <button
+                            onClick={() => handleOpenProofModal('delivery')}
+                            className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg shadow-green-500/20"
+                        >
+                            <Package className="w-4 h-4" />
+                            Confirmer Réception
+                        </button>
+                    )}
+
                     <button
                         onClick={() => window.open(`/invoice/${orderId}`, '_blank')}
                         className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-colors flex items-center gap-2"
                     >
-                        See Invoice
+                        Voir Facture
                     </button>
                     <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-colors">
-                        Contact {isSeller ? 'Buyer' : 'Seller'}
+                        Contacter {isSeller ? 'l\'Acheteur' : 'le Vendeur'}
                     </button>
                 </div>
             </div>
@@ -135,25 +197,8 @@ const OrderDetails: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Timeline / Tracking (Placeholder) */}
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                            <Truck className="w-5 h-5 text-gray-500" /> Order Status
-                        </h3>
-                        <div className="relative pl-8 border-l-2 border-gray-200 space-y-8">
-                            <div className="relative">
-                                <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow-sm ring-1 ring-gray-200"></div>
-                                <p className="font-bold text-gray-900">Order Placed</p>
-                                <p className="text-xs text-gray-500">{new Date(order.created_at).toLocaleString()}</p>
-                            </div>
-                            {order.status !== 'pending' && (
-                                <div className="relative">
-                                    <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-sm ring-1 ring-gray-200"></div>
-                                    <p className="font-bold text-gray-900">Processing</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    {/* Proof Timeline */}
+                    <ProofTimeline order={order as OrderWithProofs} isSeller={isSeller} />
                 </div>
 
                 <div className="space-y-6">
@@ -209,11 +254,33 @@ const OrderDetails: React.FC = () => {
                         <Shield className="w-5 h-5 text-teal-600 flex-shrink-0" />
                         <p className="text-xs text-teal-800">
                             <span className="font-bold block mb-1">Buyer Protection</span>
-                            Your purchase is protected. If you don't receive your item, you will be refunded.
+                            Your purchase is protected.
                         </p>
                     </div>
+
+                    {/* Pickup Code Display for Buyer */}
+                    {!isSeller && order.delivery_method === 'pickup' && order.status !== 'completed' && order.status !== 'cancelled' && (
+                        <div className="bg-purple-50 border border-purple-200 rounded-xl p-6 text-center shadow-sm animate-pulse">
+                            <h3 className="text-purple-900 font-bold mb-2">SECURE PICKUP CODE</h3>
+                            <div className="text-4xl font-mono font-black text-purple-700 tracking-widest bg-white p-4 rounded-lg border border-purple-100 inline-block">
+                                {order.pickup_code || '------'}
+                            </div>
+                            <p className="text-sm text-purple-800 mt-2">
+                                Give this code to the seller <strong>ONLY</strong> when you have received the item.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {/* Shipment Proof Modal */}
+            <ShipmentProofModal
+                isOpen={isProofModalOpen}
+                onClose={() => setIsProofModalOpen(false)}
+                orderId={order?.id || 0}
+                proofType={proofType}
+                onSubmit={handleSubmitProof}
+            />
         </div>
     );
 };

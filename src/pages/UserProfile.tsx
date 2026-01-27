@@ -80,24 +80,36 @@ const UserProfile: React.FC = () => {
       exit={{ opacity: 0 }}
       className="min-h-screen bg-gray-50 pb-20"
     >
-      {/* Decorative Background */}
-      <div className="h-64 bg-gradient-to-r from-teal-800 to-gray-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        {/* Abstract Shapes */}
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl"></div>
+      {/* Clean Header Section */}
+      <div className="bg-gradient-to-br from-teal-50 via-white to-purple-50 border-b border-gray-100">
+        <div className="container mx-auto px-4 py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-6"
+          >
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-outfit mb-2">Profil Vendeur</h1>
+            <p className="text-gray-600">Découvrez les articles de ce vendeur</p>
+          </motion.div>
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-24 relative z-10">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8">
 
           {/* Sidebar: Profile Info & Stats */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Main Profile Card - Glassmorphism */}
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-8 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 to-purple-500"></div>
+            {/* Main Profile Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-lg border border-gray-100 p-4 sm:p-6 md:p-8 text-center relative overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-500 to-purple-500"></div>
 
-              <div className="w-28 h-28 mx-auto rounded-full bg-white p-1 shadow-lg relative -mt-4 mb-5">
+              <div className="w-24 h-24 md:w-28 md:h-28 mx-auto rounded-full bg-gradient-to-br from-gray-100 to-gray-50 p-1 shadow-md relative mb-5">
                 <img
                   src={profileUser.avatar}
                   alt={profileUser.name}
@@ -120,23 +132,31 @@ const UserProfile: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                <button
+                <motion.button
                   onClick={handleMessageUser}
-                  className="w-full bg-teal-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-teal-600 text-white px-4 py-3.5 rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   <MessageCircle className="w-5 h-5" /> {t('profile.message')}
-                </button>
+                </motion.button>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-700 font-medium transition-colors flex items-center justify-center gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex-1 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-700 font-medium transition-all flex items-center justify-center gap-2 min-h-[44px] hover:border-gray-300"
+                  >
                     <Share2 className="w-4 h-4" /> {t('profile.share')}
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     onClick={() => setIsReportModalOpen(true)}
                     disabled={hasReported}
-                    className={`flex-1 py-2.5 border border-gray-200 rounded-xl transition-colors flex items-center justify-center gap-2 font-medium ${hasReported ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-red-50 text-gray-600 hover:text-red-600 hover:border-red-100'}`}
+                    whileHover={!hasReported ? { scale: 1.02 } : {}}
+                    whileTap={!hasReported ? { scale: 0.98 } : {}}
+                    className={`flex-1 py-3 border border-gray-200 rounded-xl transition-all flex items-center justify-center gap-2 font-medium min-h-[44px] ${hasReported ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-red-50 text-gray-600 hover:text-red-600 hover:border-red-200'}`}
                   >
                     <Flag className={`w-4 h-4 ${hasReported ? 'fill-gray-400' : ''}`} />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -170,23 +190,38 @@ const UserProfile: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center hover:shadow-md transition-shadow"
+              >
                 <p className="text-3xl font-bold text-teal-600 font-outfit">{userListings.length}</p>
                 <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('profile.listings')}</p>
-              </div>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center hover:shadow-md transition-shadow"
+              >
                 <p className="text-3xl font-bold text-indigo-600 font-outfit">12</p>
                 <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('profile.sold')}</p>
-              </div>
+              </motion.div>
             </div>
           </div>
 
           {/* Main Content: Listings */}
-          <div className="lg:col-span-8 pt-4">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:col-span-8 pt-4"
+          >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900 font-outfit flex items-center gap-2">
                 <span className="w-2 h-8 bg-teal-500 rounded-full"></span>
@@ -196,7 +231,7 @@ const UserProfile: React.FC = () => {
             </div>
 
             {userListings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {userListings.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -210,7 +245,7 @@ const UserProfile: React.FC = () => {
                 <p className="text-gray-500 text-sm">Cet utilisateur n'a pas encore mis d'articles en vente.</p>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
 
@@ -308,7 +343,7 @@ const UserProfile: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </motion.div >
   );
 };
 

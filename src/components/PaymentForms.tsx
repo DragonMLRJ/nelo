@@ -106,6 +106,7 @@ export const StripePayment = (props: PaymentProps) => (
 
 export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSuccess, onError, isProcessing, setIsProcessing }) => {
     const [phone, setPhone] = useState('');
+    const [network, setNetwork] = useState<'mtn' | 'airtel'>('mtn');
 
     const handlePay = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -119,8 +120,9 @@ export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSu
                     amount,
                     currency,
                     phone,
+                    network, // Send network to backend
                     orderId: 'MOMO-' + Date.now(),
-                    manualTxRef: 'MOMO-PENDING-' + Date.now(), // Trigger manual flow
+                    manualTxRef: 'MOMO-PENDING-' + Date.now(),
                     provider: 'Momo'
                 }),
             });
@@ -129,10 +131,8 @@ export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSu
 
             if (!response.ok) throw new Error(data.message || 'Payment request failed');
 
-            // For Sandbox, we simulate success easily. In prod, we'd poll the status.
-            alert(`Payment Request Sent to ${phone}. Please approve ensuring funds.`);
+            alert(`Payment Request Sent to ${phone} via ${network.toUpperCase()}. Please approve ensuring funds.`);
 
-            // Simulating a delay for the user to approve on phone
             setTimeout(() => {
                 onSuccess({ provider: 'mtn-momo', referenceId: data.transactionId });
             }, 3000);
@@ -146,7 +146,38 @@ export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSu
     return (
         <form onSubmit={handlePay} className="space-y-4">
             <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mobile Money Number</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Choisir le Réseau</label>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                    <button
+                        type="button"
+                        onClick={() => setNetwork('mtn')}
+                        className={`relative p-3 border rounded-xl flex items-center justify-center gap-2 transition-all overflow-hidden ${network === 'mtn' ? 'border-yellow-400 bg-yellow-50 ring-2 ring-yellow-400 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}
+                    >
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/9/9e/MTN_Mobile_Money_logo.svg"
+                            alt="MTN"
+                            className="h-8 w-auto object-contain"
+                        />
+                        {network === 'mtn' && (
+                            <div className="absolute top-1 right-1">
+                                <span className="block w-2 H-2 bg-yellow-400 rounded-full"></span>
+                            </div>
+                        )}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setNetwork('airtel')}
+                        className={`relative p-3 border rounded-xl flex items-center justify-center gap-2 transition-all overflow-hidden ${network === 'airtel' ? 'border-red-500 bg-red-50 ring-2 ring-red-500 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}
+                    >
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Airtel_Logo_new.svg"
+                            alt="Airtel"
+                            className="h-8 w-auto object-contain"
+                        />
+                    </button>
+                </div>
+
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Numéro Mobile Money</label>
                 <div className="relative">
                     <input
                         type="tel"
@@ -158,7 +189,6 @@ export const MobileMoneyForm: React.FC<PaymentProps> = ({ amount, currency, onSu
                     />
                     <Phone className="absolute left-3 top-3.5 text-gray-400 w-5 h-5" />
                 </div>
-                <p className="text-[10px] text-gray-400 mt-1">Supports MTN Mobile Money & Airtel Money</p>
             </div>
 
             <button

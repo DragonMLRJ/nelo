@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, TrendingUp, Settings, DollarSign, Filter } from 'lucide-react';
+import { Package, TrendingUp, Settings, DollarSign, Filter, Download } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useOrders } from '../context/OrderContext';
 import { useLanguage } from '../context/LanguageContext';
 import OrderCard from '../components/OrderCard';
+import { exportToCSV } from '../utils/exportUtils';
 
 const SellerDashboard: React.FC = () => {
     const { user } = useAuth();
@@ -33,6 +34,18 @@ const SellerDashboard: React.FC = () => {
 
     const pendingOrders = orders.filter(o => o.status === 'pending').length;
 
+    const handleExportSales = () => {
+        const dataToExport = filteredOrders.map(o => ({
+            Date: new Date(o.created_at).toLocaleDateString(),
+            'Order #': o.order_number,
+            Buyer: o.counterparty_name,
+            Amount: `${o.total_amount} ${o.currency}`,
+            Status: o.status,
+            'Payment Status': o.payment_status
+        }));
+        exportToCSV(dataToExport, `nelo_sales_${new Date().toISOString().split('T')[0]}`);
+    };
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
@@ -41,6 +54,12 @@ const SellerDashboard: React.FC = () => {
                     <p className="text-gray-500">{t('seller.subtitle')}</p>
                 </div>
                 <div className="flex gap-2">
+                    <button
+                        onClick={handleExportSales}
+                        className="flex items-center gap-2 bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-colors"
+                    >
+                        <Download className="w-4 h-4" /> Export CSV
+                    </button>
                     <button
                         onClick={() => navigate('/sell')}
                         className="bg-teal-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-teal-700 transition-colors"
