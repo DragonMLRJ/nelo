@@ -15,7 +15,7 @@ router.post('/create-intent', async (req, res) => {
 });
 
 // MTN MoMo: Request to Pay
-router.post('/momo/pay', async (req, res) => {
+router.post('/momo/pay', async (req: express.Request, res: express.Response) => {
     try {
         const { amount, currency, phone } = req.body;
         const result = await PaymentService.requestMtnPayment(amount, currency, phone);

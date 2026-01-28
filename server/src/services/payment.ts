@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-    apiVersion: '2025-01-27.acacia', // Latest API version
+    apiVersion: '2024-12-18.acacia', // Stable API version
 });
 
 interface MTNConfig {
