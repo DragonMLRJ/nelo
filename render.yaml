@@ -1,6 +1,53 @@
+# Render.com Blueprint for Nelo Marketplace
+# Deploy all services: Frontend (Static), PHP Backend (Docker), Node Backend
+
 services:
+  # Frontend - Static Site
   - type: web
-    name: nelo-marketplace-backend
+    name: nelo-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_SUPABASE_URL
+        value: https://nzyuwfxghaujzzfjewze.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        value: pk_test_51RWyckGg41qE6Oi8kRj1ioF9tagBSOeVq9PDa9uwnnNrjP5RS44GWOdyrm7xaMsBfwIVMzlysN2YR6hBEU5vkn7N00I7IjLXC9
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+
+  # PHP Backend (Docker)
+  - type: web
+    name: nelo-php-backend
+    env: docker
+    dockerfilePath: ./Dockerfile.php
+    plan: free
+    envVars:
+      - key: DB_HOST
+        value: db.nzyuwfxghaujzzfjewze.supabase.com
+      - key: DB_USER
+        value: postgres  
+      - key: DB_PASS
+        sync: false
+      - key: DB_NAME
+        value: postgres
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+
+  # Node.js Backend
+  - type: web
+    name: nelo-node-backend
     env: node
     plan: free
     rootDir: server
@@ -9,13 +56,9 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_KEY
-        sync: false
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: STRIPE_WEBHOOK_SECRET
+      - key: VITE_SUPABASE_URL
+        value: https://nzyuwfxghaujzzfjewze.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
         sync: false
       - key: NODE_ENV
         value: production
