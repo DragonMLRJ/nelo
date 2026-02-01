@@ -30,16 +30,34 @@ services:
     dockerfilePath: ./Dockerfile.php
     plan: free
     envVars:
+      - key: DB_CONNECTION
+        value: pgsql
       - key: DB_HOST
-        value: db.nzyuwfxghaujzzfjewze.supabase.com
+        value: db.nzyuwfxghaujzzfjewze.supabase.co
+      - key: DB_PORT
+        value: 5432
       - key: DB_USER
         value: postgres  
       - key: DB_PASS
         sync: false
       - key: DB_NAME
         value: postgres
-      - key: DB_CONNECTION
-        value: pgsql
+      - key: FLW_PUBLIC_KEY
+        sync: false
+      - key: FLW_SECRET_HASH
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM_EMAIL
+        value: no-reply@nelo.cg
+      - key: SMTP_FROM_NAME
+        value: Nelo Marketplace
       - key: APP_ENV
         value: production
       - key: APP_DEBUG

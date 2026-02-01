@@ -60,11 +60,7 @@ services:
       DB_PORT: 5432
       DB_NAME: postgres
       DB_USER: postgres
-      DB_PASS: StrongPass_Nelo_2026!
-      # DB_HOST: ${DB_HOST}
-      # DB_USER: ${DB_USER}
-      # DB_PASS: ${DB_PASS}
-      # DB_NAME: ${DB_NAME}
+      DB_PASS: ${DATABASE_PASSWORD:-StrongPass_Nelo_2026!}
       # Payment
       FLW_PUBLIC_KEY: ${FLW_PUBLIC_KEY}
       FLW_SECRET_HASH: ${FLW_SECRET_HASH}
@@ -79,6 +75,8 @@ services:
       - nelo-network
     volumes:
       - ./api:/var/www/html
+    ports:
+      - "8000:80"
 
   # React Frontend
   frontend:
@@ -89,6 +87,10 @@ services:
     restart: unless-stopped
     depends_on:
       - php-backend
+    environment:
+      VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+      VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+      VITE_API_URL: http://php-backend
     ports:
       - "3000:80"
       - "443:443"
