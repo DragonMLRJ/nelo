@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 
 const router = express.Router();
 
-router.post('/confirmation', async (req, res) => {
+router.post('/confirmation', async (req: express.Request, res: express.Response) => {
     const { email, orderNumber, totalAmount, currency, items, shippingAddress } = req.body;
 
     console.log(`[Email] Sending order confirmation to ${email} for Order ${orderNumber}`);

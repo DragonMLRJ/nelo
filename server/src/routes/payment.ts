@@ -4,7 +4,7 @@ import { PaymentService } from '../services/payment';
 const router = express.Router();
 
 // Stripe: Create Payment Intent
-router.post('/create-intent', async (req, res) => {
+router.post('/create-intent', async (req: express.Request, res: express.Response) => {
     try {
         const { amount, currency } = req.body; // Expect amount in standard unit (e.g., 20.00)
         const result = await PaymentService.createStripePaymentIntent(amount, currency);
@@ -26,7 +26,7 @@ router.post('/momo/pay', async (req: express.Request, res: express.Response) => 
 });
 
 // MTN MoMo: Check Status
-router.get('/momo/status/:referenceId', async (req, res) => {
+router.get('/momo/status/:referenceId', async (req: express.Request, res: express.Response) => {
     try {
         const { referenceId } = req.params;
         const result = await PaymentService.getMtnTransactionStatus(referenceId);
