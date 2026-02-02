@@ -19,9 +19,9 @@ if ($method === 'GET' && $action === 'list') {
     $product_id = isset($_GET['productId']) ? intval($_GET['productId']) : 0;
 
     if ($product_id > 0) {
-        $query = "SELECT r.*, u.name as user_name 
+        $query = "SELECT r.*, p.name as user_name 
                   FROM reviews r 
-                  JOIN users u ON r.user_id = u.id 
+                  JOIN profiles p ON r.user_id = p.id 
                   WHERE r.product_id = ? 
                   ORDER BY r.created_at DESC";
         $stmt = $db->prepare($query);
