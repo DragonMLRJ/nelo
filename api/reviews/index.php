@@ -9,9 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-include_once '../config/database.php';
-$database = new Database();
-$db = $database->getConnection();
+require_once __DIR__ . '/../config/database.php';
+$db = getDB();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = isset($_GET['action']) ? $_GET['action'] : '';

@@ -132,13 +132,4 @@ function getCategoriesTree() {
         sendResponse(['error' => 'Database error: ' . $e->getMessage()], 500);
     }
 }
-
-/**
- * Helper function to send JSON response
- */
-function sendResponse($data, $statusCode = 200) {
-    http_response_code($statusCode);
-    header('Content-Type: application/json');
-    echo json_encode($data);
-    exit;
-}
+?>
