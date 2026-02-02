@@ -21,7 +21,7 @@ class RateLimiter {
                 $this->db->exec("DELETE FROM rate_limits WHERE reset_at < NOW()");
             }
 
-            $stmt = $this->db->prepare("SELECT * FROM rate_limits WHERE `key` = ?");
+            $stmt = $this->db->prepare("SELECT * FROM rate_limits WHERE \"key\" = ?");
             $stmt->execute([$this->key]);
             $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -29,7 +29,7 @@ class RateLimiter {
                 if (new DateTime($record['reset_at']) < new DateTime()) {
                     // Window expired, reset
                     $resetAt = (new DateTime())->modify("+{$this->window} seconds")->format('Y-m-d H:i:s');
-                    $stmt = $this->db->prepare("UPDATE rate_limits SET attempts = 1, reset_at = ? WHERE `key` = ?");
+                    $stmt = $this->db->prepare("UPDATE rate_limits SET attempts = 1, reset_at = ? WHERE \"key\" = ?");
                     $stmt->execute([$resetAt, $this->key]);
                     return true;
                 } else {
@@ -37,7 +37,7 @@ class RateLimiter {
                         return false; // Limit exceeded
                     } else {
                         // Increment
-                        $stmt = $this->db->prepare("UPDATE rate_limits SET attempts = attempts + 1 WHERE `key` = ?");
+                        $stmt = $this->db->prepare("UPDATE rate_limits SET attempts = attempts + 1 WHERE \"key\" = ?");
                         $stmt->execute([$this->key]);
                         return true;
                     }
@@ -45,7 +45,7 @@ class RateLimiter {
             } else {
                 // New record
                 $resetAt = (new DateTime())->modify("+{$this->window} seconds")->format('Y-m-d H:i:s');
-                $stmt = $this->db->prepare("INSERT INTO rate_limits (`key`, attempts, reset_at) VALUES (?, 1, ?)");
+                $stmt = $this->db->prepare("INSERT INTO rate_limits (\"key\", attempts, reset_at) VALUES (?, 1, ?)");
                 $stmt->execute([$this->key, $resetAt]);
                 return true;
             }
