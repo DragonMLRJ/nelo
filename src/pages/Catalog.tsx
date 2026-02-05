@@ -252,7 +252,8 @@ const Catalog: React.FC = () => {
             ${isMobileFiltersOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0 shadow-none'}
             overflow-y-auto lg:overflow-visible
             lg:bg-transparent bg-white
-          `}>
+          `}
+        >
           <div className="p-6 lg:p-6 lg:sticky lg:top-24 bg-white/80 backdrop-blur-xl rounded-3xl lg:shadow-xl lg:border lg:border-white/50 min-h-screen lg:min-h-0">
             <div className="flex items-center justify-between mb-8 text-gray-800">
               <div className="flex items-center gap-3">
@@ -264,7 +265,7 @@ const Catalog: React.FC = () => {
               <div className="flex items-center gap-4">
                 {activeFiltersCount > 0 && (
                   <button onClick={clearFilters} className="text-xs text-teal-600 font-bold hover:underline bg-teal-50 px-2 py-1 rounded-md">
-                    Réinitialiser
+                    R??initialiser
                   </button>
                 )}
                 <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
@@ -301,7 +302,7 @@ const Catalog: React.FC = () => {
 
             {/* Category Filter */}
             <div className="mb-8">
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Catégorie</h3>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Cat??gorie</h3>
               <ul className="space-y-1">
                 <li>
                   <button
@@ -341,7 +342,7 @@ const Catalog: React.FC = () => {
                   </div>
                   <div className="ml-3 flex items-center gap-2">
                     <BadgeCheck className="w-5 h-5 text-teal-500" />
-                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Vérifié</span>
+                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">V??rifi??</span>
                   </div>
                 </label>
               </div>
@@ -410,7 +411,7 @@ const Catalog: React.FC = () => {
 
       {/* Condition Filter */}
       <div>
-        <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">État</h3>
+        <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">??tat</h3>
         <div className="space-y-1">
           {CONDITIONS.map(condition => (
             <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">
@@ -506,7 +507,7 @@ const Catalog: React.FC = () => {
     <div className="flex flex-wrap gap-2 mb-6">
       {(priceRange.min || priceRange.max) && (
         <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-          Price: {priceRange.min || '0'} - {priceRange.max || '∞'} {filterCurrency}
+          Price: {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
           <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
         </div>
       )}
