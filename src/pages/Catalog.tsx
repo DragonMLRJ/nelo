@@ -441,143 +441,138 @@ const Catalog: React.FC = () => {
         <AdBanner slot="catalog-sidebar" format="box" />
       </div>
 
-    </div>
-  </aside >
+    </aside>
 
-  {/* Main Content */ }
-  < div className = "flex-1" >
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {searchQuery ? (
-                  <span className="flex items-center gap-2">
-                    Results for "{searchQuery}"
-                    <button onClick={clearSearch} className="text-gray-400 hover:text-red-500">
-                      <X className="w-5 h-5" />
-                    </button>
-                  </span>
-                ) : (
-                  selectedCategory === 'all' ? 'All Items' : CATEGORIES.find(c => c.id === selectedCategory)?.name
-                )}
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">{processedProducts.length} results found</p>
-            </div>
-
-            {/* Sort Dropdown */}
-            <div className="relative w-full sm:w-auto z-20">
-              <button
-                onClick={() => setIsSortOpen(!isSortOpen)}
-                className="w-full sm:w-64 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 flex items-center justify-between hover:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
-              >
-                <span className="truncate">Sort by: {SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} />
+    {/* Main Content */ }
+  <div className="flex-1">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {searchQuery ? (
+            <span className="flex items-center gap-2">
+              Results for "{searchQuery}"
+              <button onClick={clearSearch} className="text-gray-400 hover:text-red-500">
+                <X className="w-5 h-5" />
               </button>
-
-              <AnimatePresence>
-                {isSortOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-xl overflow-hidden py-1"
-                  >
-                    {SORT_OPTIONS.map(option => (
-                      <button
-                        key={option.value}
-                        onClick={() => {
-                          setSortBy(option.value);
-                          setIsSortOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-teal-50 transition-colors ${sortBy === option.value ? 'font-bold text-teal-700 bg-teal-50/50' : 'text-gray-700'}`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          <AdBanner slot="catalog-top" className="mb-8" />
-
-{/* Active Filters Summary (Chips) */ }
-{
-  activeFiltersCount > 0 && (
-    <div className="flex flex-wrap gap-2 mb-6">
-      {(priceRange.min || priceRange.max) && (
-        <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-          Price: {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
-          <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
-        </div>
-      )}
-      {verifiedSellerOnly && (
-        <div className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
-          Verified Sellers <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
-        </div>
-      )}
-      {officialStoresOnly && (
-        <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-xs font-medium text-purple-800">
-          Official Stores <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
-        </div>
-      )}
-      {searchParams.get('loc') && (
-        <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-          <MapPin className="w-3 h-3" /> {searchParams.get('loc')}
-          <button onClick={() => setSearchParams(prev => { prev.delete('loc'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
-        </div>
-      )}
-      {selectedConditions.map(c => (
-        <div key={c} className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
-          {c} <button onClick={() => toggleCondition(c)}><X className="w-3 h-3 hover:text-red-500" /></button>
-        </div>
-      ))}
-      <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Clear all</button>
-    </div>
-  )
-}
-
-{/* Products Grid */ }
-{
-  loading ? (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <ProductCardSkeleton key={i} />
-      ))}
-    </div>
-  ) : processedProducts.length > 0 ? (
-    <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      <AnimatePresence>
-        {processedProducts.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </AnimatePresence>
-
-      {/* Conditional Ad Injection */}
-      {processedProducts.length > 4 && (
-        <div className="col-span-2 sm:col-span-3 lg:col-span-4">
-          <AdBanner slot="catalog-mid-feed" />
-        </div>
-      )}
-    </motion.div>
-  ) : (
-    <div className="text-center py-24 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-        <Search className="w-8 h-8 text-gray-300" />
+            </span>
+          ) : (
+            selectedCategory === 'all' ? 'All Items' : CATEGORIES.find(c => c.id === selectedCategory)?.name
+          )}
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">{processedProducts.length} results found</p>
       </div>
-      <h3 className="text-lg font-bold text-gray-900 mb-2">No items found</h3>
-      <p className="text-gray-500 text-sm mb-6">
-        {searchQuery ? `We couldn't find anything matching "${searchQuery}".` : "Try adjusting your filters."}
-      </p>
-      <button onClick={() => { clearFilters(); clearSearch(); }} className="bg-teal-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors shadow-sm">
-        Clear all filters
-      </button>
+
+      {/* Sort Dropdown */}
+      <div className="relative w-full sm:w-auto z-20">
+        <button
+          onClick={() => setIsSortOpen(!isSortOpen)}
+          className="w-full sm:w-64 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 flex items-center justify-between hover:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
+        >
+          <span className="truncate">Sort by: {SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
+          <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        <AnimatePresence>
+          {isSortOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="absolute right-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-xl overflow-hidden py-1"
+            >
+              {SORT_OPTIONS.map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    setSortBy(option.value);
+                    setIsSortOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-teal-50 transition-colors ${sortBy === option.value ? 'font-bold text-teal-700 bg-teal-50/50' : 'text-gray-700'}`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
-  )
-}
-        </div >
-      </div >
-    </motion.div >
+
+    <AdBanner slot="catalog-top" className="mb-8" />
+
+    {/* Active Filters Summary (Chips) */}
+    {activeFiltersCount > 0 && (
+      <div className="flex flex-wrap gap-2 mb-6">
+        {(priceRange.min || priceRange.max) && (
+          <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+            Price: {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
+            <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
+          </div>
+        )}
+        {verifiedSellerOnly && (
+          <div className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
+            Verified Sellers <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+          </div>
+        )}
+        {officialStoresOnly && (
+          <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-xs font-medium text-purple-800">
+            Official Stores <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+          </div>
+        )}
+        {searchParams.get('loc') && (
+          <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+            <MapPin className="w-3 h-3" /> {searchParams.get('loc')}
+            <button onClick={() => setSearchParams(prev => { prev.delete('loc'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
+          </div>
+        )}
+        {selectedConditions.map(c => (
+          <div key={c} className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
+            {c} <button onClick={() => toggleCondition(c)}><X className="w-3 h-3 hover:text-red-500" /></button>
+          </div>
+        ))}
+        <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Clear all</button>
+      </div>
+    )}
+
+    {/* Products Grid */}
+    {loading ? (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <ProductCardSkeleton key={i} />
+        ))}
+      </div>
+    ) : processedProducts.length > 0 ? (
+      <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <AnimatePresence>
+          {processedProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </AnimatePresence>
+
+        {/* Conditional Ad Injection */}
+        {processedProducts.length > 4 && (
+          <div className="col-span-2 sm:col-span-3 lg:col-span-4">
+            <AdBanner slot="catalog-mid-feed" />
+          </div>
+        )}
+      </motion.div>
+    ) : (
+      <div className="text-center py-24 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <Search className="w-8 h-8 text-gray-300" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 mb-2">No items found</h3>
+        <p className="text-gray-500 text-sm mb-6">
+          {searchQuery ? `We couldn't find anything matching "${searchQuery}".` : "Try adjusting your filters."}
+        </p>
+        <button onClick={() => { clearFilters(); clearSearch(); }} className="bg-teal-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors shadow-sm">
+          Clear all filters
+        </button>
+      </div>
+    )}
+  </div>
+    
+  </motion.div >
   );
 };
 
