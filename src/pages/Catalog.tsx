@@ -252,8 +252,7 @@ const Catalog: React.FC = () => {
             ${isMobileFiltersOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0 shadow-none'}
             overflow-y-auto lg:overflow-visible
             lg:bg-transparent bg-white
-          `}
-        >
+          `}>
           <div className="p-6 lg:p-6 lg:sticky lg:top-24 bg-white/80 backdrop-blur-xl rounded-3xl lg:shadow-xl lg:border lg:border-white/50 min-h-screen lg:min-h-0">
             <div className="flex items-center justify-between mb-8 text-gray-800">
               <div className="flex items-center gap-3">
@@ -345,105 +344,107 @@ const Catalog: React.FC = () => {
                     <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Vérifié</span>
                   </div>
                 </label>
-
-                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
-                  <div className="relative flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={officialStoresOnly}
-                      onChange={() => setOfficialStoresOnly(!officialStoresOnly)}
-                      className="peer sr-only"
-                    />
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all shadow-sm"></div>
-                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                  </div>
-                  <div className="ml-3 flex items-center gap-2">
-                    <Store className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Boutique Officielle</span>
-                  </div>
-                </label>
               </div>
             </div>
 
-            {/* Price Filter */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Prix</h3>
-                <div className="flex bg-gray-100/80 p-1 rounded-lg">
-                  <button
-                    onClick={() => setFilterCurrency('XAF')}
-                    className={`px-2 py-0.5 text-xs font-bold rounded-md transition-all ${filterCurrency === 'XAF' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    XAF
-                  </button>
-                  <button
-                    onClick={() => setFilterCurrency('$')}
-                    className={`px-2 py-0.5 text-xs font-bold rounded-md transition-all ${filterCurrency === '$' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    $
-                  </button>
-                </div>
+            <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
+              <div className="relative flex items-center">
+                <input
+                  type="checkbox"
+                  checked={officialStoresOnly}
+                  onChange={() => setOfficialStoresOnly(!officialStoresOnly)}
+                  className="peer sr-only"
+                />
+                <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all shadow-sm"></div>
+                <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
               </div>
-              <div className="flex gap-2 items-center">
-                <div className="relative flex-1">
-                  <input
-                    type="number"
-                    value={priceRange.min}
-                    onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
-                    placeholder="Min"
-                    className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
-                  />
-                </div>
-                <span className="text-gray-400 font-medium">-</span>
-                <div className="relative flex-1">
-                  <input
-                    type="number"
-                    value={priceRange.max}
-                    onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
-                    placeholder="Max"
-                    className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
-                  />
-                </div>
+              <div className="ml-3 flex items-center gap-2">
+                <Store className="w-5 h-5 text-purple-600" />
+                <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Boutique Officielle</span>
               </div>
-            </div>
+            </label>
+          </div> {/* Closing div for space-y-3 */}
+      </div> {/* Closing div for Seller Filter section */}
 
-            {/* Condition Filter */}
-            <div>
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">État</h3>
-              <div className="space-y-1">
-                {CONDITIONS.map(condition => (
-                  <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">
-                    <div className="flex items-center">
-                      <div className="relative flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={selectedConditions.includes(condition)}
-                          onChange={() => toggleCondition(condition)}
-                          className="peer sr-only"
-                        />
-                        <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
-                        <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                      </div>
-                      <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-900 font-medium transition-colors">{condition}</span>
-                    </div>
-                    <span className="text-xs text-gray-400 font-medium bg-gray-50 px-2 py-0.5 rounded-md">
-                      {conditionCounts[condition] || 0}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Sidebar Ad */}
-            <div className="mt-8 hidden lg:block opacity-80 hover:opacity-100 transition-opacity">
-              <AdBanner slot="catalog-sidebar" format="box" />
-            </div>
-
+      {/* Price Filter */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Prix</h3>
+          <div className="flex bg-gray-100/80 p-1 rounded-lg">
+            <button
+              onClick={() => setFilterCurrency('XAF')}
+              className={`px-2 py-0.5 text-xs font-bold rounded-md transition-all ${filterCurrency === 'XAF' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              XAF
+            </button>
+            <button
+              onClick={() => setFilterCurrency('$')}
+              className={`px-2 py-0.5 text-xs font-bold rounded-md transition-all ${filterCurrency === '$' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              $
+            </button>
           </div>
-        </aside>
+        </div>
+        <div className="flex gap-2 items-center">
+          <div className="relative flex-1">
+            <input
+              type="number"
+              value={priceRange.min}
+              onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+              placeholder="Min"
+              className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
+            />
+          </div>
+          <span className="text-gray-400 font-medium">-</span>
+          <div className="relative flex-1">
+            <input
+              type="number"
+              value={priceRange.max}
+              onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+              placeholder="Max"
+              className="w-full bg-white/50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all"
+            />
+          </div>
+        </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
+      {/* Condition Filter */}
+      <div>
+        <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">État</h3>
+        <div className="space-y-1">
+          {CONDITIONS.map(condition => (
+            <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">
+              <div className="flex items-center">
+                <div className="relative flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedConditions.includes(condition)}
+                    onChange={() => toggleCondition(condition)}
+                    className="peer sr-only"
+                  />
+                  <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
+                  <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                </div>
+                <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-900 font-medium transition-colors">{condition}</span>
+              </div>
+              <span className="text-xs text-gray-400 font-medium bg-gray-50 px-2 py-0.5 rounded-md">
+                {conditionCounts[condition] || 0}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Sidebar Ad */}
+      <div className="mt-8 hidden lg:block opacity-80 hover:opacity-100 transition-opacity">
+        <AdBanner slot="catalog-sidebar" format="box" />
+      </div>
+
+    </div>
+  </aside >
+
+  {/* Main Content */ }
+  < div className = "flex-1" >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
@@ -499,79 +500,83 @@ const Catalog: React.FC = () => {
 
           <AdBanner slot="catalog-top" className="mb-8" />
 
-          {/* Active Filters Summary (Chips) */}
-          {activeFiltersCount > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {(priceRange.min || priceRange.max) && (
-                <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                  Price: {priceRange.min || '0'} - {priceRange.max || '∞'} {filterCurrency}
-                  <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
-                </div>
-              )}
-              {verifiedSellerOnly && (
-                <div className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
-                  Verified Sellers <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
-                </div>
-              )}
-              {officialStoresOnly && (
-                <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-xs font-medium text-purple-800">
-                  Official Stores <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
-                </div>
-              )}
-              {searchParams.get('loc') && (
-                <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                  <MapPin className="w-3 h-3" /> {searchParams.get('loc')}
-                  <button onClick={() => setSearchParams(prev => { prev.delete('loc'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
-                </div>
-              )}
-              {selectedConditions.map(c => (
-                <div key={c} className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
-                  {c} <button onClick={() => toggleCondition(c)}><X className="w-3 h-3 hover:text-red-500" /></button>
-                </div>
-              ))}
-              <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Clear all</button>
-            </div>
-          )}
-
-          {/* Products Grid */}
-          {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <ProductCardSkeleton key={i} />
-              ))}
-            </div>
-          ) : processedProducts.length > 0 ? (
-            <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              <AnimatePresence>
-                {processedProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </AnimatePresence>
-
-              {/* Conditional Ad Injection */}
-              {processedProducts.length > 4 && (
-                <div className="col-span-2 sm:col-span-3 lg:col-span-4">
-                  <AdBanner slot="catalog-mid-feed" />
-                </div>
-              )}
-            </motion.div>
-          ) : (
-            <div className="text-center py-24 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                <Search className="w-8 h-8 text-gray-300" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">No items found</h3>
-              <p className="text-gray-500 text-sm mb-6">
-                {searchQuery ? `We couldn't find anything matching "${searchQuery}".` : "Try adjusting your filters."}
-              </p>
-              <button onClick={() => { clearFilters(); clearSearch(); }} className="bg-teal-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors shadow-sm">
-                Clear all filters
-              </button>
-            </div>
-          )}
+{/* Active Filters Summary (Chips) */ }
+{
+  activeFiltersCount > 0 && (
+    <div className="flex flex-wrap gap-2 mb-6">
+      {(priceRange.min || priceRange.max) && (
+        <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+          Price: {priceRange.min || '0'} - {priceRange.max || '∞'} {filterCurrency}
+          <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
         </div>
-      </div>
+      )}
+      {verifiedSellerOnly && (
+        <div className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
+          Verified Sellers <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+        </div>
+      )}
+      {officialStoresOnly && (
+        <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-xs font-medium text-purple-800">
+          Official Stores <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+        </div>
+      )}
+      {searchParams.get('loc') && (
+        <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+          <MapPin className="w-3 h-3" /> {searchParams.get('loc')}
+          <button onClick={() => setSearchParams(prev => { prev.delete('loc'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
+        </div>
+      )}
+      {selectedConditions.map(c => (
+        <div key={c} className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
+          {c} <button onClick={() => toggleCondition(c)}><X className="w-3 h-3 hover:text-red-500" /></button>
+        </div>
+      ))}
+      <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Clear all</button>
+    </div>
+  )
+}
+
+{/* Products Grid */ }
+{
+  loading ? (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <ProductCardSkeleton key={i} />
+      ))}
+    </div>
+  ) : processedProducts.length > 0 ? (
+    <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <AnimatePresence>
+        {processedProducts.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </AnimatePresence>
+
+      {/* Conditional Ad Injection */}
+      {processedProducts.length > 4 && (
+        <div className="col-span-2 sm:col-span-3 lg:col-span-4">
+          <AdBanner slot="catalog-mid-feed" />
+        </div>
+      )}
     </motion.div>
+  ) : (
+    <div className="text-center py-24 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+        <Search className="w-8 h-8 text-gray-300" />
+      </div>
+      <h3 className="text-lg font-bold text-gray-900 mb-2">No items found</h3>
+      <p className="text-gray-500 text-sm mb-6">
+        {searchQuery ? `We couldn't find anything matching "${searchQuery}".` : "Try adjusting your filters."}
+      </p>
+      <button onClick={() => { clearFilters(); clearSearch(); }} className="bg-teal-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors shadow-sm">
+        Clear all filters
+      </button>
+    </div>
+  )
+}
+        </div >
+      </div >
+    </motion.div >
   );
 };
 
