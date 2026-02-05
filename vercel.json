@@ -1,8 +1,27 @@
 {
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ]
+      "buildCommand": "npm install && npm run build",
+      "outputDirectory": "dist",
+      "installCommand": "npm install",
+      "framework": "vite",
+      "env": {
+              "VITE_SUPABASE_URL": "https://nzyuwfxghaujzzfjewze.supabase.co",
+              "VITE_STRIPE_PUBLISHABLE_KEY": "pk_test_51RWyckGg41qE6Oi8kRj1ioF9tagBSOeVq9PDa9uwnnNrjP5RS44GWOdyrm7xaMsBfwIVMzlysN2YR6hBEU5vkn7N00I7IjLXC9"
+      },
+      "headers": [
+              {
+                        "source": "/(.*)",
+                        "headers": [
+                                    {
+                                                  "key": "X-Frame-Options",
+                                                  "value": "SAMEORIGIN"
+                                    }
+                        ]
+              }
+      ],
+      "rewrites": [
+              {
+                        "source": "/(.*)",
+                        "destination": "/index.html"
+              }
+      ]
 }
