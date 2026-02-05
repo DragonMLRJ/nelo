@@ -1,28 +1,7 @@
-# Render.com Blueprint for Nelo Marketplace
-# Deploy all services: Frontend (Static), PHP Backend (Docker), Node Backend
+# Render.com Blueprint for Nelo Marketplace  
+# Backends Only - Frontend is deployed to Vercel
 
 services:
-  # Frontend - Static Site
-  - type: web
-    name: nelo-frontend
-    env: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    envVars:
-      - key: VITE_SUPABASE_URL
-        value: https://nzyuwfxghaujzzfjewze.supabase.co
-      - key: VITE_SUPABASE_ANON_KEY
-        sync: false
-      - key: VITE_STRIPE_PUBLISHABLE_KEY
-        value: pk_test_51RWyckGg41qE6Oi8kRj1ioF9tagBSOeVq9PDa9uwnnNrjP5RS44GWOdyrm7xaMsBfwIVMzlysN2YR6hBEU5vkn7N00I7IjLXC9
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: SAMEORIGIN
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-
   # PHP Backend (Docker)
   - type: web
     name: nelo-php-backend
@@ -30,6 +9,10 @@ services:
     dockerfilePath: ./Dockerfile.php
     plan: free
     envVars:
+      - key: VITE_SUPABASE_URL
+        value: https://nzyuwfxghaujzzfjewze.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -62,6 +45,8 @@ services:
         value: production
       - key: APP_DEBUG
         value: false
+      - key: CORS_ORIGIN
+        value: https://nelo-marketplace.vercel.app
 
   # Node.js Backend
   - type: web
@@ -72,11 +57,19 @@ services:
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
+      - key: PORT
+        value: 10000
       - key: DATABASE_URL
         sync: false
       - key: VITE_SUPABASE_URL
         value: https://nzyuwfxghaujzzfjewze.supabase.co
       - key: VITE_SUPABASE_ANON_KEY
         sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
       - key: NODE_ENV
         value: production
+      - key: FRONTEND_URL
+        value: https://nelo-marketplace.vercel.app
+      - key: CORS_ORIGIN
+        value: https://nelo-marketplace.vercel.app
