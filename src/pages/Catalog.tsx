@@ -41,11 +41,13 @@ const Catalog: React.FC = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [filterCurrency, setFilterCurrency] = useState<'XAF' | '$'>('XAF');
   const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
-  const [verifiedSellerOnly, setVerifiedSellerOnly] = useState(false);
-  const [officialStoresOnly, setOfficialStoresOnly] = useState(false);
+
+  // Initialize from URL params
+  const [verifiedSellerOnly, setVerifiedSellerOnly] = useState(searchParams.get('verified') === 'true');
+  const [officialStoresOnly, setOfficialStoresOnly] = useState(searchParams.get('official') === 'true');
 
   // Sort State
-  const [sortBy, setSortBy] = useState<string>('recommended');
+  const [sortBy, setSortBy] = useState<string>(searchParams.get('sort') || 'recommended');
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
@@ -53,6 +55,18 @@ const Catalog: React.FC = () => {
   React.useEffect(() => {
     setSelectedCategory(catParam);
   }, [catParam]);
+
+  // Sync other params if they change directly (e.g. navigation)
+  React.useEffect(() => {
+    const sortParam = searchParams.get('sort');
+    if (sortParam) setSortBy(sortParam);
+
+    const verifiedParam = searchParams.get('verified');
+    if (verifiedParam) setVerifiedSellerOnly(verifiedParam === 'true');
+
+    const officialParam = searchParams.get('official');
+    if (officialParam) setOfficialStoresOnly(officialParam === 'true');
+  }, [searchParams]);
 
   // Toggle Condition Filter
   const toggleCondition = (condition: string) => {

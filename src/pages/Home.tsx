@@ -90,7 +90,9 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="md:row-span-2 relative rounded-[2.5rem] overflow-hidden group shadow-xl"
+            className="md:row-span-2 relative rounded-[2.5rem] overflow-hidden group shadow-xl cursor-pointer"
+            onClick={() => window.location.href = '/catalog?cat=women&sort=date_desc&official=true'}
+            title="Saison : Les dernières nouveautés Pro"
           >
             <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80" alt="Fashion" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
