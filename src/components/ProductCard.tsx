@@ -113,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Price - Massive & Bold */}
         <div className="mt-1">
           <span className="font-sans text-xl font-black text-gray-900 tracking-tight">
-            {product.currency} {product.price.toLocaleString()}
+            {product.currency} {(product.price || 0).toLocaleString()}
           </span>
         </div>
 
@@ -122,17 +122,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Seller / Rating */}
           <div className="flex flex-col">
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              <span className="truncate max-w-[100px]">{product.seller.name}</span>
-              {product.seller.isVerified && <BadgeCheck className="w-3.5 h-3.5 text-blue-500" />}
+              <span className="truncate max-w-[100px]">{product.seller?.name || 'Seller'}</span>
+              {product.seller?.isVerified && <BadgeCheck className="w-3.5 h-3.5 text-blue-500" />}
             </div>
             <div className="flex items-center gap-0.5 text-[10px] text-gray-400 mt-0.5">
-              <span>{product.seller.responseRate || '98%'} positive</span>
+              <span>{product.seller?.responseRate || '98%'} positive</span>
             </div>
           </div>
 
           {/* Location */}
           <span className="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100 truncate max-w-[80px]">
-            {product.location.split(',')[0]}
+            {product.location ? product.location.split(',')[0] : 'Congo'}
           </span>
         </div>
       </div>
