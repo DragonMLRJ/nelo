@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useOrders } from '../context/OrderContext';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
@@ -11,24 +11,46 @@ import {
   LogOut,
   Calendar,
   CheckCircle,
-  Truck,
-  MoreHorizontal,
-  CreditCard,
-  User as UserIcon,
   Shield,
   MessageSquare,
-  Clock,
+  CreditCard,
+  Heart,
+  MessageCircle,
   Download
 } from 'lucide-react';
 import OrderCard from '../components/OrderCard';
 import { exportToCSV } from '../utils/exportUtils';
+import Wishlist from './Wishlist';
+import Messages from './Messages';
 
 const Profile: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
   const { getOrdersByBuyer, getOrdersBySeller } = useOrders();
-  const [activeTab, setActiveTab] = useState<'purchases' | 'sales' | 'settings'>('purchases');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Initialize tab from URL or default to 'purchases'
+  const initialTab = searchParams.get('tab') as any || 'purchases';
+  const [activeTab, setActiveTab] = useState<'purchases' | 'sales' | 'settings' | 'wishlist' | 'messages'>(initialTab);
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ name: '', location: '' });
+
+  // Sync state when URL param changes (e.g. back button)
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ['purchases', 'sales', 'settings', 'wishlist', 'messages'].includes(tab)) {
+      setActiveTab(tab as any);
+    }
+  }, [searchParams]);
+
+  // Update URL when tab changes
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId as any);
+    setSearchParams(prev => {
+      prev.set('tab', tabId);
+      return prev;
+    });
+  };
 
   React.useEffect(() => {
     if (user) {
@@ -139,11 +161,13 @@ const Profile: React.FC = () => {
             {[
               { id: 'purchases', label: 'Mes Commandes', icon: ShoppingBag },
               { id: 'sales', label: 'Mes Ventes', icon: Package },
+              { id: 'wishlist', label: 'Favoris', icon: Heart },
+              { id: 'messages', label: 'Messages', icon: MessageCircle },
               { id: 'settings', label: 'Paramètres', icon: Settings }
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`py-5 text-sm font-bold flex items-center gap-2.5 transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-teal-700' : 'text-gray-500 hover:text-gray-800'}`}
               >
                 <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'stroke-[2.5px]' : ''}`} />
@@ -257,6 +281,27 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </motion.div>
+          ) : activeTab === 'wishlist' ? (
+            <motion.div
+              key="wishlist"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                <Wishlist />
+              </div>
+            </motion.div>
+          ) : activeTab === 'messages' ? (
+            <motion.div
+              key="messages"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="-mt-6 -mx-4 md:mx-0"
+            >
+              <Messages />
             </motion.div>
           ) : (
             <motion.div
