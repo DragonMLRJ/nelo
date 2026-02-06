@@ -200,7 +200,7 @@ const Navbar: React.FC = () => {
                       onClick={() => toggleLanguage(lang as Language)}
                       className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === lang ? 'font-bold text-teal-600' : 'text-gray-700'}`}
                     >
-                      {lang === 'EN' ? 'English' : lang === 'FR' ? 'Français' : 'Lingala'}
+                      {lang === 'EN' ? 'English' : lang === 'FR' ? 'Fran??ais' : 'Lingala'}
                     </button>
                   ))}
                 </div>
@@ -392,7 +392,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 fixed top-20 left-0 right-0 bottom-0 overflow-y-auto shadow-lg z-50">
+          <div className="md:hidden bg-white border-t border-gray-100 fixed top-20 left-0 right-0 bottom-0 overflow-y-auto shadow-lg z-[9999]">
             <div className="p-4 flex flex-col gap-4">
               {/* Mobile Search Input */}
               <form onSubmit={handleSearchSubmit} className="relative mb-2">
