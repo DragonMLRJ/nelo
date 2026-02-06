@@ -265,12 +265,54 @@ const Catalog: React.FC = () => {
               <div className="flex items-center gap-4">
                 {activeFiltersCount > 0 && (
                   <button onClick={clearFilters} className="text-xs text-teal-600 font-bold hover:underline bg-teal-50 px-2 py-1 rounded-md">
-                    R??initialiser
+                    Réinitialiser
                   </button>
                 )}
                 <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
                   <X className="w-6 h-6 text-gray-500" />
                 </button>
+              </div>
+            </div>
+
+            {/* Trust Filters (Seller) - eBay Style Highlighting */}
+            <div className="mb-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-4 shadow-sm">
+              <h3 className="text-xs font-bold mb-3 text-amber-900 uppercase tracking-wider flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-amber-600" /> Confiance & Sécurité
+              </h3>
+              <div className="space-y-3">
+                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/60 rounded-xl transition-colors border border-transparent hover:border-amber-200">
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={verifiedSellerOnly}
+                      onChange={() => setVerifiedSellerOnly(!verifiedSellerOnly)}
+                      className="peer sr-only"
+                    />
+                    <div className="w-5 h-5 border-2 border-amber-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
+                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                  </div>
+                  <div className="ml-3 flex items-center gap-2">
+                    <BadgeCheck className="w-4 h-4 text-teal-600" />
+                    <span className="text-sm text-gray-800 font-bold group-hover:text-black">Vendeurs Vérifiés</span>
+                  </div>
+                </label>
+
+                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/60 rounded-xl transition-colors border border-transparent hover:border-amber-200">
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={officialStoresOnly}
+                      onChange={() => setOfficialStoresOnly(!officialStoresOnly)}
+                      className="peer sr-only"
+                    />
+                    <div className="w-5 h-5 border-2 border-amber-300 rounded-md bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all shadow-sm"></div>
+                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                  </div>
+                  <div className="ml-3 flex items-center gap-2">
+                    <Store className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm text-gray-800 font-bold group-hover:text-black">Boutiques Officielles</span>
+                  </div>
+                </label>
               </div>
             </div>
 
@@ -302,67 +344,32 @@ const Catalog: React.FC = () => {
 
             {/* Category Filter */}
             <div className="mb-8">
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Cat??gorie</h3>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Catégorie</h3>
               <ul className="space-y-1">
                 <li>
                   <button
                     onClick={() => { setSelectedCategory('all'); setSearchParams(prev => { prev.delete('cat'); return prev; }) }}
-                    className={`text-sm w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedCategory === 'all' ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                    className={`text-sm w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium flex justify-between ${selectedCategory === 'all' ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
                   >
-                    Tout voir
+                    <span>Tout voir</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${selectedCategory === 'all' ? 'bg-white/20' : 'bg-gray-100'}`}>{products.length}</span>
                   </button>
                 </li>
                 {CATEGORIES.map(cat => (
                   <li key={cat.id}>
                     <button
                       onClick={() => { setSelectedCategory(cat.id); setSearchParams(prev => { prev.set('cat', cat.id); return prev; }) }}
-                      className={`text-sm w-full text-left px-3 py-2 rounded-xl transition-all font-medium ${selectedCategory === cat.id ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                      className={`text-sm w-full text-left px-3 py-2 rounded-xl transition-all font-medium flex justify-between ${selectedCategory === cat.id ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
                     >
-                      {cat.name}
+                      <span>{cat.name}</span>
+                      {/* Calculate Count on the fly (mocking complex query for UI speed) */}
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${selectedCategory === cat.id ? 'bg-white/20' : 'bg-gray-100'}`}>
+                        {products.filter(p => p.category === cat.id).length}
+                      </span>
                     </button>
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Seller Filter */}
-            <div className="mb-8">
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Vendeur</h3>
-              <div className="space-y-3">
-                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
-                  <div className="relative flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={verifiedSellerOnly}
-                      onChange={() => setVerifiedSellerOnly(!verifiedSellerOnly)}
-                      className="peer sr-only"
-                    />
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-teal-600 peer-checked:border-teal-600 transition-all shadow-sm"></div>
-                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                  </div>
-                  <div className="ml-3 flex items-center gap-2">
-                    <BadgeCheck className="w-5 h-5 text-teal-500" />
-                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">V??rifi??</span>
-                  </div>
-                </label>
-
-                <label className="flex items-center cursor-pointer group p-2 hover:bg-white/50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
-                  <div className="relative flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={officialStoresOnly}
-                      onChange={() => setOfficialStoresOnly(!officialStoresOnly)}
-                      className="peer sr-only"
-                    />
-                    <div className="w-5 h-5 border-2 border-gray-300 rounded-md bg-white peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all shadow-sm"></div>
-                    <Check className="w-3.5 h-3.5 text-white absolute top-[3px] left-[3px] opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                  </div>
-                  <div className="ml-3 flex items-center gap-2">
-                    <Store className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900">Boutique Officielle</span>
-                  </div>
-                </label>
-              </div>
             </div>
 
             {/* Price Filter */}
@@ -409,7 +416,7 @@ const Catalog: React.FC = () => {
 
             {/* Condition Filter */}
             <div>
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">??tat</h3>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">État</h3>
               <div className="space-y-1">
                 {CONDITIONS.map(condition => (
                   <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">
@@ -449,7 +456,7 @@ const Catalog: React.FC = () => {
               <h1 className="text-2xl font-bold text-gray-900">
                 {searchQuery ? (
                   <span className="flex items-center gap-2">
-                    Results for "{searchQuery}"
+                    Results for "${searchQuery}"
                     <button onClick={clearSearch} className="text-gray-400 hover:text-red-500">
                       <X className="w-5 h-5" />
                     </button>
@@ -504,7 +511,7 @@ const Catalog: React.FC = () => {
             <div className="flex flex-wrap gap-2 mb-6">
               {(priceRange.min || priceRange.max) && (
                 <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                  Price: {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
+                  Price: {priceRange.min || '0'} - {priceRange.max || '∞'} {filterCurrency}
                   <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               )}
@@ -543,9 +550,7 @@ const Catalog: React.FC = () => {
           ) : processedProducts.length > 0 ? (
             <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <AnimatePresence>
-                {processedProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+                {processedProducts.map(product => ( <ProductCard key={product.id} product={product} /> ))}
               </AnimatePresence>
 
               {/* Conditional Ad Injection */}
