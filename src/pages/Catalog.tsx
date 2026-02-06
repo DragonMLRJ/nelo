@@ -279,7 +279,7 @@ const Catalog: React.FC = () => {
               <div className="flex items-center gap-4">
                 {activeFiltersCount > 0 && (
                   <button onClick={clearFilters} className="text-xs text-teal-600 font-bold hover:underline bg-teal-50 px-2 py-1 rounded-md">
-                    R&eacute;initialiser
+                    R\u00E9initialiser
                   </button>
                 )}
                 <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
@@ -307,7 +307,7 @@ const Catalog: React.FC = () => {
                   </div>
                   <div className="ml-3 flex items-center gap-2">
                     <BadgeCheck className="w-4 h-4 text-teal-600" />
-                    <span className="text-sm text-gray-800 font-bold group-hover:text-black">Vendeurs V&eacute;rifi&eacute;s</span>
+                    <span className="text-sm text-gray-800 font-bold group-hover:text-black">Vendeurs V\u00E9rifi\u00E9s</span>
                   </div>
                 </label>
 
@@ -358,7 +358,7 @@ const Catalog: React.FC = () => {
 
             {/* Category Filter */}
             <div className="mb-8">
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Cat&eacute;gorie</h3>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">Cat\u00E9gorie</h3>
               <ul className="space-y-1">
                 <li>
                   <button
@@ -430,7 +430,7 @@ const Catalog: React.FC = () => {
 
             {/* Condition Filter */}
             <div>
-              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">&Eacute;tat</h3>
+              <h3 className="text-sm font-bold mb-3 text-gray-900 uppercase tracking-wider">\u00C9tat</h3>
               <div className="space-y-1">
                 {CONDITIONS.map(condition => (
                   <label key={condition} className="flex items-center cursor-pointer group justify-between p-2 hover:bg-white/50 rounded-xl transition-all">

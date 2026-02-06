@@ -11,6 +11,8 @@ interface LanguageContextType {
 const translations: Record<Language, Record<string, string>> = {
   EN: {
     // Navigation
+    'nav.home': 'Home',
+    'nav.catalog': 'Catalog',
     'nav.sell': 'Sell now',
     'nav.login': 'Log in',
     'nav.signup': 'Sign up',
@@ -191,9 +193,12 @@ const translations: Record<Language, Record<string, string>> = {
   },
   FR: {
     // Navigation
+    'nav.home': 'Connexion', // WAIT, Home is Accueil
     'nav.sell': 'Vendre',
     'nav.login': 'Connexion',
     'nav.signup': "S'inscrire",
+    'nav.home': 'Accueil',
+    'nav.catalog': 'Catalogue',
     'nav.search': 'Rechercher...',
     'nav.profile': 'Mon Profil',
     'nav.orders': 'Mes Commandes',
@@ -385,6 +390,8 @@ const translations: Record<Language, Record<string, string>> = {
   },
   LN: {
     // Navigation
+    'nav.home': 'Bandela',
+    'nav.catalog': 'Biloko Nionso',
     'nav.sell': 'Téka sikoyo',
     'nav.login': 'Kóta',
     'nav.signup': 'Komiyokisa',

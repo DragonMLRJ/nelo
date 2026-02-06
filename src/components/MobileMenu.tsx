@@ -63,7 +63,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
         { label: t('nav.home'), icon: Home, path: '/' },
         { label: t('nav.catalog'), icon: ShoppingBag, path: '/catalog' },
         { label: t('nav.sell'), icon: PlusCircle, path: '/sell', highlight: true },
-        { label: 'Communaut&eacute;', icon: Users, action: () => window.open('https://discord.gg/nelo-community', '_blank') },
+        { label: 'Communaut\u00E9', icon: Users, action: () => window.open('https://discord.gg/nelo-community', '_blank') },
     ];
 
     const userItems = user ? [
@@ -71,7 +71,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
         { label: 'Mes Commandes', icon: Package, path: '/profile?tab=purchases' },
         { label: 'Favoris', icon: Heart, path: '/profile?tab=wishlist' },
         { label: 'Messages', icon: MessageCircle, path: '/profile?tab=messages' },
-        { label: 'Param&egrave;tres', icon: Settings, path: '/profile?tab=settings' },
+        { label: 'Param\u00E8tres', icon: Settings, path: '/profile?tab=settings' },
     ] : [];
 
     return (
