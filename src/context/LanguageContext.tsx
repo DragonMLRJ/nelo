@@ -193,11 +193,10 @@ const translations: Record<Language, Record<string, string>> = {
   },
   FR: {
     // Navigation
-    'nav.home': 'Connexion', // WAIT, Home is Accueil
+    'nav.home': 'Accueil',
     'nav.sell': 'Vendre',
     'nav.login': 'Connexion',
     'nav.signup': "S'inscrire",
-    'nav.home': 'Accueil',
     'nav.catalog': 'Catalogue',
     'nav.search': 'Rechercher...',
     'nav.profile': 'Mon Profil',
