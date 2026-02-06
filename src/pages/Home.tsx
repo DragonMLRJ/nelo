@@ -91,7 +91,7 @@ const Home: React.FC = () => {
               variants={staggerContainer}
             >
               <motion.span variants={fadeInUp} className="inline-block px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 backdrop-blur-md text-teal-300 text-xs font-bold uppercase tracking-wider mb-6">
-                N°1 Marketplace au Congo 🇨🇩
+                N&deg;1 Marketplace au Congo &#127464;&#127465;
               </motion.span>
               <h1 className="text-4xl md:text-6xl font-heading font-black leading-tight mb-6 tracking-tight">
                 <motion.span variants={fadeInUp} className="block">Vendez simplement.</motion.span>
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
                 </motion.span>
               </h1>
               <motion.p variants={fadeInUp} className="text-lg text-teal-100/80 mb-8 max-w-sm font-light">
-                La plateforme la plus sécurisée pour donner une seconde vie à vos objets.
+                La plateforme la plus s&eacute;curis&eacute;e pour donner une seconde vie &agrave; vos objets.
               </motion.p>
             </motion.div>
           </motion.div>
@@ -193,7 +193,7 @@ const Home: React.FC = () => {
               <div className="w-10 h-10 rounded-full border-2 border-purple-500 bg-white flex items-center justify-center text-xs font-bold text-purple-700">+1k</div>
             </div>
             <div>
-              <h3 className="font-heading font-bold text-xl mb-1">Communauté</h3>
+              <h3 className="font-heading font-bold text-xl mb-1">Communaut&eacute;</h3>
               <p className="text-sm text-purple-200">Membres actifs cette semaine</p>
             </div>
           </motion.div>
@@ -212,10 +212,10 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-items-center text-center">
             {[
-              { icon: ShieldCheck, title: "Paiement Sécurisé", desc: "Transactions protégées" },
+              { icon: ShieldCheck, title: "Paiement S&eacute;curis&eacute;", desc: "Transactions prot&eacute;g&eacute;es" },
               { icon: Truck, title: "Livraison Rapide", desc: "Partout au Congo" },
-              { icon: Headphones, title: "Support 24/7", desc: "Une équipe à votre écoute" },
-              { icon: RotateCcw, title: "Satisfait ou remboursé", desc: "Retours simplifiés" }
+              { icon: Headphones, title: "Support 24/7", desc: "Une &eacute;quipe &agrave; votre &eacute;coute" },
+              { icon: RotateCcw, title: "Satisfait ou rembours&eacute;", desc: "Retours simplifi&eacute;s" }
             ].map((item, idx) => (
               <div key={idx} className="flex flex-col items-center gap-2 group cursor-default">
                 <motion.div
@@ -282,7 +282,7 @@ const Home: React.FC = () => {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-3xl font-heading font-bold text-slate-900">{t('home.fresh')}</h2>
-              <p className="text-slate-500 mt-2">Les dernières pépites ajoutées par la communauté</p>
+              <p className="text-slate-500 mt-2">Les derni&egrave;res p&eacute;pites ajout&eacute;es par la communaut&eacute;</p>
             </div>
             <Link to="/catalog" className="group flex items-center gap-2 text-teal-600 font-bold hover:text-teal-800 transition-colors">
               {t('home.see_all')} <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
