@@ -208,7 +208,7 @@ const Navbar: React.FC = () => {
                       onClick={() => toggleLanguage(lang as Language)}
                       className={`w-full text-left px-4 py-2 text-sm hover:bg-teal-50 ${language === lang ? 'font-bold text-teal-600' : 'text-gray-700'}`}
                     >
-                      {lang === 'EN' ? 'English' : lang === 'FR' ? 'FranÃ§ais' : 'Lingala'}
+                      {lang === 'EN' ? 'English' : lang === 'FR' ? 'Français' : 'Lingala'}
                     </button>
                   ))}
                 </div>
