@@ -7,7 +7,7 @@ import ProductCard from '../components/ProductCard';
 import { ProductCardSkeleton } from '../components/skeletons/ProductCardSkeleton';
 import { CategorySkeleton } from '../components/skeletons/CategorySkeleton';
 import AdBanner from '../components/AdBanner';
-import { Shirt, User, Baby, Home as HomeIcon, Smartphone, Gamepad2, Sparkles, Car, Building, Briefcase, ArrowRight, ShieldCheck, Truck, Zap } from 'lucide-react';
+import { Shirt, User, Baby, Home as HomeIcon, Smartphone, Gamepad2, Sparkles, Car, Building, Briefcase, ArrowRight, ShieldCheck, Truck, Zap, Headphones, RotateCcw } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
   shirt: Shirt,
@@ -49,7 +49,7 @@ const Home: React.FC = () => {
     >
       <SEO
         title="Accueil"
-        description="Achetez et vendez facilement au Congo. Mode, Électronique, Maison et plus."
+        description="Achetez et vendez facilement au Congo. Mode, ??lectronique, Maison et plus."
       />
 
       {/* Bento Grid Hero Section */}
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
 
             <div className="relative z-10 max-w-lg">
               <span className="inline-block px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 backdrop-blur-md text-teal-300 text-xs font-bold uppercase tracking-wider mb-6">
-                N°1 Marketplace au Congo 🇨🇬
+                N??1 Marketplace au Congo ????????
               </span>
               <h1 className="text-4xl md:text-6xl font-heading font-black leading-tight mb-6 tracking-tight">
                 Vendez simplement.<br />
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
                 </span>
               </h1>
               <p className="text-lg text-teal-100/80 mb-8 max-w-sm font-light">
-                La plateforme la plus sécurisée pour donner une seconde vie à vos objets.
+                La plateforme la plus s??curis??e pour donner une seconde vie ?? vos objets.
               </p>
             </div>
           </motion.div>
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-6 left-6 right-6">
               <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 text-white w-fit shadow-lg">
-                <p className="font-bold text-sm">Collection Été 2024</p>
+                <p className="font-bold text-sm">Collection ??t?? 2024</p>
                 <p className="text-xs text-white/80">Tendances de la saison</p>
               </div>
             </div>
@@ -161,13 +161,62 @@ const Home: React.FC = () => {
               <div className="w-10 h-10 rounded-full border-2 border-purple-500 bg-white flex items-center justify-center text-xs font-bold text-purple-700">+1k</div>
             </div>
             <div>
-              <h3 className="font-heading font-bold text-xl mb-1">Communauté</h3>
+              <h3 className="font-heading font-bold text-xl mb-1">Communaut??</h3>
               <p className="text-sm text-purple-200">Membres actifs cette semaine</p>
             </div>
           </motion.div>
 
         </div >
       </div >
+
+      {/* Trust Signal Strip */}
+      <div className="bg-white border-y border-gray-100 py-8 mb-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-items-center text-center">
+
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+              <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 transition-colors group-hover:bg-teal-100">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-sm">Paiement S??curis??</h4>
+                <p className="text-xs text-gray-500">Transactions prot??g??es</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+              <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 transition-colors group-hover:bg-teal-100">
+                <Truck className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-sm">Livraison Rapide</h4>
+                <p className="text-xs text-gray-500">Partout au Congo</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+              <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 transition-colors group-hover:bg-teal-100">
+                <Headphones className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-sm">Support 24/7</h4>
+                <p className="text-xs text-gray-500">Une ??quipe ?? votre ??coute</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+              <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 transition-colors group-hover:bg-teal-100">
+                <RotateCcw className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-sm">Satisfait ou rembours??</h4>
+                <p className="text-xs text-gray-500">Retours simplifi??s</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
       <AdBanner slot="home-top" className="container mx-auto px-4 mt-8" />
 
@@ -214,7 +263,7 @@ const Home: React.FC = () => {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-3xl font-heading font-bold text-slate-900">{t('home.fresh')}</h2>
-              <p className="text-slate-500 mt-2">Les dernières pépites ajoutées par la communauté</p>
+              <p className="text-slate-500 mt-2">Les derni??res p??pites ajout??es par la communaut??</p>
             </div>
             <Link to="/catalog" className="group flex items-center gap-2 text-teal-600 font-bold hover:text-teal-800 transition-colors">
               {t('home.see_all')} <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
