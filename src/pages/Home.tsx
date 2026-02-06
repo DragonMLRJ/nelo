@@ -1,4 +1,4 @@
-import React from 'react'; // v4 FORCE UPDATE
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '../constants';
@@ -41,7 +41,6 @@ const staggerContainer = {
 };
 
 const Home: React.FC = () => {
-  console.log("HOME COMPONENT LOADED v5"); // DEBUG LOG
   const { products, loading } = useProducts();
   const { t } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
@@ -64,7 +63,7 @@ const Home: React.FC = () => {
     >
       <SEO
         title="Accueil"
-        description="Achetez et vendez facilement au Congo. Mode, ??lectronique, Maison et plus."
+        description="Achetez et vendez facilement au Congo. Mode, Électronique, Maison et plus."
       />
 
       {/* Bento Grid Hero Section */}
@@ -92,7 +91,7 @@ const Home: React.FC = () => {
               variants={staggerContainer}
             >
               <motion.span variants={fadeInUp} className="inline-block px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 backdrop-blur-md text-teal-300 text-xs font-bold uppercase tracking-wider mb-6">
-                N??1 Marketplace au Congo ????????
+                N°1 Marketplace au Congo 🇨🇩
               </motion.span>
               <h1 className="text-4xl md:text-6xl font-heading font-black leading-tight mb-6 tracking-tight">
                 <motion.span variants={fadeInUp} className="block">Vendez simplement.</motion.span>
@@ -101,7 +100,7 @@ const Home: React.FC = () => {
                 </motion.span>
               </h1>
               <motion.p variants={fadeInUp} className="text-lg text-teal-100/80 mb-8 max-w-sm font-light">
-                La plateforme la plus s??curis??e pour donner une seconde vie ?? vos objets.
+                La plateforme la plus sécurisée pour donner une seconde vie à vos objets.
               </motion.p>
             </motion.div>
           </motion.div>
@@ -194,7 +193,7 @@ const Home: React.FC = () => {
               <div className="w-10 h-10 rounded-full border-2 border-purple-500 bg-white flex items-center justify-center text-xs font-bold text-purple-700">+1k</div>
             </div>
             <div>
-              <h3 className="font-heading font-bold text-xl mb-1">Communaut??</h3>
+              <h3 className="font-heading font-bold text-xl mb-1">Communauté</h3>
               <p className="text-sm text-purple-200">Membres actifs cette semaine</p>
             </div>
           </motion.div>
@@ -213,10 +212,10 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-items-center text-center">
             {[
-              { icon: ShieldCheck, title: "Paiement S??curis??", desc: "Transactions prot??g??es" },
+              { icon: ShieldCheck, title: "Paiement Sécurisé", desc: "Transactions protégées" },
               { icon: Truck, title: "Livraison Rapide", desc: "Partout au Congo" },
-              { icon: Headphones, title: "Support 24/7", desc: "Une ??quipe ?? votre ??coute" },
-              { icon: RotateCcw, title: "Satisfait ou rembours??", desc: "Retours simplifi??s" }
+              { icon: Headphones, title: "Support 24/7", desc: "Une équipe à votre écoute" },
+              { icon: RotateCcw, title: "Satisfait ou remboursé", desc: "Retours simplifiés" }
             ].map((item, idx) => (
               <div key={idx} className="flex flex-col items-center gap-2 group cursor-default">
                 <motion.div
@@ -283,7 +282,7 @@ const Home: React.FC = () => {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-3xl font-heading font-bold text-slate-900">{t('home.fresh')}</h2>
-              <p className="text-slate-500 mt-2">Les derni??res p??pites ajout??es par la communaut??</p>
+              <p className="text-slate-500 mt-2">Les dernières pépites ajoutées par la communauté</p>
             </div>
             <Link to="/catalog" className="group flex items-center gap-2 text-teal-600 font-bold hover:text-teal-800 transition-colors">
               {t('home.see_all')} <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
