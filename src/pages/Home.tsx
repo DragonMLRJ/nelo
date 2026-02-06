@@ -91,7 +91,7 @@ const Home: React.FC = () => {
               variants={staggerContainer}
             >
               <motion.span variants={fadeInUp} className="inline-block px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 backdrop-blur-md text-teal-300 text-xs font-bold uppercase tracking-wider mb-6">
-                N&deg;1 Marketplace au Congo &#127464;&#127465;
+                N&deg;1 Marketplace au Congo &#127467;&#127468;
               </motion.span>
               <h1 className="text-4xl md:text-6xl font-heading font-black leading-tight mb-6 tracking-tight">
                 <motion.span variants={fadeInUp} className="block">Vendez simplement.</motion.span>

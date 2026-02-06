@@ -131,7 +131,7 @@ const Sell: React.FC = () => {
             <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">1</span>
             {t('sell.photos')}
           </h2>
-          <p className="text-sm text-gray-500 mb-4 ml-10">Ajoutez jusqu'à 8 photos. La première sera la couverture.</p>
+          <p className="text-sm text-gray-500 mb-4 ml-10">Ajoutez jusqu'&agrave; 8 photos. La premi&egrave;re sera la couverture.</p>
 
           <div className="ml-0 md:ml-10 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
             {images.map((img, idx) => (
@@ -177,7 +177,7 @@ const Sell: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold">2</span>
-              Détails
+              D&eacute;tails
             </h2>
 
             <div>
@@ -194,14 +194,14 @@ const Sell: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Catégorie</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Cat&eacute;gorie</label>
                 <select
                   value={category}
                   onChange={e => setCategory(e.target.value)}
                   className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none appearance-none"
                   required
                 >
-                  <option value="">Sélectionner</option>
+                  <option value="">S&eacute;lectionner</option>
                   <option value="men">{t('cat.men')}</option>
                   <option value="women">{t('cat.women')}</option>
                   <option value="kids">{t('cat.kids')}</option>
@@ -212,18 +212,18 @@ const Sell: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">État</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">&Eacute;tat</label>
                 <select
                   value={condition}
                   onChange={e => setCondition(e.target.value)}
                   className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none appearance-none"
                   required
                 >
-                  <option value="">Sélectionner</option>
+                  <option value="">S&eacute;lectionner</option>
                   <option value="New">{t('common.new')}</option>
-                  <option value="Very Good">Très bon état</option>
-                  <option value="Good">Bon état</option>
-                  <option value="Fair">État correct</option>
+                  <option value="Very Good">Tr&egrave;s bon &eacute;tat</option>
+                  <option value="Good">Bon &eacute;tat</option>
+                  <option value="Fair">&Eacute;tat correct</option>
                 </select>
               </div>
             </div>
@@ -245,7 +245,7 @@ const Sell: React.FC = () => {
                 rows={4}
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                placeholder="Décrivez votre article en détail..."
+                placeholder="D&eacute;crivez votre article en d&eacute;tail..."
                 className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all resize-none"
                 required
               />
@@ -290,7 +290,7 @@ const Sell: React.FC = () => {
                   <option key={city} value={city}>{city}</option>
                 ))}
               </select>
-              <p className="text-xs text-gray-400 mt-1">Basé sur votre profil.</p>
+              <p className="text-xs text-gray-400 mt-1">Bas&eacute; sur votre profil.</p>
             </div>
           </div>
 
