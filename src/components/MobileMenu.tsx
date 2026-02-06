@@ -59,6 +59,18 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
         onClose();
     };
 
+    // Lock body scroll when menu is open
+    React.useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
     const menuItems = [
         { label: t('nav.home'), icon: Home, path: '/' },
         { label: t('nav.catalog'), icon: ShoppingBag, path: '/catalog' },
