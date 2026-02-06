@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
                 placeholder={t('nav.search')}
                 className="w-full pl-11 pr-4 py-3 bg-white/90 border border-gray-200/50 rounded-xl focus:bg-white focus:ring-0 focus:border-teal-500/50 focus:shadow-[0_0_20px_rgba(20,184,166,0.1)] transition-all outline-none font-medium text-sm relative"
               />
-              <button type="submit" className="absolute left-4 top-3.5 text-gray-400 hover:text-teal-500 transition-colors">
+              <button type="submit" className="absolute left-4 top-3.5 text-gray-400 hover:text-teal-500 transition-colors z-10 cursor-pointer">
                 <Search className="w-5 h-5" />
               </button>
             </form>
@@ -419,11 +419,13 @@ const Navbar: React.FC = () => {
                 placeholder={t('nav.search')}
                 className="w-full pl-10 pr-10 py-3 bg-gray-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500 transition-all outline-none font-medium text-sm"
               />
-              <Search className="absolute left-7 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <button type="submit" className="absolute left-7 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-teal-600 z-10 p-1">
+                <Search className="w-4 h-4" />
+              </button>
               <button
                 type="button"
                 onClick={() => { setShowSuggestions(false); setSearchQuery(''); }}
-                className="absolute right-7 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1"
+                className="absolute right-7 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-red-100 hover:text-red-500 transition-colors"
               >
                 <X className="w-3 h-3 text-gray-500" />
               </button>
