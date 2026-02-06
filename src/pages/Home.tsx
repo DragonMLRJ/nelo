@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-6 left-6 right-6">
               <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 text-white w-fit shadow-lg">
-                <p className="font-bold text-sm">Collection ??t?? 2024</p>
+                <p className="font-bold text-sm capitalize">Collection {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</p>
                 <p className="text-xs text-white/80">Tendances de la saison</p>
               </div>
             </div>
@@ -152,7 +152,8 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[2.5rem] p-8 text-white flex flex-col justify-between shadow-lg shadow-purple-500/20"
+            className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[2.5rem] p-8 text-white flex flex-col justify-between shadow-lg shadow-purple-500/20 cursor-pointer hover:shadow-xl transition-shadow"
+            onClick={() => window.open('https://discord.gg/nelo-community', '_blank')}
           >
             <div className="flex -space-x-3">
               {[1, 2, 3].map(i => (
