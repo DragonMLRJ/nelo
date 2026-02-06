@@ -124,6 +124,8 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const isSeller = user?.role === 'seller';
+
   return (
     <>
       <nav className="sticky top-0 z-50 transition-all duration-300 backdrop-blur-2xl bg-white/70 border-b border-white/20 supports-[backdrop-filter]:bg-white/60">
@@ -367,9 +369,10 @@ const Navbar: React.FC = () => {
               {t('nav.sell')}
             </button>
           </div>
+        </div>
+      </nav>
 
-      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} logout={handleLogout} t={t} isSeller={isSeller} />
-      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} logout={handleLogout} t={t} isSeller={isSeller} />
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} logout={handleLogoutClick} t={t} isSeller={isSeller} />
 
       {/* Logout Confirmation Modal */}
       <ConfirmationModal
