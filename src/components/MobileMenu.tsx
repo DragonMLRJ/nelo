@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     X,
     Home,
@@ -24,6 +24,32 @@ interface MobileMenuProps {
     t: (key: string) => string;
     isSeller: boolean;
 }
+
+const sidebarVariants = {
+    closed: {
+        x: '100%',
+        transition: {
+            type: "spring",
+            stiffness: 400,
+            damping: 40
+        }
+    },
+    open: {
+        x: 0,
+        transition: {
+            type: "spring",
+            stiffness: 400,
+            damping: 40,
+            staggerChildren: 0.1,
+            delayChildren: 0.2
+        }
+    }
+};
+
+const itemVariants = {
+    closed: { opacity: 0, x: 50 },
+    open: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, t, isSeller }) => {
     const navigate = useNavigate();
@@ -57,20 +83,20 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+                        className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9998]"
                         onClick={onClose}
                     />
 
                     {/* Sidebar Drawer */}
                     <motion.div
-                        initial={{ x: '100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '100%' }}
-                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                        initial="closed"
+                        animate="open"
+                        exit="closed"
+                        variants={sidebarVariants}
                         className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[320px] bg-white z-[9999] shadow-2xl flex flex-col overflow-hidden"
                     >
                         {/* Header: User Profile or Login CTA */}
-                        <div className="bg-teal-900 text-white p-6 pt-12 relative overflow-hidden">
+                        <div className="bg-teal-900 text-white p-6 pt-12 relative overflow-hidden shrink-0">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
 
                             <button
@@ -81,7 +107,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                             </button>
 
                             {user ? (
-                                <div onClick={() => handleNavigation('/profile')} className="cursor-pointer">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    onClick={() => handleNavigation('/profile')}
+                                    className="cursor-pointer relative z-10"
+                                >
                                     <div className="flex items-center gap-4 mb-3">
                                         <img
                                             src={user.avatar}
@@ -98,9 +130,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                             Vendeur Vérifié
                                         </span>
                                     )}
-                                </div>
+                                </motion.div>
                             ) : (
-                                <div className="mt-4">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="mt-4 relative z-10"
+                                >
                                     <h2 className="text-2xl font-bold mb-2">Bienvenue sur Nelo</h2>
                                     <p className="text-teal-200 text-sm mb-4">Connectez-vous pour acheter et vendre.</p>
                                     <button
@@ -109,7 +146,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                     >
                                         <LogIn className="w-4 h-4" /> Se connecter
                                     </button>
-                                </div>
+                                </motion.div>
                             )}
                         </div>
 
@@ -120,9 +157,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                 {menuItems.map((item, idx) => (
                                     <motion.button
                                         key={idx}
-                                        initial={{ opacity: 0, x: 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: idx * 0.05 }}
+                                        variants={itemVariants}
                                         onClick={() => item.action ? item.action() : handleNavigation(item.path!)}
                                         className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all ${item.highlight
                                                 ? 'bg-teal-50 text-teal-700 font-bold'
@@ -141,9 +176,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                     {userItems.map((item, idx) => (
                                         <motion.button
                                             key={idx}
-                                            initial={{ opacity: 0, x: 20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: 0.1 + (idx * 0.05) }}
+                                            variants={itemVariants}
                                             onClick={() => handleNavigation(item.path)}
                                             className="w-full flex items-center gap-4 p-4 rounded-xl text-gray-700 hover:bg-gray-50 font-medium transition-all"
                                         >
@@ -157,7 +190,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
 
                         {/* Footer */}
                         {user && (
-                            <div className="p-4 border-t border-gray-100 bg-gray-50">
+                            <div className="p-4 border-t border-gray-100 bg-gray-50 shrink-0">
                                 <button
                                     onClick={() => { logout(); onClose(); }}
                                     className="w-full flex items-center justify-center gap-2 p-3 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"
