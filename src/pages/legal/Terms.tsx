@@ -11,17 +11,17 @@ const Terms: React.FC = () => {
                     <div className="p-3 bg-teal-50 rounded-lg text-teal-600">
                         <FileText className="w-8 h-8" />
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900">Conditions Générales d'Utilisation</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">Conditions G&eacute;n&eacute;rales d'Utilisation</h1>
                 </div>
 
                 <div className="prose prose-teal max-w-none text-gray-600 space-y-6">
-                    <p className="text-lg font-medium text-gray-800">Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
+                    <p className="text-lg font-medium text-gray-800">Derni&egrave;re mise &agrave; jour : {new Date().toLocaleDateString('fr-FR')}</p>
 
                     <section>
                         <h2 className="text-xl font-bold text-gray-900 mb-3 block">1. Introduction</h2>
                         <p>
-                            Bienvenue sur Nelo Marketplace ("nous", "notre" ou "nos"). En accédant à notre site web et en utilisant nos services,
-                            vous acceptez d'être lié par les présentes Conditions Générales d'Utilisation (CGU). Si vous n'acceptez pas ces termes,
+                            Bienvenue sur Nelo Marketplace ("nous", "notre" ou "nos"). En acc&eacute;dant &agrave; notre site web et en utilisant nos services,
+                            vous acceptez d'&ecirc;tre li&eacute; par les pr&eacute;sentes Conditions G&eacute;n&eacute;rales d'Utilisation (CGU). Si vous n'acceptez pas ces termes,
                             veuillez ne pas utiliser nos services.
                         </p>
                     </section>
@@ -29,33 +29,33 @@ const Terms: React.FC = () => {
                     <section>
                         <h2 className="text-xl font-bold text-gray-900 mb-3 block">2. Utilisation du Service</h2>
                         <p>
-                            Vous vous engagez à utiliser notre plateforme uniquement à des fins légales. Il est interdit de :
+                            Vous vous engagez &agrave; utiliser notre plateforme uniquement &agrave; des fins l&eacute;gales. Il est interdit de :
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
                             <li>Publier du contenu faux, trompeur ou frauduleux.</li>
                             <li>Vendre des articles contrefaits ou interdits par la loi congolaise.</li>
-                            <li>Harceler ou collecter des données sur d'autres utilisateurs sans leur consentement.</li>
+                            <li>Harceler ou collecter des donn&eacute;es sur d'autres utilisateurs sans leur consentement.</li>
                         </ul>
                     </section>
 
                     <section>
                         <h2 className="text-xl font-bold text-gray-900 mb-3 block">3. Comptes Utilisateurs</h2>
                         <p>
-                            Pour accéder à certaines fonctionnalités, vous devez créer un compte. Vous êtes responsable de la confidentialité
-                            de vos identifiants. Toute activité effectuée depuis votre compte est réputée être de votre fait.
+                            Pour acc&eacute;der &agrave; certaines fonctionnalit&eacute;s, vous devez cr&eacute;er un compte. Vous &ecirc;tes responsable de la confidentialit&eacute;
+                            de vos identifiants. Toute activit&eacute; effectu&eacute;e depuis votre compte est r&eacute;put&eacute;e &ecirc;tre de votre fait.
                         </p>
                     </section>
 
                     <section>
                         <h2 className="text-xl font-bold text-gray-900 mb-3 block">4. Ventes et Paiements</h2>
                         <p>
-                            Nelo Marketplace agit en tant qu'intermédiaire. Les contrats de vente sont conclus directement entre l'acheteur et le vendeur.
-                            Nous ne garantissons pas la qualité, la sécurité ou la légalité des articles annoncés.
+                            Nelo Marketplace agit en tant qu'interm&eacute;diaire. Les contrats de vente sont conclus directement entre l'acheteur et le vendeur.
+                            Nous ne garantissons pas la qualit&eacute;, la s&eacute;curit&eacute; ou la l&eacute;galit&eacute; des articles annonc&eacute;s.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-3 block">5. Responsabilité</h2>
+                        <h2 className="text-xl font-bold text-gray-900 mb-3 block">5. Responsabilit&eacute;</h2>
                         <p>
                             Dans toute la mesure permise par la loi, Nelo Marketplace ne saurait être tenu responsable des dommages indirects,
                             accessoires ou consécutifs résultant de l'utilisation de nos services.

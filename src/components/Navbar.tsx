@@ -369,6 +369,30 @@ const Navbar: React.FC = () => {
               {t('nav.sell')}
             </button>
           </div>
+
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-4 md:hidden">
+            <button onClick={() => setShowSuggestions(!showSuggestions)} className="text-gray-700">
+              <Search className="w-6 h-6" />
+            </button>
+
+            <Link to="/wishlist" className="relative text-gray-700">
+              <Heart className="w-6 h-6" />
+              {wishlistContext.wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+                  {wishlistContext.wishlistCount}
+                </span>
+              )}
+            </Link>
+
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="p-2 -mr-2 text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Open Menu"
+            >
+              <Menu className="w-7 h-7" />
+            </button>
+          </div>
         </div>
       </nav>
 

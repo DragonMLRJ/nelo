@@ -130,7 +130,7 @@ const Profile: React.FC = () => {
 
               <div className="flex flex-wrap justify-center md:justify-start gap-3">
                 <button onClick={logout} className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10 flex items-center gap-2">
-                  <LogOut className="w-4 h-4" /> Se déconnecter
+                  <LogOut className="w-4 h-4" /> Se d&eacute;connecter
                 </button>
               </div>
             </div>
@@ -147,7 +147,7 @@ const Profile: React.FC = () => {
               </div>
               <div className="flex-1 min-w-[100px] px-6 py-4 text-center">
                 <p className="text-2xl font-bold text-white">{user.responseRate || '100%'}</p>
-                <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Taux Rép.</p>
+                <p className="text-xs text-teal-200 uppercase font-bold tracking-wider">Taux R&eacute;p.</p>
               </div>
             </div>
           </div>
@@ -163,7 +163,7 @@ const Profile: React.FC = () => {
               { id: 'sales', label: 'Mes Ventes', icon: Package },
               { id: 'wishlist', label: 'Favoris', icon: Heart },
               { id: 'messages', label: 'Messages', icon: MessageCircle },
-              { id: 'settings', label: 'Paramètres', icon: Settings }
+              { id: 'settings', label: 'Param&egrave;tres', icon: Settings }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -349,7 +349,7 @@ const Profile: React.FC = () => {
                   </p>
                   {activeTab === 'purchases' ? (
                     <Link to="/catalog" className="inline-block bg-teal-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-1">
-                      Découvrir nos produits
+                      D&eacute;couvrir nos produits
                     </Link>
                   ) : (
                     <Link to="/sell" className="inline-block bg-teal-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-1">
