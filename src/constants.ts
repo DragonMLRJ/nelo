@@ -16,23 +16,34 @@ export const CATEGORIES: Category[] = [
   { id: 'services', name: 'Services', icon: 'briefcase' },
 ];
 
-export const CONGO_CITIES = [
-  'Brazzaville',
-  'Pointe-Noire',
-  'Dolisie',
-  'Nkayi',
-  'Kindamba',
-  'Impfondo',
-  'Ouesso',
-  'Madingou',
-  'Owando',
-  'Sibiti',
-  'Loutété',
-  'Bouansa',
-  'Gamboma',
-  'Mossendjo',
-  'Kinkala'
-];
+// Geographic Data for Central Africa Expansion
+export const COUNTRIES = [
+  { id: 'cg', name: 'Congo-Brazzaville', flag: '🇨🇬' },
+  { id: 'cd', name: 'RDC', flag: '🇨🇩' },
+  { id: 'ga', name: 'Gabon', flag: '🇬🇦' },
+  { id: 'cm', name: 'Cameroun', flag: '🇨🇲' }
+] as const;
+
+export const LOCATIONS: Record<string, string[]> = {
+  'cg': [ // Congo-Brazzaville
+    'Brazzaville', 'Pointe-Noire', 'Dolisie', 'Nkayi', 'Kindamba',
+    'Impfondo', 'Ouesso', 'Madingou', 'Owando', 'Sibiti',
+    'Loutété', 'Bouansa', 'Gamboma', 'Mossendjo', 'Kinkala'
+  ],
+  'cd': [ // RDC
+    'Kinshasa', 'Lubumbashi', 'Goma', 'Kisangani', 'Matadi',
+    'Bukavu', 'Kananga', 'Mbuji-Mayi'
+  ],
+  'ga': [ // Gabon
+    'Libreville', 'Port-Gentil', 'Franceville', 'Oyem', 'Moanda'
+  ],
+  'cm': [ // Cameroun
+    'Douala', 'Yaoundé', 'Bafoussam', 'Garoua', 'Maroua', 'Bamenda'
+  ]
+};
+
+// Flattened list of all cities for legacy support or global search if needed
+export const ALL_CITIES = Object.values(LOCATIONS).flat();
 
 export const SHIPPING_RATES = {
   SAME_CITY: 1000,

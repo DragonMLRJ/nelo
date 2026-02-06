@@ -151,8 +151,13 @@ const Navbar: React.FC = () => {
                 placeholder={t('nav.search')}
                 className="w-full pl-11 pr-4 py-3 bg-white/90 border border-gray-200/50 rounded-xl focus:bg-white focus:ring-0 focus:border-teal-500/50 focus:shadow-[0_0_20px_rgba(20,184,166,0.1)] transition-all outline-none font-medium text-sm relative"
               />
-              <Search className="absolute left-4 top-3.5 text-gray-400 w-5 h-5 pointer-events-none group-focus-within:text-teal-500 transition-colors" />
+              <button type="submit" className="absolute left-4 top-3.5 text-gray-400 hover:text-teal-500 transition-colors">
+                <Search className="w-5 h-5" />
+              </button>
             </form>
+
+            {/* Mobile Search Overlay */}
+
 
             {/* Search Suggestions Dropdown */}
             {showSuggestions && (searchQuery.length >= 2 || suggestions.length > 0) && (
@@ -395,6 +400,54 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </nav>
+
+      {/* Mobile Search Overlay - Moved to Root */}
+      <AnimatePresence>
+        {showSuggestions && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg border-t border-gray-100 overflow-hidden z-40"
+          >
+            <form onSubmit={handleSearchSubmit} className="p-4 relative flex items-center gap-2">
+              <input
+                type="text"
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('nav.search')}
+                className="w-full pl-10 pr-10 py-3 bg-gray-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-teal-500 transition-all outline-none font-medium text-sm"
+              />
+              <Search className="absolute left-7 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <button
+                type="button"
+                onClick={() => { setShowSuggestions(false); setSearchQuery(''); }}
+                className="absolute right-7 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1"
+              >
+                <X className="w-3 h-3 text-gray-500" />
+              </button>
+            </form>
+            {suggestions.length > 0 && (
+              <div className="border-t border-gray-100 max-h-60 overflow-y-auto bg-white">
+                <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Suggestions
+                </div>
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="w-full text-left px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-teal-50 text-gray-700 text-sm flex items-center gap-2"
+                  >
+                    <Search className="w-4 h-4 text-gray-400" />
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} logout={handleLogoutClick} t={t} isSeller={isSeller} />
 

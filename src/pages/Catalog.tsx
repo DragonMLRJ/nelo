@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, ChevronDown, X, Check, Search, BadgeCheck, MapPin, Store } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
-import { CATEGORIES, CONGO_CITIES } from '../constants';
+import { CATEGORIES, COUNTRIES } from '../constants';
+import LocationPicker from '../components/LocationPicker';
 import { useProducts } from '../context/ProductContext';
 import ProductCard from '../components/ProductCard';
 import { ProductCardSkeleton } from '../components/skeletons/ProductCardSkeleton';
@@ -345,28 +346,17 @@ const Catalog: React.FC = () => {
               </div>
 
               <div className="space-y-8">
-                {/* Location Filter */}
-                <div>
-                  <h3 className="text-[10px] font-black mb-3 text-gray-400 uppercase tracking-[0.2em]">Localisation</h3>
-                  <div className="relative group">
-                    <select
-                      value={searchParams.get('loc') || ''}
-                      onChange={(e) => setSearchParams(prev => {
-                        if (e.target.value) prev.set('loc', e.target.value);
-                        else prev.delete('loc');
-                        return prev;
-                      })}
-                      className="w-full bg-gray-50/50 hover:bg-white border border-gray-100 hover:border-teal-200 rounded-2xl px-5 py-3.5 text-sm font-medium outline-none focus:ring-4 focus:ring-teal-500/10 transition-all appearance-none cursor-pointer text-gray-700"
-                    >
-                      <option value="">Toutes les villes</option>
-                      {CONGO_CITIES.map(city => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-teal-500 transition-colors">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                  </div>
+                {/* Smart Location Filter (LeBonCoin Style) */}
+                <div className="mb-8">
+                  <LocationPicker
+                    currentCity={searchParams.get('loc')}
+                    currentCountry={searchParams.get('country')}
+                    onLocationSelect={(city, country) => setSearchParams(prev => {
+                      if (city) prev.set('loc', city); else prev.delete('loc');
+                      if (country) prev.set('country', country); else prev.delete('country');
+                      return prev;
+                    })}
+                  />
                 </div>
 
                 {/* Category Filter - Pills Style */}
@@ -376,8 +366,8 @@ const Catalog: React.FC = () => {
                     <button
                       onClick={() => { setSelectedCategory('all'); setSearchParams(prev => { prev.delete('cat'); return prev; }) }}
                       className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${selectedCategory === 'all'
-                          ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-500/30 scale-105'
-                          : 'bg-white text-gray-500 border-gray-100 hover:border-teal-200 hover:text-teal-600 hover:bg-teal-50'
+                        ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-500/30 scale-105'
+                        : 'bg-white text-gray-500 border-gray-100 hover:border-teal-200 hover:text-teal-600 hover:bg-teal-50'
                         }`}
                     >
                       Tout
@@ -387,8 +377,8 @@ const Catalog: React.FC = () => {
                         key={cat.id}
                         onClick={() => { setSelectedCategory(cat.id); setSearchParams(prev => { prev.set('cat', cat.id); return prev; }) }}
                         className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${selectedCategory === cat.id
-                            ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-500/30 scale-105'
-                            : 'bg-white text-gray-500 border-gray-100 hover:border-teal-200 hover:text-teal-600 hover:bg-teal-50'
+                          ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-500/30 scale-105'
+                          : 'bg-white text-gray-500 border-gray-100 hover:border-teal-200 hover:text-teal-600 hover:bg-teal-50'
                           }`}
                       >
                         {cat.name}
@@ -407,8 +397,8 @@ const Catalog: React.FC = () => {
                           key={cur}
                           onClick={() => setFilterCurrency(cur as any)}
                           className={`px-3 py-1 text-[10px] font-black rounded-md transition-all ${filterCurrency === cur
-                              ? 'bg-white text-teal-700 shadow-sm scale-110'
-                              : 'text-gray-400 hover:text-gray-600'
+                            ? 'bg-white text-teal-700 shadow-sm scale-110'
+                            : 'text-gray-400 hover:text-gray-600'
                             }`}
                         >
                           {cur}
@@ -501,10 +491,10 @@ const Catalog: React.FC = () => {
                     </button>
                   </span>
                 ) : (
-                  selectedCategory === 'all' ? 'All Items' : CATEGORIES.find(c => c.id === selectedCategory)?.name
+                  selectedCategory === 'all' ? 'Tous les articles' : CATEGORIES.find(c => c.id === selectedCategory)?.name
                 )}
               </h1>
-              <p className="text-sm text-gray-500 mt-1">{processedProducts.length} results found</p>
+              <p className="text-sm text-gray-500 mt-1">{processedProducts.length} résultats trouvés</p>
             </div>
 
             {/* Sort Dropdown */}
@@ -513,7 +503,7 @@ const Catalog: React.FC = () => {
                 onClick={() => setIsSortOpen(!isSortOpen)}
                 className="w-full sm:w-64 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 flex items-center justify-between hover:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
               >
-                <span className="truncate">Sort by: {SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
+                <span className="truncate">Trier par : {SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
                 <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -550,24 +540,25 @@ const Catalog: React.FC = () => {
             <div className="flex flex-wrap gap-2 mb-6">
               {(priceRange.min || priceRange.max) && (
                 <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                  Price: {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
+                  Prix : {priceRange.min || '0'} - {priceRange.max || '???'} {filterCurrency}
                   <button onClick={() => setPriceRange({ min: '', max: '' })}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               )}
               {verifiedSellerOnly && (
                 <div className="inline-flex items-center gap-1 bg-teal-100 px-3 py-1 rounded-full text-xs font-medium text-teal-800">
-                  Verified Sellers <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+                  Vendeurs Vérifiés <button onClick={() => setVerifiedSellerOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               )}
               {officialStoresOnly && (
                 <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-xs font-medium text-purple-800">
-                  Official Stores <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
+                  Boutiques Officielles <button onClick={() => setOfficialStoresOnly(false)}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               )}
-              {searchParams.get('loc') && (
+              {(searchParams.get('loc') || searchParams.get('country')) && (
                 <div className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                  <MapPin className="w-3 h-3" /> {searchParams.get('loc')}
-                  <button onClick={() => setSearchParams(prev => { prev.delete('loc'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
+                  <MapPin className="w-3 h-3" />
+                  {searchParams.get('loc') ? searchParams.get('loc') : COUNTRIES.find(c => c.id === searchParams.get('country'))?.name || 'Afrique Centrale'}
+                  <button onClick={() => setSearchParams(prev => { prev.delete('loc'); prev.delete('country'); return prev; })}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               )}
               {selectedConditions.map(c => (
@@ -575,7 +566,7 @@ const Catalog: React.FC = () => {
                   {c} <button onClick={() => toggleCondition(c)}><X className="w-3 h-3 hover:text-red-500" /></button>
                 </div>
               ))}
-              <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Clear all</button>
+              <button onClick={clearFilters} className="text-xs text-red-500 hover:underline px-2">Effacer tout</button>
             </div>
           )}
 
