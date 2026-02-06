@@ -63,7 +63,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
         { label: t('nav.home'), icon: Home, path: '/' },
         { label: t('nav.catalog'), icon: ShoppingBag, path: '/catalog' },
         { label: t('nav.sell'), icon: PlusCircle, path: '/sell', highlight: true },
-        { label: 'Communauté', icon: Users, action: () => window.open('https://discord.gg/nelo-community', '_blank') },
+        { label: 'Communaut&eacute;', icon: Users, action: () => window.open('https://discord.gg/nelo-community', '_blank') },
     ];
 
     const userItems = user ? [
@@ -71,7 +71,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
         { label: 'Mes Commandes', icon: Package, path: '/profile?tab=purchases' },
         { label: 'Favoris', icon: Heart, path: '/profile?tab=wishlist' },
         { label: 'Messages', icon: MessageCircle, path: '/profile?tab=messages' },
-        { label: 'Paramètres', icon: Settings, path: '/profile?tab=settings' },
+        { label: 'Param&egrave;tres', icon: Settings, path: '/profile?tab=settings' },
     ] : [];
 
     return (
@@ -127,7 +127,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                     </div>
                                     {isSeller && (
                                         <span className="inline-block px-2 py-1 bg-teal-500/30 border border-teal-500/50 rounded text-xs font-bold text-teal-100">
-                                            Vendeur Vérifié
+                                            Vendeur V&eacute;rifi&eacute;
                                         </span>
                                     )}
                                 </motion.div>
@@ -160,8 +160,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                         variants={itemVariants}
                                         onClick={() => item.action ? item.action() : handleNavigation(item.path!)}
                                         className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all ${item.highlight
-                                                ? 'bg-teal-50 text-teal-700 font-bold'
-                                                : 'text-gray-700 hover:bg-gray-50 font-medium'
+                                            ? 'bg-teal-50 text-teal-700 font-bold'
+                                            : 'text-gray-700 hover:bg-gray-50 font-medium'
                                             }`}
                                     >
                                         <item.icon className={`w-6 h-6 ${item.highlight ? 'text-teal-600' : 'text-gray-400'}`} />
@@ -195,7 +195,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, user, logout, 
                                     onClick={() => { logout(); onClose(); }}
                                     className="w-full flex items-center justify-center gap-2 p-3 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"
                                 >
-                                    <LogOut className="w-5 h-5" /> Se déconnecter
+                                    <LogOut className="w-5 h-5" /> Se d&eacute;connecter
                                 </button>
                             </div>
                         )}

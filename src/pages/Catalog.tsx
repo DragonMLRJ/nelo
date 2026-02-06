@@ -279,7 +279,7 @@ const Catalog: React.FC = () => {
               <div className="flex items-center gap-4">
                 {activeFiltersCount > 0 && (
                   <button onClick={clearFilters} className="text-xs text-teal-600 font-bold hover:underline bg-teal-50 px-2 py-1 rounded-md">
-                    R??initialiser
+                    R&eacute;initialiser
                   </button>
                 )}
                 <button onClick={() => setIsMobileFiltersOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
@@ -291,7 +291,7 @@ const Catalog: React.FC = () => {
             {/* Trust Filters (Seller) - eBay Style Highlighting */}
             <div className="mb-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-4 shadow-sm">
               <h3 className="text-xs font-bold mb-3 text-amber-900 uppercase tracking-wider flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4 text-amber-600" /> Confiance & S??curit??
+                <BadgeCheck className="w-4 h-4 text-amber-600" /> Confiance &amp; S&eacute;curit&eacute;
               </h3>
               <div className="space-y-3">
                 <label className="flex items-center cursor-pointer group p-2 hover:bg-white/60 rounded-xl transition-colors border border-transparent hover:border-amber-200">
