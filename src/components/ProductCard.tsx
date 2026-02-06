@@ -59,11 +59,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 border border-gray-200"
+      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3, type: "spring", stiffness: 300 } }}
+      className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-teal-900/10 transition-all duration-300 border border-gray-200"
     >
       {/* Image Container */}
       <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
@@ -71,7 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <img
             src={product.image}
             alt={product.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out will-change-transform"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out will-change-transform"
             loading="lazy"
           />
         </Link>
@@ -93,7 +90,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute top-2 right-2 flex flex-col gap-2 translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
           <motion.button
             onClick={handleHeartClick}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.8 }}
+            whileHover={{ scale: 1.1 }}
             className={`w-8 h-8 rounded-full flex items-center justify-center shadow-sm border border-gray-100 ${isSaved ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:text-red-500'}`}
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
@@ -104,7 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Transactional Content */}
       <div className="p-3 flex flex-col gap-1">
         {/* Title - Descriptive 2 lines */}
-        <Link to={`/product/${product.id}`} className="group-hover:text-blue-700 transition-colors block">
+        <Link to={`/product/${product.id}`} className="group-hover:text-teal-700 transition-colors block">
           <h3 className="font-sans text-[15px] font-medium text-gray-900 line-clamp-2 leading-snug min-h-[2.5rem]">
             {product.title}
           </h3>
