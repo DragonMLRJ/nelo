@@ -45,6 +45,9 @@ export const LOCATIONS: Record<string, string[]> = {
 // Flattened list of all cities for legacy support or global search if needed
 export const ALL_CITIES = Object.values(LOCATIONS).flat();
 
+// Export CONGO_CITIES for backward compatibility or specific usage
+export const CONGO_CITIES = LOCATIONS['cg'];
+
 export const SHIPPING_RATES = {
   SAME_CITY: 1000,
   INTER_CITY: 5000,
